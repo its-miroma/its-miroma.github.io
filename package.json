@@ -1,0 +1,19 @@
+{
+  "name": "vpv-branch",
+  "version": "0.0.1",
+  "description": "Showcase of VitePress Versions with Git branches.",
+  "packageManager": "pnpm@10.17.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "build:versions": "vitepress-versions build",
+    "list:versions": "vitepress-versions list",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vitepress-versions": "file:vitepress-versions-0.0.1.tgz",
+    "vue": "^3.5.21"
+  }
+}
