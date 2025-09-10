@@ -2,6 +2,6 @@
 layout: home
 
 hero:
-  name: VPV - Branches
+  name: V1
   tagline: Showcase of VitePress Versions with Git branches.
 ---
