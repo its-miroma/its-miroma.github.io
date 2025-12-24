@@ -1,0 +1,65 @@
+name: Pull from Crowdin
+
+on:
+  schedule:
+    - cron: 37 7 * * SAT
+  workflow_dispatch:
+
+concurrency:
+  group: i18n-pull
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  i18n-pull:
+    runs-on: ubuntu-24.04
+    steps:
+      - if: startsWith(github.ref_name, 'i18n/')
+        run: exit 1
+      - uses: actions/checkout@v4
+      - uses: crowdin/github-action@60debf382ee245b21794321190ad0501db89d8c1
+        with:
+          token: ${{ secrets.CROWDIN_TOKEN }}
+          crowdin_branch_name: ${{ github.ref_name }}
+          upload_sources: false
+          upload_translations: false
+          download_sources: false
+          download_translations: true
+          create_pull_request: false
+          push_translations: false
+      - run: sudo chown -R "${USER}:${USER}" .
+      - id: message
+        run: |
+          LAST_MSG="$(gh api "repos/${{ github.repository }}/commits/i18n/${{ github.ref_name }}" --template "{{.commit.message}}" || true)"
+          PREFIX="i18n: $(date +"%y")w$(date +"%W")"
+          REGEX="^${PREFIX}([a-z]+)"
+
+          if [[ "${LAST_MSG}" =~ ${REGEX} ]]; then
+            CURRENT_SUFFIX="${BASH_REMATCH[1]}"
+            if [[ "${CURRENT_SUFFIX}" =~ z$ ]]; then
+              NEW_SUFFIX="${CURRENT_SUFFIX%?}oa"
+            else
+              LAST_CHAR="${CURRENT_SUFFIX: -1}"
+              NEXT_CHAR="$(tr "a-y" "b-z" <<<"${LAST_CHAR}")"
+              NEW_SUFFIX="${CURRENT_SUFFIX%?}${NEXT_CHAR}"
+            fi
+          else
+            NEW_SUFFIX="a"
+          fi
+
+          echo message="${PREFIX}${NEW_SUFFIX}" >>"${GITHUB_OUTPUT}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725
+        with:
+          title: ${{ steps.message.outputs.message }}
+          body: ""
+          commit-message: ${{ steps.message.outputs.message }}
+          branch: i18n/${{ github.ref_name }}
+          author: Fabric Bot <159731069+FabricMCBot@users.noreply.github.com>
+          committer: Fabric Bot <159731069+FabricMCBot@users.noreply.github.com>
+          labels: localization
+          # TODO: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#push-pull-request-branches-to-a-fork

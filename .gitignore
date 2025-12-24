@@ -1,18 +1,11 @@
-# Folders
-/node_modules
-/.vitepress/cache
-/.vitepress/.temp
-/.vitepress/dist
-.idea/
-.obsidian/
+node_modules
+.idea
+.obsidian
+.vitepress/cache
+.vitepress/dist
+.vitepress/.temp
 
-# Files
 .DS_Store
-
-# Alternative Package Locks
 pnpm-lock.yaml
 pnpm-workspace.yaml
 yarn.lock
-
-# LanguageTool Dictionaries and False Positives
-.vscode/*.txt

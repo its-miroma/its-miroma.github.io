@@ -5,25 +5,7 @@ files:
       - /translated/**/*
       - README.md
     translation: /translated/%locale_with_underscore%/%original_path%/%original_file_name%
-    excluded_target_languages:
-      - es-AR
-      - es-CL
-      - es-EC
-      - es-MX
-      - es-UY
-      - es-VE
-      - fr-CA
   - source: /*_translations.json
     translation: /translated/%locale_with_underscore%/%original_path%/%original_file_name%
-    excluded_target_languages:
-      - es-AR
-      - es-CL
-      - es-EC
-      - es-MX
-      - es-UY
-      - es-VE
-      - fr-CA
-
-pull_request_labels:
-  - localization
-  - stage:expansion
+preserve_hierarchy: true
+project_id: '856878'

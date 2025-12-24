@@ -1,0 +1,38 @@
+name: Push to Crowdin
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/i18n-push.yml"
+      - "**.md"
+      - "*_translations.json"
+      - "crowdin.yml"
+      - "!README.md"
+      - "!translated/**"
+      - "!versions/**"
+  workflow_dispatch:
+
+concurrency:
+  group: i18n-push
+  cancel-in-progress: true
+
+jobs:
+  i18n-push:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.crowdin/cache.json
+          key: ${{ runner.os }}-crowdin-cache-${{ github.ref_name }}-${{ hashFiles('**/crowdin.yaml') }}
+          restore-keys: ${{ runner.os }}-crowdin-cache-${{ github.ref_name }}-
+      - uses: crowdin/github-action@60debf382ee245b21794321190ad0501db89d8c1
+        with:
+          token: ${{ secrets.CROWDIN_TOKEN }}
+          crowdin_branch_name: ${{ github.ref_name }}
+          upload_sources_args: --cache
+          upload_sources: true
+          upload_translations: false
+          download_sources: false
+          download_translations: false
