@@ -21,11 +21,11 @@ Mods mais recentes podem requerer a versão mais nova do Fabric Loader para func
 
 ## Escolha o Seu SO {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',
- icon: 'mage:microsoft-windows',
+ icon: 'simple-icons:windows',
  color: '#0078D4',
 },
 {
@@ -36,7 +36,7 @@ Mods mais recentes podem requerer a versão mais nova do Fabric Loader para func
 {
  name: 'Linux',
  href: './linux',
- icon: 'codicon:terminal-linux',
+ icon: 'simple-icons:linux',
  color: '#FF9A00',
 },
 ]" />

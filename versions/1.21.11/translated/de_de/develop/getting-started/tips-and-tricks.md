@@ -11,7 +11,7 @@ outline: false
 
 ## Deine Entwicklungsumgebung wählen {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/tips-and-tricks',
@@ -21,7 +21,7 @@ outline: false
 {
  name: 'Visual Studio Code',
  href: './vscode/tips-and-tricks',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

@@ -20,7 +20,7 @@ config:
     allowed_elements:
       - audio
       - Badge
-      - ChoiceComponent
+      - Choice
       - ColorSwatch
       - DownloadEntry
       - kbd
@@ -88,6 +88,7 @@ config:
         search: [“, ”, ‘, ’]
         replace: ['"', '"', "'", "'"]
         searchScope: text
+      # TODO: revert this rule, use .md extensions. Maybe allow index.md too
       - name: no-file-extension-in-links
         message: "Don't add the file extension to links"
         information: https://vitepress.dev/guide/routing#linking-between-pages
@@ -125,6 +126,7 @@ config:
         searchPattern: "/^(:{3,}) (?!(?:info|tip|warning|danger|details|raw|code-group|v-pre|tab|tabs)(?: |$))/gim"
         replace: "$1 info "
         searchScope: text
+      # TODO: revert this rule. add md-it plugin that removes /public
       - name: no-links-to-public
         message: "Don't add /public to links"
         information: https://vitepress.dev/guide/asset-handling#the-public-directory
@@ -167,6 +169,13 @@ config:
         replace: ""
         searchScope: code
 customRules:
-  # TODO: add      markdownlint-rule-max-one-sentence-per-line/rule.js
+  # TODO: add markdownlint-rule-max-one-sentence-per-line/rule.js
   - ./node_modules/markdownlint-rule-search-replace/rule.js
   - ./node_modules/markdownlint-rule-titlecase/rule.js
+globs:
+  - "**/*.md"
+  - "!.git/**"
+  - "!node_modules/**"
+  - "!README.md"
+  - "!translated/**"
+  - "!versions/**"

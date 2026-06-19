@@ -10,11 +10,11 @@ authors:
 
 ## Scegli il tuo sistema operativo {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',
- icon: 'mage:microsoft-windows',
+ icon: 'simple-icons:windows',
  color: '#0078D4',
 },
 {
@@ -25,7 +25,7 @@ authors:
 {
  name: 'Linux',
  href: './linux',
- icon: 'codicon:terminal-linux',
+ icon: 'simple-icons:linux',
  color: '#FF9A00',
 },
 ]" />

@@ -1,12 +1,14 @@
 allowBuilds:
-  es5-ext: true
   esbuild: true
-  vitepress-versioning-plugin: true
+  vitepress-versioning-plugin@https://codeload.github.com/FabricMC/vitepress-versioning-plugin/tar.gz/65bae2d4dfee47d0d233f688844cbb572c534ef5: true
 
 minimumReleaseAge: 4320 # three days
 
-overrides:
-  vite: npm:rolldown-vite@7.3.1
-
 patchedDependencies:
-  vitepress: patches/vitepress.patch
+  vitepress@2.0.0-alpha.20: patches/vitepress@2.0.0-alpha.20.patch
+
+savePrefix: ""
+
+update:
+  ignoreDeps:
+    - typescript

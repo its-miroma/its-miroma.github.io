@@ -19,11 +19,11 @@ Esse guia apenas é aplicável para o Iniciador Oficial de Minecraft. Para outro
 
 ## Escolha o seu SO {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',
- icon: 'mage:microsoft-windows',
+ icon: 'simple-icons:windows',
  color: '#0078D4',
 },
 {
@@ -34,7 +34,7 @@ Esse guia apenas é aplicável para o Iniciador Oficial de Minecraft. Para outro
 {
  name: 'Linux',
  href: './linux',
- icon: 'codicon:terminal-linux',
+ icon: 'simple-icons:linux',
  color: '#FF9A00',
 },
 ]" />

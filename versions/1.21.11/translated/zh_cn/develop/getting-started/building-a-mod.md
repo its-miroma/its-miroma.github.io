@@ -12,7 +12,7 @@ authors:
 
 ## 选择你的 IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/building-a-mod',
@@ -21,7 +21,7 @@ authors:
 },
 {
  name: 'Visual Studio Code',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

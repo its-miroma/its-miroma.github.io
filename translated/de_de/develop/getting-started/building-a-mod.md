@@ -12,7 +12,7 @@ Sobald dein Mod zum Testen bereit ist, kannst du ihn in eine JAR-Datei exportier
 
 ## Deine Entwicklungsumgebung wählen {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/building-a-mod',
@@ -21,7 +21,7 @@ Sobald dein Mod zum Testen bereit ist, kannst du ihn in eine JAR-Datei exportier
 },
 {
  name: 'Visual Studio Code',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

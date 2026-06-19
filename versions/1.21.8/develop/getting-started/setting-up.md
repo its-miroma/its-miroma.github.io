@@ -40,10 +40,10 @@ const choices = [
 
 To develop mods for Minecraft 1.21.8, you will need JDK 21.
 
-If you need help installing Java, you can refer to the various Java installation guides in the [player guides section](../../players/index).
+If you need help installing Java, you can refer to the various Java installation guides in the [player guides section](../../players/).
 
 ## Set Up Your IDE {#set-up-your-ide}
 
 To start developing mods with Fabric, you will need to set up a development environment using IntelliJ IDEA (recommended), or alternatively Visual Studio Code.
 
-<ChoiceComponent :choices />
+<Choice :choices />
