@@ -4,16 +4,60 @@ import "vidstack/player/layouts/default";
 import "vidstack/player/styles/default/layouts/video.css";
 import "vidstack/player/styles/default/theme.css";
 import "vidstack/player/ui";
-import { useSlots } from "vue";
+import { useData } from "vitepress";
+import { VPButton } from "vitepress/theme";
+import { computed, ref, useSlots } from "vue";
+import type { ThemeConfig } from "../../types.d.ts";
 
-defineProps<{ src: string }>();
+const props = defineProps<{
+  src: string;
+  warn?: boolean;
+}>();
 
-const title = ((useSlots().default?.() ?? [""])[0] as any).children ?? "";
+const data = useData<ThemeConfig>();
+const slots = useSlots();
+
+const options = computed(() => data.theme.value.video);
+
+const videoTitle = String(slots.default?.()?.[0]?.children || "");
+
+const showWarning = ref(props.warn);
 </script>
 
 <template>
-  <media-player load="visible" view-type="video" stream-type="on-demand" :title :src>
+  <media-player load="visible" view-type="video" stream-type="on-demand" :title="videoTitle" :src>
     <media-provider />
     <media-video-layout />
+
+    <dialog v-if="showWarning">
+      <h3>{{ options.title }}</h3>
+      <p>{{ options.description }}</p>
+      <VPButton @click="showWarning = !showWarning">{{ options.button }}</VPButton>
+    </dialog>
   </media-player>
 </template>
+
+<style scoped>
+dialog {
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border-radius: 0.375rem;
+
+  color: var(--vp-c-white);
+  text-align: center;
+
+  background-color: color-mix(in srgb, var(--vp-c-black) 93%, transparent);
+}
+
+h3 {
+  margin-top: 0;
+}
+</style>

@@ -8,7 +8,7 @@ authors:
 
 ## Choose Your IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
   {
     name: 'IntelliJ IDEA',
     href: './intellij-idea/generating-sources',
@@ -18,7 +18,7 @@ authors:
   {
     name: 'Visual Studio Code',
     href: './vscode/generating-sources',
-    icon: 'codicon:vscode',
+    icon: 'simple-icons:visualstudiocode',
     color: '#007ACC',
   },
 ]" />

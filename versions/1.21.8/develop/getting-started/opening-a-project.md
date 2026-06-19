@@ -28,4 +28,4 @@ const choices = [
 
 ## Choose Your IDE {#choose-your-ide}
 
-<ChoiceComponent :choices />
+<Choice :choices />

@@ -11,7 +11,7 @@ outline: false
 
 ## Scegli il tuo IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/launching-the-game',
@@ -21,7 +21,7 @@ outline: false
 {
  name: 'Visual Studio Code',
  href: './vscode/launching-the-game',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

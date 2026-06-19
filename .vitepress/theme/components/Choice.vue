@@ -1,0 +1,107 @@
+<script setup lang="ts">
+import { VPIcon, VPLink } from "vitepress/theme";
+
+/* TODO: drop this component altogether, and instead adopt a simpler system by reusing existing features:
+
+::: tabs
+
+== Choice 1
+
+<!-- @include: path/to/choice-1.md -->
+
+== Choice 2
+
+<!-- @include: path/to/choice-2.md -->
+
+:::
+
+The stuff that would be lost is:
+- The icons (afaik there is some kind of plugin or sth to add support for those, or maybe it is for code-groups, but anyway I don't think I mind)
+- The color (trivial to add to tabs if we *really* want to). These two were cosmetic, so they're not too bad.
+- Disabled state (though that can be worked around by just writing in the tab content "Not supported" or whatever)
+- External hrefs (I don't know if they are used at any point)
+*/
+
+defineProps<{
+  choices: {
+    name: string;
+    icon?: string;
+    color?: string;
+    href?: string;
+  }[];
+}>();
+</script>
+
+<template>
+  <ul :style="{ '--grid-columns': Math.min(choices.length, 3) }">
+    <li v-for="(c, key) of choices" :key>
+      <VPLink :href="c.href" :style="{ '--color': c.color }">
+        <VPIcon v-if="c.icon" :icon="c.icon" />
+        {{ c.name }}
+      </VPLink>
+    </li>
+  </ul>
+</template>
+
+<style scoped>
+ul {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
+  gap: 1rem;
+
+  padding: 0;
+
+  list-style: none;
+
+  @media (width <= 48rem) {
+    grid-template-columns: 1fr;
+  }
+}
+
+li + li {
+  margin-top: revert;
+}
+
+.VPLink {
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 0.75rem;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+
+  background-color: var(--vp-c-bg-soft);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  [class^="vpi-"] {
+    font-size: 3rem;
+  }
+}
+
+a.VPLink:hover,
+a.VPLink:focus-visible {
+  transform: translateY(-0.25rem);
+  border-color: var(--color, var(--vp-c-brand-1));
+  color: var(--color, var(--vp-c-brand-1));
+  box-shadow: 0 6px 16px rgb(0 0 0 / 12%);
+}
+
+span.VPLink {
+  cursor: not-allowed;
+  opacity: 75%;
+}
+</style>

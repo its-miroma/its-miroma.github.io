@@ -19,11 +19,11 @@ This guide only applies for the official Minecraft Launcher. For third party lau
 
 ## Choose Your OS {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
   {
     name: 'Windows',
     href: './windows',
-    icon: 'mage:microsoft-windows',
+    icon: 'simple-icons:windows',
     color: '#0078D4',
   },
   {
@@ -34,7 +34,7 @@ This guide only applies for the official Minecraft Launcher. For third party lau
   {
     name: 'Linux',
     href: './linux',
-    icon: 'codicon:terminal-linux',
+    icon: 'simple-icons:linux',
     color: '#FF9A00',
   },
 ]" />

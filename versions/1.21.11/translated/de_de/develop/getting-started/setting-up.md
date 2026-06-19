@@ -31,7 +31,7 @@ Wenn du Hilfe bei der Installation von Java benötigst, kannst du den [Leitfaden
 
 Um mit der Entwicklung von Mods mit Fabric zu beginnen, musst du eine Entwicklungsumgebung mit IntelliJ IDEA (empfohlen) oder alternativ Visual Studio Code einrichten.
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/setting-up',
@@ -41,7 +41,7 @@ Um mit der Entwicklung von Mods mit Fabric zu beginnen, musst du eine Entwicklun
 {
  name: 'Visual Studio Code',
  href: './vscode/setting-up',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

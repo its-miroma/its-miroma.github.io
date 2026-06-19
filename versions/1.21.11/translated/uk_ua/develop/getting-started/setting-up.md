@@ -31,7 +31,7 @@ outline: false
 
 Щоб розпочати розробку модів за допомогою Fabric, вам потрібно буде налаштувати середовище розробки за допомогою IntelliJ IDEA (рекомендовано) або Visual Studio Code.
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/setting-up',
@@ -41,7 +41,7 @@ outline: false
 {
  name: 'Visual Studio Code',
  href: './vscode/setting-up',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

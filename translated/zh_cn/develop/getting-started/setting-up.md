@@ -30,7 +30,7 @@ authors-nogithub:
 
 要开始使用 Fabric 开发模组，你需要使用 IntelliJ IDEA（推荐）或 Visual Studio Code 设置开发环境。
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/setting-up',
@@ -40,7 +40,7 @@ authors-nogithub:
 {
  name: 'Visual Studio Code',
  href: './vscode/setting-up',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

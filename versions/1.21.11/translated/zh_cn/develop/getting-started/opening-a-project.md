@@ -13,7 +13,7 @@ outline: false
 
 ## 选择你的 IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/opening-a-project',
@@ -23,7 +23,7 @@ outline: false
 {
  name: 'Visual Studio Code',
  href: './vscode/opening-a-project',
- icon: 'codicon:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />
