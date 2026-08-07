@@ -72,17 +72,31 @@ export default defineVersionedConfig(
         // Use the tabs plugin for... having tabs?
         md.use(tabsMarkdownPlugin);
       },
+      container: {
+        // TODO(not-for-llm): decide
+        // TODO(not-for-llm): acknowledge ::: caution and ::: note
+        // TODO(not-for-llm): review all ::: containers with a title, except ::: details, because that shouldn't be needed
+        // TODO(not-for-llm): migrate ::: info PREREQUISITES
+        // TODO(not-for-llm): migrate ::: warning IMPORTANT
+        customContainers: {
+          prerequisites: "PREREQUISITES",
+        },
+      },
+      footnote: false,
       gfmAlerts: false,
-      image: { lazyLoading: true },
+      image: { lazyLoad: true },
       languageAlias: { classtweaker: "text", gradle: "groovy" },
       languages: [
-        { ...(mcfunction as any), name: "mcfunction" },
         { ...(bytecode as any), name: "bytecode" },
+        { ...(mcfunction as any), name: "mcfunction" },
       ],
       lineNumbers: true,
       shikiSetup: async (shiki) => {
         await shiki.loadTheme("github-light", "github-dark");
       },
+      // TODO: drop silent: true after the errors are fixed.
+      snippet: { stripRegionMarkers: "all", silent: true },
+      toc: false,
     },
 
     rewrites: { "translated/:locale/(.*)": ":locale/(.*)" },

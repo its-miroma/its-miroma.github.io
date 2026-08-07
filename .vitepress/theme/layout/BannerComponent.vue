@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useElementSize } from "@vueuse/core";
 import { useData } from "vitepress";
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
-import { computed, ref, watch } from "vue";
-import { Fabric } from "../../types.d";
+import { VPLink } from "vitepress/theme";
+import { computed, ref, watchEffect } from "vue";
+import { Fabric } from "../../types";
 
 const data = useData();
 const banner = ref<HTMLElement>();
@@ -30,16 +30,16 @@ const strings = computed(() => {
   }
 });
 
-watch([height, strings], () =>
+watchEffect(() => {
   document.documentElement.style.setProperty(
     "--vp-layout-top-height",
-    `${strings.value.length ? height.value + 16 : 0}px`
-  )
-);
+    `${strings.value.length > 0 ? height.value + 16 : 0}px`
+  );
+});
 </script>
 
 <template>
-  <div v-if="strings.length" ref="banner">
+  <div v-show="strings.length" ref="banner">
     {{ strings[0]
     }}<VPLink
       v-if="strings[1]"

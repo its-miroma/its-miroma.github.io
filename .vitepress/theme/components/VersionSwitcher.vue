@@ -3,7 +3,7 @@ import { Icon, loadIcon } from "@iconify/vue";
 import { computedAsync } from "@vueuse/core";
 import { useData } from "vitepress";
 import VPFlyout from "vitepress/dist/client/theme-default/components/VPFlyout.vue";
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
+import { VPLink } from "vitepress/theme";
 import { computed, ref } from "vue";
 import { Fabric } from "../../types.d";
 
@@ -35,7 +35,7 @@ const button = computed(() => {
   return `<span style="display:flex;align-items:center;gap:4px">${icon} ${currentV.value}</span>`;
 });
 
-// TODO: add future versions to the supported pages
+// TODO(not-for-llm): add future versions to the supported pages
 const versions = computed(() => [
   props.versioningPlugin.latestVersion,
   ...(typeof env.value === "number"
@@ -90,10 +90,14 @@ const getRoute = (newVersion: string) => {
       <span class="vpi-plus" />
     </button>
 
-    <VPLink v-for="v in versions" :key="v" :href="getRoute(v)">{{
-      options.label.replace("%s", v)
-    }}</VPLink>
-    <VPLink v-if="versions.length <= 1">{{ options.none }}</VPLink>
+    <ul>
+      <li v-for="v in versions" :key="v">
+        <VPLink :href="getRoute(v)">{{ options.label.replace("%s", v) }}</VPLink>
+      </li>
+      <li v-if="versions.length <= 1">
+        <VPLink>{{ options.none }}</VPLink>
+      </li>
+    </ul>
   </component>
 </template>
 
@@ -165,8 +169,14 @@ div:not(.VPFlyout) {
     color 0.25s;
 }
 
-span.VPLink {
-  font-style: italic;
+li:has(span.VPLink):first-of-type {
+  span.VPLink {
+    font-weight: bold;
+  }
+
+  + li:has(span.VPLink) {
+    font-style: italic;
+  }
 }
 
 a.VPLink:hover {

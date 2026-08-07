@@ -40,17 +40,7 @@ export namespace Fabric {
     };
   }
 
-  export interface CodeOptions {
-    /**
-     * @default "Copied"
-     */
-    copied: string;
-
-    /**
-     * @default "Copy Code"
-     */
-    copy: string;
-
+  export interface FullscreenCodeOptions {
     /**
      * @default "Full Screen"
      */
@@ -127,13 +117,6 @@ export namespace Fabric {
     linkText: string;
 
     /**
-     * Set custom not found description.
-     *
-     * @default "This page got tangled in the yarn"
-     */
-    quote: string;
-
-    /**
      * The possible different quotes.
      */
     quotes: string[];
@@ -208,7 +191,7 @@ export namespace Fabric {
   export interface ThemeConfig extends Versioned.ThemeConfig {
     authors: AuthorsOptions;
     banner: BannerOptions;
-    code: CodeOptions;
+    code: FullscreenCodeOptions;
     download: DownloadOptions;
     env: EnvOptions;
     notFound: NotFoundOptions;

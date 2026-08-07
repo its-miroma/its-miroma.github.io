@@ -99,6 +99,27 @@ export const getLocales = () => {
       title: resolver("title"),
       description: resolver("description"),
 
+      markdown: {
+        codeCopyButton: {
+          copiedText: resolver("code.copied"),
+          tooltipText: resolver("code.copy"),
+        },
+
+        container: {
+          cautionLabel: resolver("container.caution"),
+          dangerLabel: resolver("container.danger"),
+          detailsLabel: resolver("container.details"),
+          importantLabel: resolver("container.important"),
+          infoLabel: resolver("container.info"),
+          noteLabel: resolver("container.note"),
+          tipLabel: resolver("container.tip"),
+          warningLabel: resolver("container.warning"),
+          customContainers: {
+            prerequisites: resolver("container.prerequisites"),
+          }
+        },
+      },
+
       themeConfig: {
         authors: {
           heading: resolver("authors.heading"),
@@ -117,8 +138,6 @@ export const getLocales = () => {
         },
 
         code: {
-          copied: resolver("code.copied"),
-          copy: resolver("code.copy"),
           enterFullscreen: resolver("code.enter_fullscreen"),
           exitFullscreen: resolver("code.exit_fullscreen"),
           wrap: resolver("code.wrap"),

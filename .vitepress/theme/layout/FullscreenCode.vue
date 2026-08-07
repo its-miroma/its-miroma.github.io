@@ -7,7 +7,10 @@ import { Fabric } from "../../types";
 
 const prefersReducedMotion = usePreferredReducedMotion();
 const data = useData();
-const options = computed(() => data.theme.value.code as Fabric.CodeOptions);
+const markdown = computed(() => data.site.value.locales[data.localeIndex.value].markdown!);
+
+const options = computed(() => data.theme.value.code as Fabric.FullscreenCodeOptions);
+const copyOptions = computed(() => markdown.value.codeCopyButton!);
 
 const dialog = ref<HTMLDialogElement>();
 const originalCopyButton = ref<HTMLButtonElement>();
@@ -104,11 +107,6 @@ onContentUpdated(() =>
 
     handleExitFullscreen();
 
-    document.documentElement.style.setProperty(
-      "--vp-code-copy-copied-text-content",
-      JSON.stringify(options.value.copied)
-    );
-
     const enterFullscreenIconData = await loadIcon("lucide:maximize-2");
     const enterFullscreenIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">${enterFullscreenIconData.body}</svg>`;
 
@@ -119,9 +117,6 @@ onContentUpdated(() =>
       const originalCopyButton = //
         codeBlock.querySelector<HTMLButtonElement>("button.copy:not(.fullscreen)");
       if (!originalCopyButton) continue;
-
-      originalCopyButton.title = options.value.copy;
-      originalCopyButton.setAttribute("aria-label", options.value.copy);
 
       const enterFullscreenButton =
         codeBlock.querySelector<HTMLButtonElement>("button.copy.fullscreen")
@@ -174,11 +169,11 @@ onUnmounted(() => dialog.value?.close());
       <button
         class="copy"
         :class="{ copied: isCopied }"
-        :title="options.copy"
-        :aria-label="options.copy"
+        :title="copyOptions.tooltipText"
+        :aria-label="copyOptions.tooltipText"
         @click="handleCopy"
       >
-        <span>{{ options.copied }}</span>
+        <span>{{ copyOptions.copiedText }}</span>
         <Icon icon="lucide:clipboard" />
         <Icon class="clicked" icon="lucide:clipboard-check" />
       </button>

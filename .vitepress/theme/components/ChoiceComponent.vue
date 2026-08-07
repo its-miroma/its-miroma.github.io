@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
+import { VPLink } from "vitepress/theme";
 
 defineProps<{
   choices: {
@@ -13,19 +13,25 @@ defineProps<{
 </script>
 
 <template>
-  <div :style="{ '--grid-columns': Math.min(choices.length, 3) }">
-    <VPLink v-for="(c, key) in choices" :href="c.href" :style="{ '--color': c.color }" :key>
-      <Icon v-if="c.icon" :icon="c.icon" width="48" />
-      {{ c.name }}
-    </VPLink>
-  </div>
+  <ul :style="{ '--grid-columns': Math.min(choices.length, 3) }">
+    <li v-for="(c, key) in choices" :key>
+      <VPLink :href="c.href" :style="{ '--color': c.color }">
+        <Icon v-if="c.icon" :icon="c.icon" width="48" />
+        {{ c.name }}
+      </VPLink>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
-div {
+ul {
   display: grid;
   grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
   gap: 1rem;
+
+  padding: 0;
+
+  list-style: none;
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
@@ -38,6 +44,9 @@ div {
   gap: 1rem;
   align-items: center;
 
+  /* TODO: broken: now when two side-by-side cards have icons with different heights they have different heights. */
+  width: 100%;
+  height: 100%;
   padding: 1rem;
   border: 1px solid var(--vp-c-border);
   border-radius: 10px;

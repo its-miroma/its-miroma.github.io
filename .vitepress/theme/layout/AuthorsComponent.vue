@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData } from "vitepress";
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
+import { VPLink } from "vitepress/theme";
 import { computed } from "vue";
 import { Fabric } from "../../types.d";
 
@@ -20,34 +20,34 @@ const authors = computed<Author[]>(() =>
   ].sort((a, b) => a.name.localeCompare(b.name))
 );
 
-const getImageSrc = (author: Author) =>
-  author.noGitHub
-    ? "/assets/avatater.png"
-    : "https://wsrv.nl/?"
-      + new URLSearchParams({
-        af: "",
-        maxage: "7d",
-        url: `https://github.com/${author.name}.png?size=32`,
-        default: `https://docs.fabricmc.net/assets/avatater.png`,
-      });
+const getImageSrc = (author: Author) => {
+  if (author.noGitHub) return "/assets/avatater.png";
+
+  const url = new URL("https://wsrv.nl/");
+  url.searchParams.set("af", "");
+  url.searchParams.set("w", "32");
+  url.searchParams.set("h", "32");
+  url.searchParams.set("maxage", "7d");
+  url.searchParams.set("url", `https://github.com/${author.name}.png?size=32`);
+  url.searchParams.set("default", "https://docs.fabricmc.net/assets/avatater.png");
+  return url.toString();
+};
 </script>
 
 <template>
   <h2 v-if="authors.length">{{ options.heading }}</h2>
-  <div>
-    <VPLink
-      v-for="author in authors"
-      :key="author.noGitHub ? `${author.name}!` : author.name"
-      :href="author.noGitHub ? undefined : `https://github.com/${author.name}`"
-    >
-      <img
-        :title="author.noGitHub ? options.noGitHub.replace('%s', author.name) : author.name"
-        :src="getImageSrc(author)"
-        :alt="author.name"
-        loading="lazy"
-      />
-    </VPLink>
-  </div>
+  <ul v-if="authors.length">
+    <li v-for="a in authors" :key="a.noGitHub ? `${a.name}!` : a.name">
+      <VPLink :href="a.noGitHub ? undefined : `https://github.com/${a.name}`" no-icon>
+        <img
+          :title="a.noGitHub ? options.noGitHub.replace('%s', a.name) : a.name"
+          :src="getImageSrc(a)"
+          :alt="a.name"
+          loading="lazy"
+        />
+      </VPLink>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
@@ -63,7 +63,7 @@ h2 {
   letter-spacing: 0.06em;
 }
 
-div {
+ul {
   display: flex;
   flex-flow: row wrap;
   gap: 8px;
@@ -91,13 +91,13 @@ div {
     display: none;
   }
 
-  div {
+  ul {
     margin-bottom: 16px;
   }
 }
 
 @media (width >= 1280px) {
-  .content-container > div {
+  .content-container > ul {
     display: none;
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useData } from "vitepress";
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
+import { VPLink } from "vitepress/theme";
 import { computed } from "vue";
 import { Fabric } from "../../types";
 
@@ -43,52 +43,73 @@ const getFileTitle = (path: string) =>
 
 const getFileExtension = (path: string) =>
   path
+    .replace("fabric.mod.json", "minecraft-fabric")
     .replace(/^.*[.]([^.]+)$/, "$1")
-    .replace(/^classtweaker$/, "document")
+    .replace(/^classtweaker$/, "minecraft-fabric")
     .replace(/^md$/, "markdown");
 </script>
 
 <template>
-  <h2 v-if="resources.length">{{ options.resources }}</h2>
-  <VPLink v-for="[href, title] in resources" :key="href" :href>
-    <img :src="getImageSrc(href)" alt="" width="16" height="16" />
-    <span>{{ title }}</span>
-  </VPLink>
+  <template v-if="resources.length">
+    <h2>{{ options.resources }}</h2>
+    <ul>
+      <li v-for="[href, title] in resources" :key="href">
+        <VPLink :href>
+          <img :src="getImageSrc(href)" alt="" width="16" height="16" />
+          <span>{{ title }}</span>
+        </VPLink>
+      </li>
+    </ul>
+  </template>
 
-  <h2 v-if="files.length">{{ options.files }}</h2>
-  <VPLink v-for="(f, i) in files" :key="f" :href="getFileHref(f)" :title="getFileTitle(f)" noIcon>
-    <Icon :icon="`material-icon-theme:${getFileExtension(f)}`" />
-    <code>
-      <template v-for="(seg, j) in shortestUniquePaths[i].split('/')" :key="j">
-        <template v-if="j !== 0">/<wbr /></template>{{ seg }}
-      </template>
-    </code>
-  </VPLink>
-
-  <div />
+  <template v-if="files.length">
+    <h2>{{ options.files }}</h2>
+    <ul>
+      <li v-for="(f, i) in files" :key="f">
+        <VPLink :href="getFileHref(f)" :title="getFileTitle(f)" no-icon>
+          <Icon :icon="`material-icon-theme:${getFileExtension(f)}`" />
+          <code>
+            <template v-for="(seg, j) in shortestUniquePaths[i].split('/')" :key="j">
+              <template v-if="j !== 0">/<wbr /></template>{{ seg }}
+            </template>
+          </code>
+        </VPLink>
+      </li>
+    </ul>
+  </template>
 </template>
 
 <style scoped>
-div,
 h2 {
   margin-top: 20px;
   margin-bottom: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--vp-c-divider);
 
   font-size: 12px;
   font-weight: bold;
   color: var(--vp-c-text-2);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+
+  &:not(:first-child) {
+    padding-top: 16px;
+    border-top: 1px solid var(--vp-c-divider);
+  }
+}
+
+ul:last-of-type:has(+ *:not(div.spacer)) {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+li {
+  margin-bottom: 4px;
 }
 
 .VPLink {
   display: flex;
   gap: 0.3em;
   align-items: flex-start;
-
-  margin-bottom: 4px;
 
   font-size: 12px;
   line-height: 1.5;
@@ -111,9 +132,10 @@ img {
 }
 
 @media (width >= 1280px) {
-  .VPDocFooter > h2,
-  .VPDocFooter > .VPLink {
-    display: none;
+  .VPDocFooter {
+    * {
+      display: none;
+    }
   }
 }
 </style>

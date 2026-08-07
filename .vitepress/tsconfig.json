@@ -4,6 +4,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "lib": ["es2023", "DOM", "DOM.Iterable"],
+    "types": ["vitepress/client"],
     "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true

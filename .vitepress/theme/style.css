@@ -1,3 +1,10 @@
+/* TODO: can / should this be in a <style> block in Layout.vue? */
+
+/* TODO: sort this rule where appropriate */
+.VPLink.no-icon::after {
+  content: unset;
+}
+
 @font-face {
   font-family: "JetBrains Mono";
   font-weight: 100 800;
@@ -28,6 +35,7 @@
     monospace;
 
   &:where(:lang(zh)) {
+    /* TODO: review breakage after https://github.com/vuejs/vitepress/commit/91b06b67a302ebfa210e888fe9d03d27fb291b31 */
     --vp-font-family-base: "Punctuation SC", var(--font-family-base);
   }
 
