@@ -6,10 +6,10 @@ import type { Fabric } from "../../types.d";
 
 const data = useData();
 
-const root = ref<HTMLElement>();
+const root = ref<HTMLDivElement>();
 const ball = ref<HTMLCanvasElement>();
-const thread = ref<HTMLElement>();
-const content = ref<HTMLElement>();
+const thread = ref<HTMLDivElement>();
+const content = ref<HTMLDivElement>();
 
 const isBallVisible = ref(true);
 const isContentVisible = ref(false);
@@ -86,7 +86,7 @@ const createThreadPattern = () => {
   tPattern = pattern.toDataURL();
 };
 
-const drawThread = (t: HTMLElement) => {
+const drawThread = (t: HTMLDivElement) => {
   createThreadPattern();
   t.style.backgroundImage = `url(${tPattern})`;
   t.style.backgroundRepeat = "repeat-x";
@@ -144,7 +144,7 @@ const startAnimation = () => {
   animationFrame = requestAnimationFrame(step);
 };
 
-// TODO: refactor with ResizeObserver so that changing locales redraws the thread
+let resizeObserver: ResizeObserver | null = null;
 let handleResizeTimeout: number | null = null;
 const handleResize = () => {
   values = getValues();
@@ -157,14 +157,16 @@ const handleResize = () => {
 
 onMounted(async () => {
   await nextTick();
-  window.addEventListener("resize", handleResize);
+  resizeObserver = new ResizeObserver(handleResize);
+  resizeObserver.observe(root.value!);
+  resizeObserver.observe(content.value!);
   startAnimation();
 });
 
 onBeforeUnmount(() => {
   if (animationFrame) cancelAnimationFrame(animationFrame);
   if (handleResizeTimeout) clearTimeout(handleResizeTimeout);
-  window.removeEventListener("resize", handleResize);
+  resizeObserver?.disconnect();
 });
 
 // extracted from https://github.com/FabricMC/community/blob/57106dcfe85da0f9209b327d19f4e206abd10d76/media/unascribed/png/yarn.png

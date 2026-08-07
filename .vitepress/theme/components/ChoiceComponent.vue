@@ -16,7 +16,7 @@ defineProps<{
   <ul :style="{ '--grid-columns': Math.min(choices.length, 3) }">
     <li v-for="(c, key) in choices" :key>
       <VPLink :href="c.href" :style="{ '--color': c.color }">
-        <Icon v-if="c.icon" :icon="c.icon" width="48" />
+        <Icon v-if="c.icon" :icon="c.icon" width="48" height="48" />
         {{ c.name }}
       </VPLink>
     </li>
@@ -38,13 +38,16 @@ ul {
   }
 }
 
+li + li {
+  margin-top: unset;
+}
+
 .VPLink {
   overflow: hidden;
   display: flex;
   gap: 1rem;
   align-items: center;
 
-  /* TODO: broken: now when two side-by-side cards have icons with different heights they have different heights. */
   width: 100%;
   height: 100%;
   padding: 1rem;

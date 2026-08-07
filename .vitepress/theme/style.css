@@ -1,9 +1,4 @@
-/* TODO: can / should this be in a <style> block in Layout.vue? */
-
-/* TODO: sort this rule where appropriate */
-.VPLink.no-icon::after {
-  content: unset;
-}
+/* TODO: should hovering over images targeted by medium-zoom show the zoom cursor? */
 
 @font-face {
   font-family: "JetBrains Mono";
@@ -43,6 +38,10 @@
   &:is(.dark) .light-only {
     display: none;
   }
+}
+
+.VPLink.no-icon::after {
+  content: unset;
 }
 
 *,

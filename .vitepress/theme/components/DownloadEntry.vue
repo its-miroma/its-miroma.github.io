@@ -67,14 +67,13 @@ img {
   max-height: 300px;
 }
 
-/* TODO: wrap on text too long */
-a {
-  height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
+/* TODO: even when text wraps, the button spans the whole page width */
+.VPButton.medium {
+  padding-block: 8px;
 
-  text-align: center;
+  line-height: unset;
   text-decoration: none;
+  text-wrap: balance;
   white-space: normal;
 
   &:hover {

@@ -6,7 +6,7 @@ import { computed, ref, watchEffect } from "vue";
 import { Fabric } from "../../types";
 
 const data = useData();
-const banner = ref<HTMLElement>();
+const banner = ref<HTMLDivElement>();
 const { height } = useElementSize(banner);
 
 const env = computed(() => data.theme.value.env as Fabric.EnvOptions);
