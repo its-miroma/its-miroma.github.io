@@ -2,7 +2,7 @@
 import { useData } from "vitepress";
 import { VPButton } from "vitepress/theme";
 import { computed, useSlots } from "vue";
-import { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d";
 
 // TODO: ideally this component would not be needed. A better experience would be something like:
 // ![Alt text for the downloadable image](@/assets/path/to/preview-image.png){download}

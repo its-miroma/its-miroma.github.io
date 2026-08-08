@@ -3,7 +3,7 @@ import { Icon } from "@iconify/vue";
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed } from "vue";
-import { Fabric } from "../../types";
+import type { Fabric } from "../../types";
 
 const data = useData();
 

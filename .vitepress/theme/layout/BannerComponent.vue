@@ -3,7 +3,7 @@ import { useElementSize } from "@vueuse/core";
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed, ref, watchEffect } from "vue";
-import { Fabric } from "../../types";
+import type { Fabric } from "../../types";
 
 const data = useData();
 const banner = ref<HTMLDivElement>();

@@ -1,4 +1,4 @@
-import { Fabric } from "../types.d";
+import type { Fabric } from "../types.d";
 
 export default [
   {

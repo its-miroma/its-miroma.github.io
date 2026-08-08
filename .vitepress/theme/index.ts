@@ -1,7 +1,7 @@
 import type { Theme } from "vitepress";
 import { enhanceAppWithTabs } from "vitepress-plugin-tabs/client";
 import DefaultTheme from "vitepress/theme";
-import { Component } from "vue";
+import type { Component } from "vue";
 import Layout from "./layout/Layout.vue";
 import "./style.css";
 

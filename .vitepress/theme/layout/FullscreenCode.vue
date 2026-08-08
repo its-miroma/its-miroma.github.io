@@ -3,7 +3,7 @@ import { Icon, loadIcon } from "@iconify/vue";
 import { usePreferredReducedMotion } from "@vueuse/core";
 import { onContentUpdated, useData } from "vitepress";
 import { computed, nextTick, onUnmounted, ref } from "vue";
-import { Fabric } from "../../types";
+import type { Fabric } from "../../types";
 
 const prefersReducedMotion = usePreferredReducedMotion();
 const data = useData();

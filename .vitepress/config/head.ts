@@ -1,4 +1,4 @@
-import { Fabric } from "../types";
+import type { Fabric } from "../types";
 
 type NewHeadContext = {
   latestVersion: string;
