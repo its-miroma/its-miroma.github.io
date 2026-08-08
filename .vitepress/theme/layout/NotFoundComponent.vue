@@ -1,18 +1,25 @@
 <script setup lang="ts">
+import {
+  useDebounceFn,
+  usePreferredReducedMotion,
+  useRafFn,
+  useResizeObserver,
+} from "@vueuse/core";
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Fabric } from "../../types.d";
 
 const data = useData();
+const prefersReducedMotion = usePreferredReducedMotion();
 
 const root = ref<HTMLDivElement>();
 const ball = ref<HTMLCanvasElement>();
 const thread = ref<HTMLDivElement>();
 const content = ref<HTMLDivElement>();
 
-const isBallVisible = ref(true);
-const isContentVisible = ref(false);
+const isAnimating = ref(true);
+const showContent = ref(false);
 
 const random = Math.random();
 const options = computed(() => {
@@ -26,7 +33,6 @@ const options = computed(() => {
   };
 });
 
-let animationFrame = 0;
 let values: ReturnType<typeof getValues>;
 let tPattern: string;
 
@@ -95,15 +101,43 @@ const drawThread = (t: HTMLDivElement) => {
   t.style.left = `0px`;
   t.style.zIndex = "1";
   t.style.height = `${values.px}px`;
-  t.style.width = `${isBallVisible.value ? 0 : values.bTotalX}px`;
+  t.style.width = `${isAnimating.value ? 0 : values.bTotalX}px`;
   t.style.imageRendering = "pixelated";
   t.style.position = "absolute";
 };
 
-const startAnimation = () => {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    isContentVisible.value = true;
-    isBallVisible.value = false;
+let startTime = 0;
+let totalTime = 0;
+
+const { pause, resume } = useRafFn(
+  ({ timestamp }) => {
+    const time = Math.min(1, Math.max(0, timestamp - startTime) / totalTime);
+    const bStartXNow = values.bStartX + values.bTotalX * (1 - Math.pow(1 - time, 3));
+    const bMiddleXNow = bStartXNow + values.bDiameter / 2;
+
+    thread.value!.style.width = `${Math.min(values.bTotalX, bMiddleXNow)}px`;
+
+    // show content when the ball crosses the midpoint
+    if (!showContent.value && bMiddleXNow >= values.cMiddleX) {
+      showContent.value = true;
+    }
+
+    const bCircumference = Math.PI * values.bDiameter;
+    const bRotationDeg = ((bStartXNow - values.bStartX) * 360) / bCircumference;
+    ball.value!.style.transform = `translateX(${bStartXNow}px) translateZ(0) rotate(${bRotationDeg}deg)`;
+
+    if (time >= 1) {
+      isAnimating.value = false;
+      pause();
+    }
+  },
+  { immediate: false }
+);
+
+const start = () => {
+  if (prefersReducedMotion.value === "reduce") {
+    showContent.value = true;
+    isAnimating.value = false;
     return;
   }
 
@@ -112,62 +146,25 @@ const startAnimation = () => {
   drawBall(ball.value!);
   drawThread(thread.value!);
 
-  // start rolling the ball
-  const totalTime = Math.max(600, 3 * values.bTotalX);
-  const startTime = performance.now();
+  totalTime = Math.max(600, 3 * values.bTotalX);
+  startTime = performance.now();
 
-  const step = (now: number) => {
-    if (!isBallVisible.value) return;
-
-    const time = Math.min(1, Math.max(0, now - startTime) / totalTime);
-    const bStartXNow = values.bStartX + values.bTotalX * (1 - Math.pow(1 - time, 3));
-    const bMiddleXNow = bStartXNow + values.bDiameter / 2;
-
-    thread.value!.style.width = `${Math.min(values.bTotalX, bMiddleXNow)}px`;
-
-    // show content when the ball crosses the midpoint
-    if (!isContentVisible.value && bMiddleXNow >= values.cMiddleX) {
-      isContentVisible.value = true;
-    }
-
-    const bCircumference = Math.PI * values.bDiameter;
-    const bRotationDeg = ((bStartXNow - values.bStartX) * 360) / bCircumference;
-    ball.value!.style.transform = `translateX(${bStartXNow}px) translateZ(0) rotate(${bRotationDeg}deg)`;
-
-    if (time < 1) {
-      animationFrame = requestAnimationFrame(step);
-    } else {
-      isBallVisible.value = false;
-    }
-  };
-
-  animationFrame = requestAnimationFrame(step);
+  resume();
 };
 
-let resizeObserver: ResizeObserver | null = null;
-let handleResizeTimeout: number | null = null;
-const handleResize = () => {
+const handleResize = useDebounceFn(() => {
   values = getValues();
-  if (handleResizeTimeout) clearTimeout(handleResizeTimeout);
   // even after the animation, thread must fill the width
-  handleResizeTimeout = window.setTimeout(() => {
-    if (!isBallVisible.value) drawThread(thread.value!);
-  }, 100);
-};
+  if (!isAnimating.value) drawThread(thread.value!);
+}, 100);
+useResizeObserver([root, content], handleResize);
 
 onMounted(async () => {
   await nextTick();
-  resizeObserver = new ResizeObserver(handleResize);
-  resizeObserver.observe(root.value!);
-  resizeObserver.observe(content.value!);
-  startAnimation();
+  start();
 });
 
-onBeforeUnmount(() => {
-  if (animationFrame) cancelAnimationFrame(animationFrame);
-  if (handleResizeTimeout) clearTimeout(handleResizeTimeout);
-  resizeObserver?.disconnect();
-});
+onBeforeUnmount(() => handleResize.cancel());
 
 // extracted from https://github.com/FabricMC/community/blob/57106dcfe85da0f9209b327d19f4e206abd10d76/media/unascribed/png/yarn.png
 
@@ -196,17 +193,17 @@ const TEXTURE = [
 <template>
   <div ref="root" class="not-found" aria-live="polite">
     <div class="yarn" aria-hidden="true">
-      <canvas ref="ball" v-show="isBallVisible" />
+      <canvas ref="ball" v-show="isAnimating" />
       <div ref="thread" />
     </div>
 
     <div
       ref="content"
       :style="{
-        opacity: isContentVisible ? 1 : 0,
-        pointerEvents: isContentVisible ? 'auto' : 'none',
+        opacity: showContent ? 1 : 0,
+        pointerEvents: showContent ? 'auto' : 'none',
       }"
-      :aria-hidden="!isContentVisible"
+      :aria-hidden="!showContent"
     >
       <code>{{ options.code }}</code>
       <h1>{{ options.title.toLocaleUpperCase(data.lang.value) }}</h1>

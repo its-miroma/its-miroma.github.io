@@ -67,8 +67,10 @@ img {
   max-height: 300px;
 }
 
-/* TODO: even when text wraps, the button spans the whole page width */
+/* TODO: this still isn't working as it should, it's still full-width */
 .VPButton.medium {
+  width: fit-content;
+  max-width: 100%;
   padding-block: 8px;
 
   line-height: unset;

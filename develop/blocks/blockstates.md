@@ -32,7 +32,7 @@ Pillar blocks have two textures, top and side - they use the `block/cube_column`
 
 As always, with all block textures, the texture files can be found in `assets/example-mod/textures/block`
 
-<DownloadEntry visualURL="/assets/develop/blocks/blockstates_0_large.png" downloadURL="/assets/develop/blocks/condensed_oak_log_textures.zip">Textures</DownloadEntry>
+<DownloadEntry visualURL="/assets/develop/blocks/blockstates_0_large.png" downloadURL="/assets/develop/blocks/condensed_oak_log_textures.zip">A Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Long Name For The Textures</DownloadEntry>
 
 Since the pillar block has two positions, horizontal and vertical, we'll need to make two separate model files:
 

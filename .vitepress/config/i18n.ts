@@ -16,6 +16,7 @@ export const getLocaleNames = (translatedDir: string) => [
 const translated = path.resolve(import.meta.dirname, "..", "..", "translated");
 const locales = getLocaleNames(translated);
 
+// TODO: can this be an "await import()" instead so the dev env can track changes?
 export const getResolver = (file: string, locale: string, warn = true): ((k: string) => string) => {
   const filePath = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
 
