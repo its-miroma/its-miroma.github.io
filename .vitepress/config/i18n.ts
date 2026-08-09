@@ -7,9 +7,6 @@ import Develop from "../sidebars/develop";
 import Players from "../sidebars/players";
 import type { Fabric } from "../types.d";
 
-// TODO: because variable dynamic imports are NOT watched, this must be refactored.
-// refactor to use import.meta.glob with **/*_translations.json, and the resolver should get the data from that import map.
-
 const REQUIRED_FILES = [
   "index.md",
   "sidebar_translations.json",
@@ -24,51 +21,53 @@ export const getLocaleNames = (translated: string) => [
     .map((d) => path.relative(translated, d)),
 ];
 
-// TODO: why is this outside
-const locales = getLocaleNames(path.resolve(import.meta.dirname, "..", "..", "translated"));
+const translated = path.resolve(import.meta.dirname, "..", "..", "translated");
 
 const getResolver = //
-  async <T extends Record<string, any>>(
+  <T extends Record<string, any>>(
     file: string,
     locale: string
-  ): Promise<<K extends keyof T>(k: K) => T[K]> => {
-    const importFile = async (file: string) =>
-      (await import(file, { with: { type: "json" } })).default as T;
+  ): (<K extends keyof T>(k: K) => T[K]) => {
+    const loadStrings = (locale: string): T => {
+      const filePath = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
+      if (!fs.existsSync(filePath)) {
+        console.warn(`${file}: cannot find file for locale: ${locale}`);
+      }
 
-    const strings = await importFile(
-      `../../translated/${locale === "en_us" ? ".." : locale}/${file}`
-    );
+      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    };
+
+    const strings = loadStrings(locale);
 
     if (locale !== "en_us") {
-      const fallback = await importFile(`../../${file}`);
+      const fallback = loadStrings("en_us");
       return (k) => strings[k] || fallback[k];
     }
 
     for (const k of Object.keys(strings)) {
       if (!/^([/][/])?[a-z0-9_.]*$/.test(k)) {
-        // TODO: can these use the vite logger? if it did, the progress messages wouldn't break maybe?
         console.warn(`${file}: unusual character in key: ${k}`);
       }
     }
 
-    // TODO: should this be the one that warns about unrecognized keys instead?
-    return (k) => strings[k];
+    return (k) => {
+      if (strings[k] === undefined) {
+        console.warn(`${file}: missing translation for key: ${String(k)}`);
+      }
+
+      return strings[k];
+    };
   };
 
-export const getSidebar = async (locale: string) => {
+export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
-  const resolver = await getResolver<typeof t_sidebar>("sidebar_translations.json", locale);
+  const resolver = getResolver<typeof t_sidebar>("sidebar_translations.json", locale);
 
   const normalizeSidebar = (sidebar: Fabric.SidebarItem[]) => {
     const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
 
     for (const item of returned) {
-      // @ts-expect-error - TODO: maybe check if the item.text is NOT found? In that case, warn?
-      //
-      // const key = item.text
-      // item.text = resolver(key)
-      // if (!item.text) console.warn(...)
-      // Does that work?
+      // @ts-expect-error
       item.text = resolver(item.text);
       if (item.items) item.items = normalizeSidebar(item.items);
       if (locale !== "en_us" && item.link?.startsWith("/")) {
@@ -85,8 +84,10 @@ export const getSidebar = async (locale: string) => {
   return returned;
 };
 
-export const getLocales = async () => {
+export const getLocales = () => {
   const returned: Fabric.Config["locales"] = {};
+
+  const locales = getLocaleNames(translated);
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
   const intlLocaleOverrides: Record<string, string> = {
@@ -109,7 +110,7 @@ export const getLocales = async () => {
       ?? locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
     const crowdinLocale = crowdinLocaleOverrides[locale] ?? locale.split("_")[0];
 
-    const resolver = await getResolver<typeof t_website>("website_translations.json", locale);
+    const resolver = getResolver<typeof t_website>("website_translations.json", locale);
     const intl = new Intl.DisplayNames(intlLocale, {
       languageDisplay: "standard",
       style: "short",
@@ -300,7 +301,7 @@ export const getLocales = async () => {
           },
         },
 
-        sidebar: await getSidebar(locale),
+        sidebar: getSidebar(locale),
 
         sidebarMenuLabel: resolver("sidebar_menu"),
 

@@ -95,7 +95,7 @@ console.log(`Creating sidebars at '.vitepress/sidebars/versioned/${oldVersion}.j
 for (const locale of locales) {
   fs.writeFileSync(
     `./.vitepress/sidebars/versioned/${oldVersion}${locale === "en_us" ? "" : `-${locale}`}.json`,
-    JSON.stringify(await getSidebar(locale), null, 2)
+    JSON.stringify(getSidebar(locale), null, 2)
   );
 }
 

@@ -8,6 +8,7 @@ import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles";
+import { watchTranslationsPlugin } from "../plugins/watchTranslations";
 import type { Fabric } from "../types.d";
 import { getBuildTransformHead, getClientTransformHead } from "./head";
 import { getLocales } from "./i18n";
@@ -38,8 +39,6 @@ const hostname =
         ? "http://fabric-docs.localhost:5173/"
         : `${process.env.DEPLOY_PRIME_URL!}/`;
 
-const locales = await getLocales();
-
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
 export default defineVersionedConfig(
@@ -65,7 +64,7 @@ export default defineVersionedConfig(
     // Reduce the size of the dist by using a separate js file for the metadata.
     metaChunk: true,
 
-    locales,
+    locales: getLocales(),
 
     markdown: {
       config: (md) => {
@@ -162,7 +161,7 @@ export default defineVersionedConfig(
     },
 
     vite: {
-      plugins: [transformFilesPlugin(latestVersion)],
+      plugins: [transformFilesPlugin(latestVersion), watchTranslationsPlugin()],
     },
 
     vue: {
