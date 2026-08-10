@@ -28,19 +28,12 @@ const getResolver = //
     file: string,
     locale: string
   ): (<K extends keyof T>(k: K) => T[K]) => {
-    const loadStrings = (locale: string): T => {
-      const filePath = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
-      if (!fs.existsSync(filePath)) {
-        console.warn(`${file}: cannot find file for locale: ${locale}`);
-      }
-
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    };
-
-    const strings = loadStrings(locale);
+    const stringsFile = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
+    const strings = JSON.parse(fs.readFileSync(stringsFile, "utf-8"));
 
     if (locale !== "en_us") {
-      const fallback = loadStrings("en_us");
+      const fallbackFile = path.resolve(translated, "..", file);
+      const fallback = JSON.parse(fs.readFileSync(fallbackFile, "utf-8"));
       return (k) => strings[k] || fallback[k];
     }
 
