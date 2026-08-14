@@ -8,7 +8,7 @@ import {
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
-import type { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d.ts";
 
 const data = useData();
 const prefersReducedMotion = usePreferredReducedMotion();

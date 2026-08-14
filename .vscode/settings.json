@@ -10,6 +10,8 @@
   "markdown.copyFiles.destination": {
     "*": "public/assets/${documentRelativeDirName}/${documentBaseName}/${fileName}"
   },
+  // TODO: add markdown-it plugin to rewrite asset paths
+  "markdown.validate.enabled": true,
   "markdownlint.lintWorkspaceGlobs": [
     "**/*.md",
     "!node_modules/**",
@@ -17,6 +19,5 @@
     "!translated/**",
     "!versions/**"
   ],
-  "markdown.validate.enabled": true,
-  "sarif-viewer.connectToGithubCodeScanning": "off"
+  "vue.server.includeLanguages": ["vue", "markdown"]
 }

@@ -1,3 +1,4 @@
+/// <reference types="vitepress/client" />
 import type { Theme } from "vitepress";
 import { enhanceAppWithTabs } from "vitepress-plugin-tabs/client";
 import DefaultTheme from "vitepress/theme";

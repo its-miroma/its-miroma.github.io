@@ -2,7 +2,7 @@
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed } from "vue";
-import type { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d.ts";
 
 type Author = { name: string; noGitHub?: true };
 

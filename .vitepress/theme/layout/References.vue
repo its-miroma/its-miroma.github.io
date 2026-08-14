@@ -3,7 +3,9 @@ import { Icon } from "@iconify/vue";
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
 import { computed } from "vue";
-import type { Fabric } from "../../types";
+import type { Fabric } from "../../types.d.ts";
+
+// TODO: on mobile (narrow viewport) references should be placed akin to "On this page", instead of at the footer.
 
 const data = useData();
 

@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
-import { getLocaleNames, getSidebar } from "./config/i18n";
+import { getLocaleNames, getSidebar } from "./config/i18n.ts";
 
 const git = (...args: string[]) => {
   const res = crossSpawn.sync("git", args, { encoding: "utf8" });

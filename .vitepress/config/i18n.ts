@@ -1,11 +1,12 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
-import type t_sidebar from "../../sidebar_translations.json";
-import type t_website from "../../website_translations.json";
-import Develop from "../sidebars/develop";
-import Players from "../sidebars/players";
-import type { Fabric } from "../types.d";
+import Develop from "../sidebars/develop.ts";
+import Players from "../sidebars/players.ts";
+import type { Fabric } from "../types.d.ts";
+
+type SidebarTranslations = typeof import("../../sidebar_translations.json");
+type WebsiteTranslations = typeof import("../../website_translations.json");
 
 const REQUIRED_FILES = [
   "index.md",
@@ -54,7 +55,7 @@ const getResolver = //
 
 export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
-  const resolver = getResolver<typeof t_sidebar>("sidebar_translations.json", locale);
+  const resolver = getResolver<SidebarTranslations>("sidebar_translations.json", locale);
 
   const normalizeSidebar = (sidebar: Fabric.SidebarItem[]) => {
     const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
@@ -103,7 +104,7 @@ export const getLocales = () => {
       ?? locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
     const crowdinLocale = crowdinLocaleOverrides[locale] ?? locale.split("_")[0];
 
-    const resolver = getResolver<typeof t_website>("website_translations.json", locale);
+    const resolver = getResolver<WebsiteTranslations>("website_translations.json", locale);
     const intl = new Intl.DisplayNames(intlLocale, {
       languageDisplay: "standard",
       style: "short",

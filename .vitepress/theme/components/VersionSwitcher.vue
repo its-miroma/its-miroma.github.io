@@ -5,7 +5,7 @@ import { useData } from "vitepress";
 import VPFlyout from "vitepress/dist/client/theme-default/components/VPFlyout.vue";
 import { VPLink } from "vitepress/theme";
 import { computed, ref } from "vue";
-import type { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d.ts";
 
 const props = defineProps<{
   versioningPlugin: { versions: string[]; latestVersion: string };
@@ -94,7 +94,7 @@ const getRoute = (newVersion: string) => {
       <li v-for="v in versions" :key="v">
         <VPLink :href="getRoute(v)">{{ options.label.replace("%s", v) }}</VPLink>
       </li>
-      <li v-if="versions.length <= 1">
+      <li v-if="versions.length <= 1" class="none">
         <VPLink>{{ options.none }}</VPLink>
       </li>
     </ul>
@@ -152,6 +152,14 @@ div:not(.VPFlyout) {
   }
 }
 
+li:not(.none) > span.VPLink {
+  font-weight: bold;
+}
+
+li.none > span.VPLink {
+  font-style: italic;
+}
+
 .VPLink {
   display: block;
 
@@ -167,16 +175,6 @@ div:not(.VPFlyout) {
   transition:
     background-color 0.25s,
     color 0.25s;
-}
-
-li:has(span.VPLink):first-of-type {
-  span.VPLink {
-    font-weight: bold;
-  }
-
-  + li:has(span.VPLink) {
-    font-style: italic;
-  }
 }
 
 a.VPLink:hover {

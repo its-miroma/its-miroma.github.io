@@ -2,8 +2,8 @@
 import { useElementSize } from "@vueuse/core";
 import { useData } from "vitepress";
 import { VPLink } from "vitepress/theme";
-import { computed, ref, watchEffect } from "vue";
-import type { Fabric } from "../../types";
+import { computed, onMounted, ref, watchEffect } from "vue";
+import type { Fabric } from "../../types.d.ts";
 
 const data = useData();
 const banner = ref<HTMLDivElement>();
@@ -30,12 +30,14 @@ const strings = computed(() => {
   }
 });
 
-watchEffect(() => {
-  document.documentElement.style.setProperty(
-    "--vp-layout-top-height",
-    `${strings.value.length > 0 ? height.value + 16 : 0}px`
-  );
-});
+onMounted(() =>
+  watchEffect(() => {
+    document.documentElement.style.setProperty(
+      "--vp-layout-top-height",
+      `${strings.value.length > 0 ? height.value + 16 : 0}px`
+    );
+  })
+);
 </script>
 
 <template>
