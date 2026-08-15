@@ -2,46 +2,29 @@ import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin, SiteConfig } from "vitepress";
 import type { Fabric } from "../types.d.ts";
+import { parsePagePath, VersionType } from "./fileStructure.ts";
 
 export const transformFile = (src: string, id: string, latestVersion: string) => {
-  let { data, content } = matter(src);
+  const { data, content } = matter(src);
   const newContent: string[] = [];
 
-  // Version information
-  const split = path.relative(path.resolve(import.meta.dirname, "..", ".."), id).split("/");
-  if (split[0] === "versions") {
-    data.versionType = "old";
-    data.version = split[1];
-  } else if (/^[0-9.]+$/.test(split[0])) {
-    data.versionType = "future";
-    data.version = split[0];
-  } else if (split[0] === "translated" && /^[0-9.]+$/.test(split[2])) {
-    data.versionType = "future";
-    data.version = split[2];
-  } else {
-    data.versionType = "latest";
-    data.version = latestVersion;
-  }
+  // Version and locale information
+  const relativePath = path.relative(path.resolve(import.meta.dirname, "..", ".."), id);
+  Object.assign(data, parsePagePath(relativePath, latestVersion));
 
-  if (split[0] === "translated") {
-    data.localeIndex = split[1];
-  } else if (data.versionType === "old" && split[2] === "translated") {
-    data.localeIndex = split[3];
-  } else {
-    data.localeIndex = "root";
-  }
-
-  if (data.versionType === "old") {
+  if (data.versionType === VersionType.OLD) {
     data.editLink = false;
   }
 
   const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
-  const themeConfig = (
-    config.userConfig.locales![data.localeIndex] ?? config.userConfig.locales!.root
-  ).themeConfig as Fabric.ThemeConfig;
+  // TODO: atp can we use the resolver?
+  // Consider also confirming that the usages of the strings in this file are
+  // the only ones, so we can drop them from the themeConfig in i18n.ts altogether
+  const themeConfig = config.userConfig.locales![data.localeIndex]
+    .themeConfig as Fabric.ThemeConfig;
 
   if (data.layout === "home") {
-    if (data.versionType === "old") {
+    if (data.versionType === VersionType.OLD) {
       newContent.push(
         "::: warning",
         themeConfig.version.reminder.oldVersionHome.replace("%s", data.version),
@@ -52,7 +35,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     if (data.title) {
       newContent.push("<hgroup>");
 
-      const type = data.versionType === "latest" ? "tip" : "warning";
+      const type = data.versionType === VersionType.LATEST ? "tip" : "warning";
       newContent.push(`# ${data.title} <Badge type="${type}">${data.version}</Badge> {#h1}`);
 
       if (data.description) {
@@ -62,7 +45,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
       newContent.push("</hgroup>");
     }
 
-    if (data.versionType === "old") {
+    if (data.versionType === VersionType.OLD) {
       newContent.push(
         "::: warning",
         themeConfig.version.reminder.oldVersion.replace("%s", data.version),
@@ -70,7 +53,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
       );
     }
 
-    if (data.versionType === "future") {
+    if (data.versionType === VersionType.FUTURE) {
       newContent.push(
         "::: warning",
         themeConfig.version.reminder.futureVersion.replace("%s", data.version),
@@ -80,7 +63,6 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
   }
 
   newContent.push(content);
-  content = newContent.join("\n\n");
 
   if (data.filesExclude === true) {
     data.files = [];
@@ -94,7 +76,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     data.files = [...new Set(matches)].filter((f) => !(data.filesExclude ?? []).includes(f));
   }
 
-  return matter.stringify(content, data);
+  return matter.stringify(newContent.join("\n\n"), data);
 };
 
 export const transformFilesPlugin = (latestVersion: string): Plugin => ({

@@ -8,17 +8,18 @@ import mcfunction from "syntax-mcfunction/mcfunction.tmLanguage.json" with { typ
 import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
+import { downloadImagePlugin, zipDownloadAssets } from "../plugins/downloadImage.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
 import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocales } from "./i18n.ts";
 
+// TODO: can I export this so it's available for other files? Alternatively, should I have a central paths.ts file?
+const root = path.resolve(import.meta.dirname, "..", "..");
+
 const latestVersion = fs
-  .readFileSync(
-    path.resolve(import.meta.dirname, "..", "..", "reference", "latest", "build.gradle"),
-    "utf-8"
-  )
+  .readFileSync(path.resolve(root, "reference", "latest", "build.gradle"), "utf-8")
   .match(/def minecraftVersion = "([^"]+)"/)![1];
 
 // https://docs.github.com/en/actions/reference/workflows-and-actions/variables#default-environment-variables
@@ -73,6 +74,8 @@ export default defineVersionedConfig(
         md.use(snippetPlugin);
         // Use the tabs plugin for... having tabs?
         md.use(tabsMarkdownPlugin);
+        // {download} on an image links a downloadable counterpart
+        md.use(downloadImagePlugin);
       },
       container: {
         // TODO(not-for-llm): decide
@@ -161,6 +164,10 @@ export default defineVersionedConfig(
       },
     },
 
+    buildEnd: (siteConfig) => {
+      zipDownloadAssets(siteConfig);
+    },
+
     vite: {
       plugins: [transformFilesPlugin(latestVersion), watchTranslationsPlugin()],
     },
@@ -173,5 +180,5 @@ export default defineVersionedConfig(
       },
     },
   } as Fabric.Config,
-  path.resolve(import.meta.dirname, "..")
+  path.resolve(root, ".vitepress")
 );

@@ -24,17 +24,26 @@ export const getLocaleNames = (translated: string) => [
 
 const translated = path.resolve(import.meta.dirname, "..", "..", "translated");
 
+const resolverDataCache = new Map<string, Record<string, any>>();
 const getResolver = //
   <T extends Record<string, any>>(
     file: string,
     locale: string
   ): (<K extends keyof T>(k: K) => T[K]) => {
-    const stringsFile = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
-    const strings = JSON.parse(fs.readFileSync(stringsFile, "utf-8"));
+    const readStrings = (locale: string) => {
+      const filePath = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
+      if (!resolverDataCache.has(filePath)) {
+        resolverDataCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
+      }
+
+      return resolverDataCache.get(filePath) as T;
+    };
+
+    const strings = readStrings(locale);
 
     if (locale !== "en_us") {
-      const fallbackFile = path.resolve(translated, "..", file);
-      const fallback = JSON.parse(fs.readFileSync(fallbackFile, "utf-8"));
+      const fallback = readStrings("en_us");
+
       return (k) => strings[k] || fallback[k];
     }
 
@@ -53,9 +62,15 @@ const getResolver = //
     };
   };
 
+export const getWebsiteResolver = (locale: string) =>
+  getResolver<WebsiteTranslations>("website_translations.json", locale);
+
+const getSidebarResolver = (locale: string) =>
+  getResolver<SidebarTranslations>("sidebar_translations.json", locale);
+
 export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
-  const resolver = getResolver<SidebarTranslations>("sidebar_translations.json", locale);
+  const resolver = getSidebarResolver(locale);
 
   const normalizeSidebar = (sidebar: Fabric.SidebarItem[]) => {
     const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
@@ -104,7 +119,7 @@ export const getLocales = () => {
       ?? locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
     const crowdinLocale = crowdinLocaleOverrides[locale] ?? locale.split("_")[0];
 
-    const resolver = getResolver<WebsiteTranslations>("website_translations.json", locale);
+    const resolver = getWebsiteResolver(locale);
     const intl = new Intl.DisplayNames(intlLocale, {
       languageDisplay: "standard",
       style: "short",

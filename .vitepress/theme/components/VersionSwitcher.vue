@@ -46,32 +46,23 @@ const versions = computed(() => [
 const open = ref(false);
 
 /*
-file format:   [[versions/]version/] [translated/locale/] path/to/index.md
-route format:  [locale/] [version/] path/to/
-
-- notice that version and locale are flipped between file and route
-- in the file path, [versions/] isn't added if the version is unreleased
+route format: [locale/] [version/] path/to/[file-name]
 - [locale/] is not added for pages in English
 - [version/] is not added for the latest version
+- [file-name] is not added for index.md files
 */
 const getRoute = (newVersion: string) => {
   if (newVersion === data.frontmatter.value.version) return;
 
-  const split = data.page.value.filePath.split("/");
-  // path segments for each type of version
-  const versionSlices = { latest: 0, future: 1, old: 2 };
-
-  const noVersion = split.slice(versionSlices[data.frontmatter.value.versionType as never]);
-  const neitherVersionNorLocale = noVersion.slice(noVersion[0] === "translated" ? 2 : 0);
-
-  const segments = [
+  return [
     "",
     data.localeIndex.value !== "root" ? data.localeIndex.value : undefined,
     newVersion !== props.versioningPlugin.latestVersion ? newVersion : undefined,
-    ...neitherVersionNorLocale,
-  ].filter((s) => s !== undefined);
-
-  return segments.join("/").replace(/((?<=^|[/])index)?[.](html|md)$/, "");
+    data.frontmatter.value.purePath,
+  ]
+    .filter((s) => s !== undefined)
+    .join("/")
+    .replace(/((?<=^|[/])index)?[.]md$/, "");
 };
 </script>
 
