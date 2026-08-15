@@ -2,8 +2,65 @@ import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin, SiteConfig } from "vitepress";
 import type { Fabric } from "../types.d.ts";
-import { parsePagePath, VersionType } from "./fileStructure.ts";
 
+enum VersionType {
+  /** `[translated/locale/]path/to/index.md` */
+  LATEST = 0,
+
+  /** `[translated/locale/]version/path/to/index.md` */
+  FUTURE = 1,
+
+  /** `versions/version/[translated/locale/]path/to/index.md` */
+  OLD = 2,
+}
+
+interface PagePath {
+  version: string;
+  versionType: VersionType;
+  localeIndex: string;
+  purePath: string;
+}
+
+const V_RE = /^[0-9]+[.][0-9.]+$/;
+
+const parsePagePath = (relativePath: string, latestVersion: string): PagePath => {
+  const returned = {} as PagePath;
+
+  const split = relativePath.split("/");
+
+  if (split[0] === "versions") {
+    returned.version = split[1];
+    returned.versionType = VersionType.OLD;
+  } else if (V_RE.test(split[0])) {
+    returned.version = split[0];
+    returned.versionType = VersionType.FUTURE;
+  } else if (split[0] === "translated" && V_RE.test(split[2])) {
+    returned.version = split[2];
+    returned.versionType = VersionType.FUTURE;
+  } else {
+    returned.version = latestVersion;
+    returned.versionType = VersionType.LATEST;
+  }
+
+  if (split[0] === "translated") {
+    returned.localeIndex = split[1];
+  } else if (returned.versionType === VersionType.OLD && split[VersionType.OLD] === "translated") {
+    returned.localeIndex = split[3];
+  } else {
+    returned.localeIndex = "root";
+  }
+
+  returned.purePath = split
+    .slice(returned.versionType)
+    .slice(returned.localeIndex === "root" ? 0 : 2)
+    .join("/");
+
+  return returned;
+};
+
+// TODO: is this still needed considering the recent vitepress refactors around a single MarkdownRenderer?
+// (context: this was currently exported because it was needed in the search render thing to add h1 iirc.
+// apparently search's render might have used a separate md renderer)
 export const transformFile = (src: string, id: string, latestVersion: string) => {
   const { data, content } = matter(src);
   const newContent: string[] = [];
@@ -17,11 +74,15 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
   }
 
   const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
-  // TODO: atp can we use the resolver?
+  // TODO: atp can we import the resolver instead of using the themeConfig?
   // Consider also confirming that the usages of the strings in this file are
   // the only ones, so we can drop them from the themeConfig in i18n.ts altogether
-  const themeConfig = config.userConfig.locales![data.localeIndex]
-    .themeConfig as Fabric.ThemeConfig;
+  // Note: theoretically, the root fallback is unnecessary, but unfortunately
+  // if a translated page exists without the REQUIRED_FILES it is still built
+  // (and themeConfig for that locale would be undefined)
+  const themeConfig = (
+    config.userConfig.locales![data.localeIndex] ?? config.userConfig.locales!.root
+  ).themeConfig as Fabric.ThemeConfig;
 
   if (data.layout === "home") {
     if (data.versionType === VersionType.OLD) {

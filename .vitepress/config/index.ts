@@ -15,7 +15,8 @@ import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocales } from "./i18n.ts";
 
-// TODO: can I export this so it's available for other files? Alternatively, should I have a central paths.ts file?
+// TODO: can I export this so it's available for other files?
+// Alternatively, should I have a central paths.ts file? prolly not
 const root = path.resolve(import.meta.dirname, "..", "..");
 
 const latestVersion = fs
@@ -70,6 +71,7 @@ export default defineVersionedConfig(
 
     markdown: {
       config: (md) => {
+        // TODO(not-for-llm): add a plugin that rewrites asset paths from /public/* to drop that prefix.
         // Use the snippet plugin for transclusions
         md.use(snippetPlugin);
         // Use the tabs plugin for... having tabs?
@@ -99,7 +101,7 @@ export default defineVersionedConfig(
       shikiSetup: async (shiki) => {
         await shiki.loadTheme("github-light", "github-dark");
       },
-      // TODO: drop silent: true after the errors are fixed.
+      // TODO(upstream): drop silent: true after the errors are fixed.
       snippet: { stripRegionMarkers: "all", silent: true },
       toc: false,
     },

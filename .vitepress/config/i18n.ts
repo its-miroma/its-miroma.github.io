@@ -24,6 +24,8 @@ export const getLocaleNames = (translated: string) => [
 
 const translated = path.resolve(import.meta.dirname, "..", "..", "translated");
 
+// TODO: what happens if a _translations.json file is modified after cached?
+// should watchTranslations clear its entry in this cache?
 const resolverDataCache = new Map<string, Record<string, any>>();
 const getResolver = //
   <T extends Record<string, any>>(

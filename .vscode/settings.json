@@ -10,7 +10,6 @@
   "markdown.copyFiles.destination": {
     "*": "public/assets/${documentRelativeDirName}/${documentBaseName}/${fileName}"
   },
-  // TODO: add markdown-it plugin to rewrite asset paths
   "markdown.validate.enabled": true,
   "markdownlint.lintWorkspaceGlobs": [
     "**/*.md",

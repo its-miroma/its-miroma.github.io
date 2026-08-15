@@ -18,11 +18,13 @@ import { getWebsiteResolver } from "../config/i18n.ts";
 // TODO: should the attr value be allowed to be a relative path?
 // this way we can do `download=../whatever.png` for like the installing-java/{os} pages
 
+// TODO: support @ prefix = ROOT
+
 const publicDir = path.resolve(import.meta.dirname, "..", "..", "public");
 
 const directoriesToBeZipped = new Set<string>();
 
-// TODO: I don't like this helper pattern :/
+// TODO: I don't like this helper pattern :/ meh maybe it's fine
 const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
   const expectedParent = `/assets/${purePath.replace(/[.]md$/, "")}/`;
 
@@ -55,7 +57,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     downloadPath ||= src.replace("/assets/", "/download/");
-    // TODO: I think I f-ed something up while refactoring :sob:
+    // TODO: I think I f-ed something up while refactoring :sob: are all paths correct?
     const fullDownloadPath = path.resolve(publicDir, `./${downloadPath}`);
     if (!fs.existsSync(fullDownloadPath)) {
       console.warn(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
@@ -77,7 +79,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
       // Current DOM: p > span.download-image > :is(img, a.download-image-button)
       // Expected:    p > :is(img, a.download), and apply styles to p:has(a.download) maybe?
       `<span class="download-image">${renderedImage}`
-      // TODO: should this be a button instead of an anchor?
+      // TODO: should this be a button instead of an anchor? maybe not?
       + `<a class="download-image-button" href="${md.utils.escapeHtml(downloadPath)}" `
       + `title="${md.utils.escapeHtml(tooltip)}" download></a></span>`
     );
