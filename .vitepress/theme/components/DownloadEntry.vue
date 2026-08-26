@@ -4,7 +4,7 @@ import { VPButton } from "vitepress/theme";
 import { computed, useSlots } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
-// TODO: this is being replaced with {download}
+// TODO(not-for-llm): this is being replaced with {download}
 
 defineProps<{
   downloadURL: string;

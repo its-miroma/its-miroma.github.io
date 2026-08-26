@@ -3,7 +3,7 @@ import type { Theme } from "vitepress";
 import { enhanceAppWithTabs } from "vitepress-plugin-tabs/client";
 import DefaultTheme from "vitepress/theme";
 import type { Component } from "vue";
-import Layout from "./layout/Layout.vue";
+import Layout from "./Layout.vue";
 import "./style.css";
 
 const modules = import.meta.glob<{ default: Component }>("./components/*.vue", { eager: true });

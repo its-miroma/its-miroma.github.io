@@ -33,7 +33,6 @@ const options = computed(() => {
   };
 });
 
-// TODO: would it be possible to refactor these to be immutable (const)?
 let values: ReturnType<typeof getValues>;
 let tPattern: string;
 
@@ -107,7 +106,6 @@ const drawThread = (t: HTMLDivElement) => {
   t.style.position = "absolute";
 };
 
-// TODO: ditto
 let startTime = 0;
 let totalTime = 0;
 

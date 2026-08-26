@@ -1,16 +1,14 @@
-<!-- TODO: should this be moved to .. ? -->
-
 <script setup lang="ts">
 import { watchImmediate } from "@vueuse/core";
 import mediumZoom from "medium-zoom";
 import { inBrowser, useRouter } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { nextTick } from "vue";
-import AuthorsComponent from "./AuthorsComponent.vue";
-import BannerComponent from "./BannerComponent.vue";
-import FullscreenCode from "./FullscreenCode.vue";
-import NotFoundComponent from "./NotFoundComponent.vue";
-import References from "./References.vue";
+import AuthorsComponent from "./layout/AuthorsComponent.vue";
+import BannerComponent from "./layout/BannerComponent.vue";
+import FullscreenCode from "./layout/FullscreenCode.vue";
+import NotFoundComponent from "./layout/NotFoundComponent.vue";
+import References from "./layout/References.vue";
 
 const router = useRouter();
 

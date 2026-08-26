@@ -9,18 +9,15 @@ import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { downloadImagePlugin, zipDownloadAssets } from "../plugins/downloadImage.ts";
-import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
+import { transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
+import ROOT from "../root.ts";
 import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
-import { getLocales } from "./i18n.ts";
-
-// TODO: can I export this so it's available for other files?
-// Alternatively, should I have a central paths.ts file? prolly not
-const root = path.resolve(import.meta.dirname, "..", "..");
+import { getLocaleConfig } from "./i18n.ts";
 
 const latestVersion = fs
-  .readFileSync(path.resolve(root, "reference", "latest", "build.gradle"), "utf-8")
+  .readFileSync(path.resolve(ROOT, "reference", "latest", "build.gradle"), "utf-8")
   .match(/def minecraftVersion = "([^"]+)"/)![1];
 
 // https://docs.github.com/en/actions/reference/workflows-and-actions/variables#default-environment-variables
@@ -64,10 +61,7 @@ export default defineVersionedConfig(
     // Adds a "Last Updated" block to the footer of pages, uses git to determine the last time a page's file was modified.
     lastUpdated: true,
 
-    // Reduce the size of the dist by using a separate js file for the metadata.
-    metaChunk: true,
-
-    locales: getLocales(),
+    locales: getLocaleConfig(),
 
     markdown: {
       config: (md) => {
@@ -126,20 +120,7 @@ export default defineVersionedConfig(
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },
-      search: {
-        options: {
-          _render: (src, env, md) =>
-            env.frontmatter?.search === false
-            || env.relativePath.startsWith("translated/")
-            || env.relativePath.startsWith("versions/")
-              ? ""
-              : md.render(
-                  transformFile(src, env.path, latestVersion).replace(/<Badge .*> (?={#h1})/, ""),
-                  env
-                ),
-        },
-        provider: "local",
-      },
+      search: { provider: "local" },
     },
 
     // Set head tags at build time
@@ -182,5 +163,5 @@ export default defineVersionedConfig(
       },
     },
   } as Fabric.Config,
-  path.resolve(root, ".vitepress")
+  path.resolve(ROOT, ".vitepress")
 );

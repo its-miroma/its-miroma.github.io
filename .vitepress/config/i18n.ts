@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
+import ROOT from "../root.ts";
 import Develop from "../sidebars/develop.ts";
 import Players from "../sidebars/players.ts";
 import type { Fabric } from "../types.d.ts";
@@ -8,24 +9,15 @@ import type { Fabric } from "../types.d.ts";
 type SidebarTranslations = typeof import("../../sidebar_translations.json");
 type WebsiteTranslations = typeof import("../../website_translations.json");
 
-const REQUIRED_FILES = [
-  "index.md",
-  "sidebar_translations.json",
-  "website_translations.json",
-] as const;
-
-export const getLocaleNames = (translated: string) => [
+const REQUIRED_FILES = ["index.md", "website_translations.json"] as const;
+export const getLocales = () => [
   "en_us",
   ...tinyglobby
-    .globSync(`${translated}/*`, { onlyDirectories: true })
+    .globSync("*", { cwd: path.resolve(ROOT, "translated"), onlyDirectories: true, absolute: true })
     .filter((d) => REQUIRED_FILES.every((f) => fs.existsSync(path.resolve(d, f))))
-    .map((d) => path.relative(translated, d)),
+    .map((d) => path.basename(d)),
 ];
 
-const translated = path.resolve(import.meta.dirname, "..", "..", "translated");
-
-// TODO: what happens if a _translations.json file is modified after cached?
-// should watchTranslations clear its entry in this cache?
 const resolverDataCache = new Map<string, Record<string, any>>();
 const getResolver = //
   <T extends Record<string, any>>(
@@ -33,9 +25,15 @@ const getResolver = //
     locale: string
   ): (<K extends keyof T>(k: K) => T[K]) => {
     const readStrings = (locale: string) => {
-      const filePath = path.resolve(translated, locale === "en_us" ? ".." : locale, file);
+      if (!locale) return {} as T;
+
+      const filePath = path.resolve(ROOT, "translated", locale === "en_us" ? ".." : locale, file);
       if (!resolverDataCache.has(filePath)) {
-        resolverDataCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
+        try {
+          resolverDataCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
+        } catch {
+          return {} as T;
+        }
       }
 
       return resolverDataCache.get(filePath) as T;
@@ -64,11 +62,11 @@ const getResolver = //
     };
   };
 
-export const getWebsiteResolver = (locale: string) =>
-  getResolver<WebsiteTranslations>("website_translations.json", locale);
-
 const getSidebarResolver = (locale: string) =>
   getResolver<SidebarTranslations>("sidebar_translations.json", locale);
+
+export const getWebsiteResolver = (locale: string) =>
+  getResolver<WebsiteTranslations>("website_translations.json", locale);
 
 export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
@@ -95,10 +93,8 @@ export const getSidebar = (locale: string) => {
   return returned;
 };
 
-export const getLocales = () => {
+export const getLocaleConfig = () => {
   const returned: Fabric.Config["locales"] = {};
-
-  const locales = getLocaleNames(translated);
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
   const intlLocaleOverrides: Record<string, string> = {
@@ -115,25 +111,27 @@ export const getLocales = () => {
     zh_tw: "zh-TW",
   };
 
-  for (const locale of locales) {
+  for (const locale of getLocales()) {
     const intlLocale =
       intlLocaleOverrides[locale]
       ?? locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
     const crowdinLocale = crowdinLocaleOverrides[locale] ?? locale.split("_")[0];
 
-    const resolver = getWebsiteResolver(locale);
-    const intl = new Intl.DisplayNames(intlLocale, {
+    const label = new Intl.DisplayNames(intlLocale, {
       languageDisplay: "standard",
       style: "short",
       type: "language",
-    });
+    })
+      .of(intlLocale)!
+      .replace(/^\p{CWU}/u, (firstChar) => firstChar.toLocaleUpperCase(intlLocale));
+
+    const resolver = getWebsiteResolver(locale);
 
     returned[locale === "en_us" ? "root" : locale] = {
       lang: intlLocale,
+      // TODO: why are we setting link? does VitePress set it differently?
       link: locale === "en_us" ? "/" : `/${locale}/`,
-      label: intl
-        .of(intlLocale)!
-        .replace(/^\p{CWU}/u, (firstChar) => firstChar.toLocaleUpperCase(intlLocale)),
+      label,
 
       title: resolver("title"),
       description: resolver("description"),
@@ -195,15 +193,19 @@ export const getLocales = () => {
           text: resolver("download"),
         },
 
-        editLink: {
-          pattern:
-            locale === "en_us"
-              ? "https://github.com/FabricMC/fabric-docs/edit/main/:path"
-              : `https://crowdin.com/project/fabricmc/${crowdinLocale}`,
-          text: locale === "en_us" ? resolver("edit_github") : resolver("edit_crowdin"),
-        },
+        editLink:
+          locale === "en_us"
+            ? {
+                pattern: "https://github.com/FabricMC/fabric-docs/edit/main/:path",
+                text: resolver("edit_github"),
+              }
+            : {
+                pattern: `https://crowdin.com/project/fabricmc/${crowdinLocale}`,
+                text: resolver("edit_crowdin"),
+              },
 
         footer: {
+          // TODO(not-for-llm): if vuejs/vitepress#5390 is merged, use Markdown
           copyright: resolver("footer.copyright").replace(
             "%s",
             [
@@ -338,13 +340,8 @@ export const getLocales = () => {
           },
         ],
 
+        // TODO: unless `versionSwitcher` must be falsy, reuse it to set label and none.
         version: {
-          reminder: {
-            oldVersion: resolver("version.reminder.old_version"),
-            oldVersionHome: resolver("version.reminder.old_version_home"),
-            futureVersion: resolver("version.reminder.future_version"),
-          },
-
           switcher: {
             label: resolver("version.switcher.label"),
             none: resolver("version.switcher.none"),

@@ -1,8 +1,10 @@
 import matter from "gray-matter";
 import * as path from "node:path";
-import type { Plugin, SiteConfig } from "vitepress";
-import type { Fabric } from "../types.d.ts";
+import type { Plugin } from "vitepress";
+import { getWebsiteResolver } from "../config/i18n.ts";
+import ROOT from "../root.ts";
 
+// the value is the number of segments in the path that indicate the version
 enum VersionType {
   /** `[translated/locale/]path/to/index.md` */
   LATEST = 0,
@@ -21,6 +23,7 @@ interface PagePath {
   purePath: string;
 }
 
+// TODO: check whether other places also require versions to follow this regex
 const V_RE = /^[0-9]+[.][0-9.]+$/;
 
 const parsePagePath = (relativePath: string, latestVersion: string): PagePath => {
@@ -58,37 +61,34 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
   return returned;
 };
 
-// TODO: is this still needed considering the recent vitepress refactors around a single MarkdownRenderer?
-// (context: this was currently exported because it was needed in the search render thing to add h1 iirc.
-// apparently search's render might have used a separate md renderer)
-export const transformFile = (src: string, id: string, latestVersion: string) => {
+const transformFile = (src: string, id: string, latestVersion: string) => {
   const { data, content } = matter(src);
-  const newContent: string[] = [];
+  if (Number.isInteger(data.versionType)) {
+    // this file has been transformed, and the second call happens during search indexing
+    if (data.versionType === VersionType.OLD || data.localeIndex !== "root") {
+      return "";
+    }
+
+    return src.replace(/<Badge[^<]+<[/]Badge> {#h1}$/, "{#h1}");
+  }
 
   // Version and locale information
-  const relativePath = path.relative(path.resolve(import.meta.dirname, "..", ".."), id);
+  const relativePath = path.relative(ROOT, id);
   Object.assign(data, parsePagePath(relativePath, latestVersion));
 
   if (data.versionType === VersionType.OLD) {
     data.editLink = false;
   }
 
-  const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
-  // TODO: atp can we import the resolver instead of using the themeConfig?
-  // Consider also confirming that the usages of the strings in this file are
-  // the only ones, so we can drop them from the themeConfig in i18n.ts altogether
-  // Note: theoretically, the root fallback is unnecessary, but unfortunately
-  // if a translated page exists without the REQUIRED_FILES it is still built
-  // (and themeConfig for that locale would be undefined)
-  const themeConfig = (
-    config.userConfig.locales![data.localeIndex] ?? config.userConfig.locales!.root
-  ).themeConfig as Fabric.ThemeConfig;
+  const locale = data.localeIndex === "root" ? "en_us" : data.localeIndex;
+  const resolver = getWebsiteResolver(locale);
+  const newContent: string[] = [];
 
   if (data.layout === "home") {
     if (data.versionType === VersionType.OLD) {
       newContent.push(
         "::: warning",
-        themeConfig.version.reminder.oldVersionHome.replace("%s", data.version),
+        resolver("version.reminder.old_version_home").replace("%s", data.version),
         ":::"
       );
     }
@@ -109,7 +109,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     if (data.versionType === VersionType.OLD) {
       newContent.push(
         "::: warning",
-        themeConfig.version.reminder.oldVersion.replace("%s", data.version),
+        resolver("version.reminder.old_version").replace("%s", data.version),
         ":::"
       );
     }
@@ -117,7 +117,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     if (data.versionType === VersionType.FUTURE) {
       newContent.push(
         "::: warning",
-        themeConfig.version.reminder.futureVersion.replace("%s", data.version),
+        resolver("version.reminder.future_version").replace("%s", data.version),
         ":::"
       );
     }
@@ -130,7 +130,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
   } else {
     // Find files referenced in the page
     const filePathRegex = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
-    const matches = [...src.matchAll(filePathRegex)].map((m) => (m[1] ?? m[2]).trim());
+    const matches = [...content.matchAll(filePathRegex)].map((m) => (m[1] ?? m[2]).trim());
 
     matches.push(...(data.files ?? []));
 

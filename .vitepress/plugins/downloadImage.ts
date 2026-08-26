@@ -3,6 +3,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import type { MarkdownRenderer, SiteConfig } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
+import ROOT from "../root.ts";
 
 // {download} on an image marks it as having a downloadable counterpart:
 //   ![Condensed Oak Log texture](/assets/develop/blocks/condensed_oak_log.png){download}
@@ -18,31 +19,32 @@ import { getWebsiteResolver } from "../config/i18n.ts";
 // TODO: should the attr value be allowed to be a relative path?
 // this way we can do `download=../whatever.png` for like the installing-java/{os} pages
 
-// TODO: support @ prefix = ROOT
-
-const publicDir = path.resolve(import.meta.dirname, "..", "..", "public");
+// TODO: support @ prefix, which means ROOT. hmm, do you think path.resolve("@", "...") can be supported?
 
 const directoriesToBeZipped = new Set<string>();
 
 // TODO: I don't like this helper pattern :/ meh maybe it's fine
 const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
+  if (!purePath) return;
+
   const expectedParent = `/assets/${purePath.replace(/[.]md$/, "")}/`;
 
   const relativeSrc = path.relative(expectedParent, src);
   if (!relativeSrc || relativeSrc.startsWith("../") || path.isAbsolute(relativeSrc)) {
-    false && console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
+    0 != 0 && console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
   }
 };
 
 export const downloadImagePlugin = (md: MarkdownRenderer) => {
   const image = md.renderer.rules.image!;
+  // TODO: what happens if the file content is "" (empty, not even a frontmatter)? - note: this happens during search indexing, see transformFile. Human debugger note: it seems like this breaks. I have modified the code such that 1) checkAssetPathConvention skips if purePath is undefined, 2) getWebsiteResolver(undefined) doesn't fail. Though I hate that I have to change those two places when it's clearly an issue to be handled here.
+  // TODO: during search indexing, be more lenient - no checking the convention (already checked), no need for the resolver. in fact: why process images at all lol???
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
     const token = tokens[idx];
 
     const src = path.resolve(token.attrGet("src")!);
     checkAssetPathConvention(env.relativePath, env.frontmatter.purePath, src);
 
-    // TODO: is it a good idea to refactor this so it's immutable (const)?
     let downloadPath = token.attrGet("download");
     if (downloadPath === null) {
       return image(tokens, idx, options, env, self);
@@ -57,8 +59,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     downloadPath ||= src.replace("/assets/", "/download/");
-    // TODO: I think I f-ed something up while refactoring :sob: are all paths correct?
-    const fullDownloadPath = path.resolve(publicDir, `./${downloadPath}`);
+    const fullDownloadPath = path.resolve(ROOT, "public", `./${downloadPath}`);
     if (!fs.existsSync(fullDownloadPath)) {
       console.warn(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
 
@@ -71,7 +72,8 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     const locale = env.frontmatter.localeIndex === "root" ? "en_us" : env.frontmatter.localeIndex;
-    const tooltip = getWebsiteResolver(locale)("download").replace("%s", token.content || src);
+    const resolver = getWebsiteResolver(locale);
+    const tooltip = resolver("download").replace("%s", token.content || src);
 
     return (
       // TODO: instead of wrapping in span.download-image, would it be possible to apply the styles to the surrounding p?

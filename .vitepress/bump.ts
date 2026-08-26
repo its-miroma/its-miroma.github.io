@@ -1,9 +1,9 @@
 import * as crossSpawn from "cross-spawn";
 import * as fs from "node:fs";
-import * as path from "node:path";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
-import { getLocaleNames, getSidebar } from "./config/i18n.ts";
+import { getLocales, getSidebar } from "./config/i18n.ts";
+import ROOT from "./root.ts";
 
 const git = (...args: string[]) => {
   const res = crossSpawn.sync("git", args, { encoding: "utf8" });
@@ -14,7 +14,7 @@ const git = (...args: string[]) => {
   return res;
 };
 
-process.chdir(path.resolve(import.meta.dirname, ".."));
+process.chdir(ROOT);
 
 if (git("status", "--porcelain").stdout.toString().trim().length > 0) {
   console.error("Working directory must be clean!");
@@ -81,7 +81,6 @@ for (const file of tinyglobby.globSync("**/*.md", {
 })) {
   fs.cpSync(`./${file}`, `./versions/${oldVersion}/${file}`);
 }
-const locales = getLocaleNames(`./versions/${oldVersion}/translated`);
 
 if (fs.existsSync(`./${newVersion}/`)) {
   console.log(`Moving in files from '${newVersion}/'...`);
@@ -92,7 +91,7 @@ if (fs.existsSync(`./${newVersion}/`)) {
 }
 
 console.log(`Creating sidebars at '.vitepress/sidebars/versioned/${oldVersion}.json'...`);
-for (const locale of locales) {
+for (const locale of getLocales()) {
   fs.writeFileSync(
     `./.vitepress/sidebars/versioned/${oldVersion}${locale === "en_us" ? "" : `-${locale}`}.json`,
     JSON.stringify(getSidebar(locale), null, 2)
