@@ -36,6 +36,10 @@ const checkAssetPathConvention = (relativePath: string, purePath: string, src: s
 export const downloadImagePlugin = (md: MarkdownRenderer) => {
   const image = md.renderer.rules.image!;
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
+    if (!env.localeIndex) {
+      return image(tokens, idx, options, env, self);
+    }
+
     const token = tokens[idx];
 
     const src = path.resolve(token.attrGet("src")!);
