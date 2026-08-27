@@ -93,12 +93,9 @@ div[class*="language-"] button.copy.fullscreen {
 .download-image-button {
   cursor: pointer;
 
-  /* rtl:ignore */
   position: absolute;
   z-index: 3;
   top: 12px;
-
-  /* rtl:ignore */
   right: 12px;
 
   width: 40px;

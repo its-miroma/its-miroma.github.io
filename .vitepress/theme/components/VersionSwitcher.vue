@@ -16,7 +16,7 @@ const data = useData();
 const collator = new Intl.Collator(undefined, { numeric: true });
 
 const env = computed(() => data.theme.value.env as Fabric.EnvOptions);
-const options = computed(() => (data.theme.value.version as Fabric.VersionOptions).switcher);
+const options = computed(() => data.theme.value.version as Fabric.VersionOptions);
 const currentV = computed(() => {
   if (data.frontmatter.value.version) return data.frontmatter.value.version as string;
 
@@ -45,11 +45,11 @@ const versions = computed(() => [
 
 const open = ref(false);
 
-/*
-route format: [locale/] [version/] path/to/[file-name]
-- [locale/] is not added for pages in English
-- [version/] is not added for the latest version
-- [file-name] is not added for index.md files
+/**
+route format: `[locale/][version/]path/to/[file-name]`
+- `[locale/]` is not added for pages in English
+- `[version/]` is not added for the latest version
+- `[file-name]` is not added for index.md files
 */
 const getRoute = (newVersion: string) => {
   if (newVersion === data.frontmatter.value.version) return;
@@ -71,22 +71,22 @@ const getRoute = (newVersion: string) => {
     :is="screenMenu ? 'div' : VPFlyout"
     :class="{ open }"
     :button
-    :label="options.label.replace('%s', currentV)"
+    :label="options.switcherLabel.replace('%s', currentV)"
   >
     <button v-if="screenMenu" :aria-expanded="open" @click="open = !open">
       <span>
         <Icon icon="lucide:git-graph" width="16" height="16" />
-        {{ options.label.replace("%s", currentV) }}
+        {{ options.switcherLabel.replace("%s", currentV) }}
       </span>
       <span class="vpi-plus" />
     </button>
 
     <ul>
       <li v-for="v in versions" :key="v">
-        <VPLink :href="getRoute(v)">{{ options.label.replace("%s", v) }}</VPLink>
+        <VPLink :href="getRoute(v)">{{ options.switcherLabel.replace("%s", v) }}</VPLink>
       </li>
       <li v-if="versions.length <= 1" class="none">
-        <VPLink>{{ options.none }}</VPLink>
+        <VPLink>{{ options.noOtherVersions }}</VPLink>
       </li>
     </ul>
   </component>

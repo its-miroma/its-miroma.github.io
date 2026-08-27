@@ -25,8 +25,6 @@ const directoriesToBeZipped = new Set<string>();
 
 // TODO: I don't like this helper pattern :/ meh maybe it's fine
 const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
-  if (!purePath) return;
-
   const expectedParent = `/assets/${purePath.replace(/[.]md$/, "")}/`;
 
   const relativeSrc = path.relative(expectedParent, src);
@@ -37,8 +35,6 @@ const checkAssetPathConvention = (relativePath: string, purePath: string, src: s
 
 export const downloadImagePlugin = (md: MarkdownRenderer) => {
   const image = md.renderer.rules.image!;
-  // TODO: what happens if the file content is "" (empty, not even a frontmatter)? - note: this happens during search indexing, see transformFile. Human debugger note: it seems like this breaks. I have modified the code such that 1) checkAssetPathConvention skips if purePath is undefined, 2) getWebsiteResolver(undefined) doesn't fail. Though I hate that I have to change those two places when it's clearly an issue to be handled here.
-  // TODO: during search indexing, be more lenient - no checking the convention (already checked), no need for the resolver. in fact: why process images at all lol???
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
     const token = tokens[idx];
 

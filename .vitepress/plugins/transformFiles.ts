@@ -6,13 +6,13 @@ import ROOT from "../root.ts";
 
 // the value is the number of segments in the path that indicate the version
 enum VersionType {
-  /** `[translated/locale/]path/to/index.md` */
+  /** `[translated/locale/]path/to/file-name.md` */
   LATEST = 0,
 
-  /** `[translated/locale/]version/path/to/index.md` */
+  /** `[translated/locale/]version/path/to/file-name.md` */
   FUTURE = 1,
 
-  /** `versions/version/[translated/locale/]path/to/index.md` */
+  /** `versions/version/[translated/locale/]path/to/file-name.md` */
   OLD = 2,
 }
 
@@ -23,8 +23,7 @@ interface PagePath {
   purePath: string;
 }
 
-// TODO: check whether other places also require versions to follow this regex
-const V_RE = /^[0-9]+[.][0-9.]+$/;
+export const VERSION_RE = /^[0-9]+[.][0-9]+([.][0-9]+)?$/;
 
 const parsePagePath = (relativePath: string, latestVersion: string): PagePath => {
   const returned = {} as PagePath;
@@ -34,10 +33,10 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
   if (split[0] === "versions") {
     returned.version = split[1];
     returned.versionType = VersionType.OLD;
-  } else if (V_RE.test(split[0])) {
+  } else if (VERSION_RE.test(split[0])) {
     returned.version = split[0];
     returned.versionType = VersionType.FUTURE;
-  } else if (split[0] === "translated" && V_RE.test(split[2])) {
+  } else if (split[0] === "translated" && VERSION_RE.test(split[2])) {
     returned.version = split[2];
     returned.versionType = VersionType.FUTURE;
   } else {
@@ -62,15 +61,7 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
 };
 
 const transformFile = (src: string, id: string, latestVersion: string) => {
-  const { data, content } = matter(src);
-  if (Number.isInteger(data.versionType)) {
-    // this file has been transformed, and the second call happens during search indexing
-    if (data.versionType === VersionType.OLD || data.localeIndex !== "root") {
-      return "";
-    }
-
-    return src.replace(/<Badge[^<]+<[/]Badge> {#h1}$/, "{#h1}");
-  }
+  const { data, content } = matter(src, {});
 
   // Version and locale information
   const relativePath = path.relative(ROOT, id);
@@ -78,6 +69,11 @@ const transformFile = (src: string, id: string, latestVersion: string) => {
 
   if (data.versionType === VersionType.OLD) {
     data.editLink = false;
+    data.search = false;
+  }
+
+  if (data.localeIndex !== "root") {
+    data.search = false;
   }
 
   const locale = data.localeIndex === "root" ? "en_us" : data.localeIndex;
@@ -97,7 +93,7 @@ const transformFile = (src: string, id: string, latestVersion: string) => {
       newContent.push("<hgroup>");
 
       const type = data.versionType === VersionType.LATEST ? "tip" : "warning";
-      newContent.push(`# ${data.title} <Badge type="${type}">${data.version}</Badge> {#h1}`);
+      newContent.push(`# ${data.title} <Badge type="${type}" text="${data.version}" /> {#h1}`);
 
       if (data.description) {
         newContent.push(`${data.description} {role="doc-subtitle"} `);

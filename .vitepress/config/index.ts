@@ -121,6 +121,7 @@ export default defineVersionedConfig(
       logo: "/logo.png",
       outline: { level: "deep" },
       search: { provider: "local" },
+      versionSwitcher: false,
     },
 
     // Set head tags at build time

@@ -25,8 +25,6 @@ const getResolver = //
     locale: string
   ): (<K extends keyof T>(k: K) => T[K]) => {
     const readStrings = (locale: string) => {
-      if (!locale) return {} as T;
-
       const filePath = path.resolve(ROOT, "translated", locale === "en_us" ? ".." : locale, file);
       if (!resolverDataCache.has(filePath)) {
         try {
@@ -129,8 +127,6 @@ export const getLocaleConfig = () => {
 
     returned[locale === "en_us" ? "root" : locale] = {
       lang: intlLocale,
-      // TODO: why are we setting link? does VitePress set it differently?
-      link: locale === "en_us" ? "/" : `/${locale}/`,
       label,
 
       title: resolver("title"),
@@ -340,15 +336,10 @@ export const getLocaleConfig = () => {
           },
         ],
 
-        // TODO: unless `versionSwitcher` must be falsy, reuse it to set label and none.
         version: {
-          switcher: {
-            label: resolver("version.switcher.label"),
-            none: resolver("version.switcher.none"),
-          },
+          switcherLabel: resolver("version.switcher.label"),
+          noOtherVersions: resolver("version.switcher.none"),
         },
-
-        versionSwitcher: false,
       },
     };
   }

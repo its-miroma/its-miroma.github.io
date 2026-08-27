@@ -149,17 +149,15 @@ export namespace Fabric {
   }
 
   export interface VersionOptions {
-    switcher: {
-      /**
-       * @default "Minecraft %s"
-       */
-      label: string;
+    /**
+     * @default "Minecraft %s"
+     */
+    switcherLabel: string;
 
-      /**
-       * @default "No other versions"
-       */
-      none: string;
-    };
+    /**
+     * @default "No other versions"
+     */
+    noOtherVersions: string;
   }
 
   export interface SidebarItem extends Versioned.SidebarItem {

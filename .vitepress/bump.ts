@@ -3,6 +3,7 @@ import * as fs from "node:fs";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
 import { getLocales, getSidebar } from "./config/i18n.ts";
+import { VERSION_RE } from "./plugins/transformFiles.ts";
 import ROOT from "./root.ts";
 
 const git = (...args: string[]) => {
@@ -34,7 +35,7 @@ if (!newVersion) {
 } else if (newVersion === oldVersion || fs.existsSync(`./reference/${newVersion}`)) {
   console.error(`'Minecraft ${newVersion}' already exists!`);
   process.exit(1);
-} else if (!/^[0-9]+[.][0-9]+([.][0-9]+)?$/.test(newVersion)) {
+} else if (!VERSION_RE.test(newVersion)) {
   console.error(`'${newVersion}' does not look like a stable Minecraft version!`);
   process.exit(1);
 }
