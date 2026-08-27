@@ -1,5 +1,6 @@
 import type { Fabric } from "../types.d.ts";
 
+// TODO: it has been suggested that develop.title stay separate in the sidebar (like Players), and for the articles currently under it to go in a new uncollapsed section "Getting Started".
 export default [
   {
     text: "develop.title",

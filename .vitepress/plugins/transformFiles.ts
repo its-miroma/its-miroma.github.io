@@ -24,6 +24,7 @@ interface PagePath {
 }
 
 export const VERSION_RE = /^[0-9]+[.][0-9]+([.][0-9]+)?$/;
+const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
 const parsePagePath = (relativePath: string, latestVersion: string): PagePath => {
   const returned = {} as PagePath;
@@ -125,8 +126,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     data.files = [];
   } else {
     // Find files referenced in the page
-    const filePathRegex = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
-    const matches = [...content.matchAll(filePathRegex)].map((m) => (m[1] ?? m[2]).trim());
+    const matches = [...content.matchAll(FILE_PATH_RE)].map((m) => (m[1] ?? m[2]).trim());
 
     matches.push(...(data.files ?? []));
 

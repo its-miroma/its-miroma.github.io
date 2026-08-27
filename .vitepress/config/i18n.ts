@@ -74,6 +74,7 @@ export const getSidebar = (locale: string) => {
     const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
 
     for (const item of returned) {
+      // TODO: perhaps to avoid scope duplication, can we reuse item.link to be the key in the resolver? I feel like all sidebar items (both in Develop and in Players) just have link = /develop/whatever/page and text = develop.whatever.page - can we not reuse the link? Please review whether they are all unique. Maybe, since most sections in the sidebar are like "Section Title" and start with "Introduction", perhaps that can also be assumed. Also, maybe I should check out SidebarItem.base and use it to reduce the duplication even further. idk, needs review.
       // @ts-expect-error
       item.text = resolver(item.text);
       if (item.items) item.items = normalizeSidebar(item.items);
