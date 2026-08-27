@@ -60,7 +60,7 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
   return returned;
 };
 
-const transformFile = (src: string, id: string, latestVersion: string) => {
+export const transformFile = (src: string, id: string, latestVersion: string) => {
   const { data, content } = matter(src, {});
 
   // Version and locale information

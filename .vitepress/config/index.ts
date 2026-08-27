@@ -9,7 +9,7 @@ import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { downloadImagePlugin, zipDownloadAssets } from "../plugins/downloadImage.ts";
-import { transformFilesPlugin } from "../plugins/transformFiles.ts";
+import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
 import ROOT from "../root.ts";
 import type { Fabric } from "../types.d.ts";
@@ -120,7 +120,16 @@ export default defineVersionedConfig(
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },
-      search: { provider: "local" },
+      search: {
+        options: {
+          _render: async (src, env, md) => {
+            src = transformFile(src, env.path, latestVersion);
+            const html = await md.renderAsync(src, env);
+            return env.frontmatter?.search === false ? "" : html;
+          },
+        },
+        provider: "local",
+      },
       versionSwitcher: false,
     },
 
