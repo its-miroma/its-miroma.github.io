@@ -137,12 +137,12 @@ export const DEVELOP_SIDEBAR: Fabric.SidebarItem = {
         //
         "/setup",
         {
-          text: "/develop/data-generation//client",
+          text: "/develop/data-generation/client",
           items: [
             //
             "/translations",
             {
-              text: "/develop/data-generation//models",
+              text: "/develop/data-generation/models",
               items: [
                 //
                 "/block-models",
@@ -152,7 +152,7 @@ export const DEVELOP_SIDEBAR: Fabric.SidebarItem = {
           ],
         },
         {
-          text: "/develop/data-generation//server",
+          text: "/develop/data-generation/server",
           items: [
             //
             "/advancements",
@@ -161,7 +161,7 @@ export const DEVELOP_SIDEBAR: Fabric.SidebarItem = {
             "/recipes",
             "/tags",
             {
-              text: "/develop/data-generation//world-generation",
+              text: "/develop/data-generation/world-generation",
               items: [
                 //
                 "/features",
@@ -249,7 +249,7 @@ export const DEVELOP_SIDEBAR: Fabric.SidebarItem = {
       ],
     },
     {
-      text: "/develop//misc",
+      text: "/develop/misc",
       items: [
         //
         "/automatic-testing",

@@ -32,44 +32,41 @@ const readTranslationFile = <T extends Record<string, any>>(file: string, locale
 type Resolver<T extends Record<string, any>> = <K extends string & keyof T>(k: K) => T[K];
 const getResolver = <T extends Record<string, any>>(file: string, locale: string): Resolver<T> => {
   const strings = readTranslationFile<T>(file, locale);
+  const fallback = readTranslationFile<T>(file, "en_us");
 
-  if (locale !== "en_us") {
-    const fallback = readTranslationFile<T>(file, "en_us");
-
-    return (k) => strings[k] || fallback[k];
-  }
-
-  return (k) => {
-    if (strings[k] === undefined && !k.endsWith("/")) {
-      console.warn(`${file}: missing translation for key '${k}'`);
-    }
-
-    return strings[k];
-  };
+  return (k) => strings[k] || fallback[k];
 };
 
-export const getWebsiteResolver = (locale: string) => {
+export const getWebsiteResolver = (locale: string): Resolver<Fabric.Translations["website"]> => {
   const file = "website_translations.json";
+  const resolver = getResolver<Fabric.Translations["website"]>(file, locale);
 
   if (locale === "en_us") {
-    const strings = readTranslationFile<Fabric.Translations["website"]>(file, "en_us");
-    for (const k of Object.keys(strings)) {
+    for (const k of Object.keys(readTranslationFile(file, locale))) {
       if (!/^([/][/])?[a-z0-9_.]*$/.test(k)) {
         console.warn(`${file}: unusual character in key '${k}'`);
       }
     }
   }
 
-  return getResolver<Fabric.Translations["website"]>(file, locale);
+  return (k) => {
+    const returned = resolver(k);
+
+    if (locale === "en_us" && !returned) {
+      console.warn(`${file}: missing translation for key '${k}'`);
+    }
+
+    return returned;
+  };
 };
 
 export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
 
-  const localePrefix = locale === "en_us" ? "" : `/${locale}`;
-
   const file = "sidebar_translations.json";
-  const resolver = getResolver<Fabric.Translations["sidebar"]>("sidebar_translations.json", locale);
+  const resolver = getResolver<Fabric.Translations["sidebar"]>(file, locale);
+
+  const localePrefix = locale === "en_us" ? "" : `/${locale}`;
 
   const normalizeSidebar = (sidebar: Fabric.SidebarItem[], base = "") => {
     const returned = (JSON.parse(JSON.stringify(sidebar)) as Fabric.SidebarItem[]) //
@@ -81,7 +78,7 @@ export const getSidebar = (locale: string) => {
       // @ts-expect-error
       item.text = resolver(k) ?? (item.link && k.endsWith("/") ? resolver("introduction") : "");
 
-      if (!item.text) {
+      if (locale === "en_us" && !item.text) {
         console.warn(`${file}: missing translation for key '${k}'`);
       }
 
