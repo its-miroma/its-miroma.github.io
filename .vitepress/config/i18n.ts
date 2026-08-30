@@ -72,10 +72,11 @@ export const getSidebar = (locale: string) => {
   const resolver = getResolver<Fabric.Translations["sidebar"]>("sidebar_translations.json", locale);
 
   const normalizeSidebar = (sidebar: Fabric.SidebarItem[], base = "") => {
-    const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
+    const returned = (JSON.parse(JSON.stringify(sidebar)) as Fabric.SidebarItem[]) //
+      .map((item) => (typeof item === "string" ? { link: item } : item));
 
     for (const item of returned) {
-      const k = item.text ?? `${item.base ?? base}${item.link ?? ""}`.replaceAll("//", "/");
+      const k = item.text ?? `${item.base ?? base}${item.link ?? ""}`;
 
       // @ts-expect-error
       item.text = resolver(k) ?? (item.link && k.endsWith("/") ? resolver("introduction") : "");
@@ -94,8 +95,8 @@ export const getSidebar = (locale: string) => {
     return returned;
   };
 
-  returned[`${localePrefix}/develop/`] = normalizeSidebar(DEVELOP_SIDEBAR);
-  returned[`${localePrefix}/players/`] = normalizeSidebar(PLAYERS_SIDEBAR);
+  returned[`${localePrefix}/develop/`] = normalizeSidebar([DEVELOP_SIDEBAR]);
+  returned[`${localePrefix}/players/`] = normalizeSidebar([PLAYERS_SIDEBAR]);
 
   return returned;
 };
