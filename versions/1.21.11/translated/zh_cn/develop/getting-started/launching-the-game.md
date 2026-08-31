@@ -11,7 +11,7 @@ outline: false
 
 ## 选择你的 IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/launching-the-game',

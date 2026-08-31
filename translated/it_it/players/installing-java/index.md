@@ -10,7 +10,7 @@ authors:
 
 ## Scegli il tuo sistema operativo {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

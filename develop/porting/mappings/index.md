@@ -43,7 +43,7 @@ Fabric API used Ravel to migrate from Yarn to Mojang Mappings. See [PR #4690 on 
 
 Neither option is perfect, and you still have to review the results and make manual fixes, especially if migrating Mixins.
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
   {
     name: 'Loom Gradle Plugin',
     href: './loom',

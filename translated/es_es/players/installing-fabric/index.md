@@ -19,7 +19,7 @@ Esta guía solo aplica al Launcher oficial de Minecraft. Para launchers de terce
 
 ## Elige tu SO {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

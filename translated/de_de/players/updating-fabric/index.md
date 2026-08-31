@@ -21,7 +21,7 @@ Neuere Mods benötigen möglicherweise eine neuere Version des Fabric Loader um 
 
 ## Dein Betriebssystem wählen {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

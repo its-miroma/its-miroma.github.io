@@ -31,7 +31,7 @@ outline: false
 
 要开始使用 Fabric 开发模组，你需要使用 IntelliJ IDEA（推荐）或 Visual Studio Code 设置开发环境。
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/setting-up',

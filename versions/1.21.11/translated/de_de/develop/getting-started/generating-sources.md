@@ -9,7 +9,7 @@ outline: false
 
 ## Deine Entwicklungsumgebung wählen {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/generating-sources',

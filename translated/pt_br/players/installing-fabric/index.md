@@ -19,7 +19,7 @@ Esse guia apenas é aplicável para o Iniciador Oficial de Minecraft. Para outro
 
 ## Escolha o seu SO {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

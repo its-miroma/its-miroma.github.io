@@ -30,7 +30,7 @@ authors-nogithub:
 
 Чтобы начать разработку модов с помощью Fabric, вам необходимо настроить среду разработки с помощью IntelliJ IDEA (рекомендуется) или альтернативного варианта Visual Studio Code.
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/setting-up',

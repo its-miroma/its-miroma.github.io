@@ -19,7 +19,7 @@ This guide only applies for the official Minecraft Launcher. For third party lau
 
 ## Choose Your OS {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
   {
     name: 'Windows',
     href: './windows',

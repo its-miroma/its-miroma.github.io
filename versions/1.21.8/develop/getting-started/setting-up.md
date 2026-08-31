@@ -46,4 +46,4 @@ If you need help installing Java, you can refer to the various Java installation
 
 To start developing mods with Fabric, you will need to set up a development environment using IntelliJ IDEA (recommended), or alternatively Visual Studio Code.
 
-<ChoiceComponent :choices />
+<Choice :choices />

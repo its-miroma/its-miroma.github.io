@@ -21,7 +21,7 @@ Mod più recenti potrebbero richiedere una versione più moderna del Loader di F
 
 ## Scegli il tuo sistema operativo {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

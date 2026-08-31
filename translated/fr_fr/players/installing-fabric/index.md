@@ -19,7 +19,7 @@ Ce guide s'applique uniquement au lanceur Minecraft officiel. Pour des lanceurs 
 
 ## Choisissez un système d'exploitation
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

@@ -39,7 +39,7 @@ Fabric API 使用 Ravel 将 Yarn 迁移到 Mojang 映射。 参见 [Fabric API �
 
 两种方法都不完美，你仍需检查结果并进行手动修复，尤其是在迁移 mixin 时。
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Loom Gradle Plugin',
  href: './loom',

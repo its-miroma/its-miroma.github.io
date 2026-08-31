@@ -19,7 +19,7 @@ Ten przewodnik zalicza się tylko do oficjalnego launchera Minecraft. W przypadk
 
 ## Wybierz swój system operacyjny {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',
