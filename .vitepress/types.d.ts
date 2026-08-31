@@ -160,6 +160,18 @@ export namespace Fabric {
     noOtherVersions: string;
   }
 
+  export interface VideoOptions {
+    /**
+     * @default "This video contains flashing lights."
+     */
+    description: string;
+
+    /**
+     * @default "Proceed"
+     */
+    button: string;
+  }
+
   export interface Translations {
     sidebar: typeof import("../sidebar_translations.json");
     website: typeof import("../website_translations.json");
@@ -192,6 +204,7 @@ export namespace Fabric {
     references: ReferencesOptions;
     sidebar: Sidebar;
     version: VersionOptions;
+    video: VideoOptions;
   }
 
   export type Config = UserConfig<ThemeConfig> & Versioned.Config;

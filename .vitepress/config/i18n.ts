@@ -349,6 +349,11 @@ export const getLocaleConfig = () => {
         },
 
         versionSwitcher: false,
+
+        video: {
+          description: resolver("video.warning.description"),
+          button: resolver("video.warning.button"),
+        },
       },
     };
   }
