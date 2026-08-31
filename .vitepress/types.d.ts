@@ -177,18 +177,14 @@ export namespace Fabric {
     website: typeof import("../website_translations.json");
   }
 
-  // TODO: types of sidebar item:
-  // - `text: string`, which have not `base` nor `link` but must have `items`
-  // - `base: string` and `link: string`: level 0 and when overriding earlier bases. can have items
-  // - `base: string`: section title; must have items
-  // - `link: string`: verbose syntax, only when it has items
-  // - `string`: compact syntax, when it's a link only
-  // What needs to be done is threefold:
-  // 1. Verify that all these 5 types are real and exist
-  // 2. Verify that no SidebarItem breaks these five types
-  // 3. Figure out the cleverest and most compact way to represent this in types (doesn't have to be 1:1, but it preferrably should get close)
+  type _SidebarItemRest = Omit<Versioned.SidebarItem, "text" | "link" | "base" | "items">;
+
   export type SidebarItem =
-    string | (Omit<Versioned.SidebarItem, "items"> & { items?: SidebarItem[] });
+    | string
+    | (_SidebarItemRest & { text: string; link?: never; base?: never; items: SidebarItem[] })
+    | (_SidebarItemRest & { text?: never; link: string; base: string; items?: SidebarItem[] })
+    | (_SidebarItemRest & { text?: never; link?: never; base: string; items: SidebarItem[] })
+    | (_SidebarItemRest & { text?: never; link: string; base?: never; items?: SidebarItem[] });
 
   export interface Sidebar extends DefaultTheme.SidebarMulti {
     [path: string]: SidebarItem[];
