@@ -4,13 +4,11 @@ import mediumZoom from "medium-zoom";
 import { inBrowser, useRouter } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { nextTick } from "vue";
-import AuthorsComponent from "./layout/AuthorsComponent.vue";
-import BannerComponent from "./layout/BannerComponent.vue";
+import Authors from "./layout/Authors.vue";
+import Banner from "./layout/Banner.vue";
 import FullscreenCode from "./layout/FullscreenCode.vue";
-import NotFoundComponent from "./layout/NotFoundComponent.vue";
+import NotFound from "./layout/NotFound.vue";
 import References from "./layout/References.vue";
-
-// TODO: rename all files under ./layout and ./components to not end with `Component` (warning: must rename all usages.)
 
 const router = useRouter();
 
@@ -43,20 +41,20 @@ watchImmediate(
     </template>
 
     <template #doc-before>
-      <AuthorsComponent />
+      <Authors />
     </template>
 
     <template #aside-outline-after>
-      <AuthorsComponent />
+      <Authors />
       <References />
     </template>
 
     <template #not-found>
-      <NotFoundComponent />
+      <NotFound />
     </template>
 
     <template #layout-top>
-      <BannerComponent />
+      <Banner />
     </template>
 
     <template #layout-bottom>

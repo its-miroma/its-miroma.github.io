@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { color } = defineProps<{ color: string }>();
+defineProps<{ color: string }>();
 </script>
 
 <template>
