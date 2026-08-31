@@ -2,6 +2,27 @@
 import { Icon } from "@iconify/vue";
 import { VPLink } from "vitepress/theme";
 
+/* TODO: I am tempted to drop this component altogether, and instead adopt a simpler system by reusing existing features:
+
+::: tabs
+
+== Choice 1
+
+<!-- @include: path/to/choice-1.md -->
+
+== Choice 2
+
+<!-- @include: path/to/choice-2.md -->
+
+:::
+
+The stuff that would be lost is:
+- The icons (afaik there is some kind of plugin or sth to add support for those, or maybe it is for code-groups, but anyway I don't think I mind)
+- The color (trivial to add to tabs if we *really* want to). These two were cosmetic, so they're not too bad.
+- Disabled state (though that can be worked around by just writing in the tab content "Not supported" or whatever)
+- External hrefs (I don't know if they are used at any point)
+*/
+
 defineProps<{
   choices: {
     name: string;
