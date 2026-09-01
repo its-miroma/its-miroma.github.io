@@ -162,6 +162,11 @@ export namespace Fabric {
 
   export interface VideoOptions {
     /**
+     * @default "Warning"
+     */
+    title: string;
+
+    /**
      * @default "This video contains flashing lights."
      */
     description: string;

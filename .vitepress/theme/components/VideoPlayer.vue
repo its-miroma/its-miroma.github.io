@@ -17,7 +17,6 @@ const props = defineProps<{
 const data = useData();
 const slots = useSlots();
 
-const markdown = computed(() => data.site.value.locales[data.localeIndex.value].markdown!);
 const options = computed(() => data.theme.value.video as Fabric.VideoOptions);
 
 const videoTitle = String(slots.default?.()?.[0]?.children ?? "");
@@ -31,7 +30,7 @@ const showWarning = ref(props.warn);
     <media-video-layout />
 
     <dialog v-if="showWarning">
-      <h3>{{ markdown.container!.warningLabel }}</h3>
+      <h3>{{ options.title }}</h3>
       <p>{{ options.description }}</p>
       <VPButton @click="showWarning = !showWarning">{{ options.button }}</VPButton>
     </dialog>
@@ -55,9 +54,5 @@ dialog {
 
 h3 {
   margin-top: 0;
-}
-
-p {
-  text-wrap: balance;
 }
 </style>
