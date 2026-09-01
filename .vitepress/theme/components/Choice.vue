@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/vue";
 import { VPLink } from "vitepress/theme";
 
-/* TODO: I am tempted to drop this component altogether, and instead adopt a simpler system by reusing existing features:
+/* TODO(not-for-llm): I am tempted to drop this component altogether, and instead adopt a simpler system by reusing existing features:
 
 ::: tabs
 

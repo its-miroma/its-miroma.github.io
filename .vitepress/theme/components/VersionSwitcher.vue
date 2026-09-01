@@ -7,9 +7,6 @@ import { VPLink } from "vitepress/theme";
 import { computed, ref } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
-// TODO: should this me moved to ../layout/, seeing as it's only used in the layout not in the pages?
-// although, maybe it needs to be registered with app.component? Or.. can I add it to a slot in DefaultTheme.Layout?
-
 const props = defineProps<{
   versioningPlugin: { versions: string[]; latestVersion: string };
   screenMenu?: boolean;
