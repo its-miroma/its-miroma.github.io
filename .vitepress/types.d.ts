@@ -7,6 +7,8 @@ import type { Versioned } from "vitepress-versioning-plugin";
 // whether we shall generate the files in CI before pushing - trivial with fs.writeFileSync(JSON.stringify(...)).
 // This can also open the door to not having sidebar_translations.json and localizing the sidebar files directly.
 
+// TODO: explore whether we should simplify this file's exports by using Fabric.ThemeConfig["video"] instead of VideoOptions. There is also a possibility that we can use 'useData<Fabric.ThemeConfig>()' instead of 'as Fabric.ThemeConfig'
+
 export namespace Fabric {
   export interface AuthorsOptions {
     /**

@@ -11,11 +11,7 @@ import { getWebsiteResolver } from "../config/i18n.ts";
 // An explicit path can still be given with {download=/download/...} if needed.
 // If the download path resolves to a directory, it will be zipped after build.
 
-// TODO: does this work in the dev server? elements that might not work:
-// - Caches
-// - zipping files
-// - ???
-
+// TODO: disable this cache in dev mode to avoid excessive memory usage.
 const directoriesToBeZipped = new Set<string>();
 
 // TODO: I don't like this helper pattern :/ meh maybe it's fine
@@ -77,6 +73,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
       // Expected:    p > :is(img, a.download), and apply styles to p:has(a.download) maybe?
       `<span class="download-image">${renderedImage}`
       // TODO: should this be a button instead of an anchor? maybe not?
+      // TODO: disable the button for ZIP files in dev mode.
       + `<a class="download-image-button" href="${md.utils.escapeHtml(downloadPath)}" `
       + `title="${md.utils.escapeHtml(tooltip)}" download></a></span>`
     );
