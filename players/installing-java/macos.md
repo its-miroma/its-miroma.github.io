@@ -11,7 +11,7 @@ This guide will walk you through installing Java 25 on macOS.
 
 The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
-## 1. Check if Java Is Already Installed {#1-check-if-java-is-already-installed}
+## 1. Check if Java Is Already Installed {#macos-check-if-java-is-already-installed}
 
 In Terminal (located in `/Applications/Utilities/Terminal.app`) type the following, and press <kbd>Enter</kbd>:
 
@@ -37,7 +37,7 @@ If this command displays any version lower than 25, you'll need to update your e
 
 :::
 
-## 2. Downloading and Installing Java 25 {#2-downloading-and-installing-java}
+## 2. Downloading and Installing Java 25 {#macos-downloading-and-installing-java}
 
 We recommend using [Adoptium's build of OpenJDK 25](https://adoptium.net/temurin/releases?version=25&os=mac&arch=any&mode=filter):
 
@@ -58,7 +58,7 @@ You will have to enter your administrator password to complete the installation:
 
 ![macOS Password Prompt](/assets/players/installing-java/macos-password-prompt.png)
 
-### Using Homebrew {#using-homebrew}
+### Using Homebrew {#macos-using-homebrew}
 
 If you already have [Homebrew](https://brew.sh) installed, you can install Java 25 using `brew` instead:
 
@@ -66,7 +66,7 @@ If you already have [Homebrew](https://brew.sh) installed, you can install Java 
 brew install --cask temurin@25
 ```
 
-## 3. Verify That Java 25 Is Installed {#3-verify-that-java-is-installed}
+## 3. Verify That Java 25 Is Installed {#macos-verify-that-java-is-installed}
 
 Once the installation is complete, you can verify that Java 25 is active by opening Terminal again and typing `$(/usr/libexec/java_home -v 25)/bin/java --version`.
 

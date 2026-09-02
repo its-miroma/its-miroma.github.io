@@ -10,7 +10,7 @@ This guide will walk you through installing Java 25 on Linux.
 
 The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
-## 1. Check if Java Is Already Installed {#1-check-if-java-is-already-installed}
+## 1. Check if Java Is Already Installed {#linux-check-if-java-is-already-installed}
 
 Open a terminal, type `java -version`, and press <kbd>Enter</kbd>.
 
@@ -24,11 +24,11 @@ If this command displays any version lower than 25, you'll need to update your e
 
 :::
 
-## 2. Downloading and Installing Java 25 {#2-downloading-and-installing-java}
+## 2. Downloading and Installing Java 25 {#linux-downloading-and-installing-java}
 
 We recommend using OpenJDK 25, which is available for most Linux distributions.
 
-### Arch Linux {#arch-linux}
+### Arch Linux {#linux-arch}
 
 ::: info
 
@@ -54,7 +54,7 @@ If you plan to develop mods, you'll need the JDK instead:
 sudo pacman -S jdk-openjdk
 ```
 
-### Debian/Ubuntu {#debian-ubuntu}
+### Debian/Ubuntu {#linux-debian-ubuntu}
 
 You can install Java 25 using `apt` with the following commands:
 
@@ -63,7 +63,7 @@ sudo apt update
 sudo apt install openjdk-25-jdk
 ```
 
-### Fedora {#fedora}
+### Fedora {#linux-fedora}
 
 You can install Java 25 using `dnf` with the following commands:
 
@@ -83,13 +83,13 @@ If you plan to develop mods, you'll need the JDK instead:
 sudo dnf install java-25-openjdk-devel
 ```
 
-### Other Linux Distributions {#other-linux-distributions}
+### Other Linux Distributions {#linux-other-distributions}
 
 If your distribution isn't listed above, you can download the latest JRE from [Adoptium](https://adoptium.net/installation/linux)
 
 You should refer to an alternative guide for your distribution if you plan to develop mods.
 
-## 3. Verify That Java 25 Is Installed {#3-verify-that-java-is-installed}
+## 3. Verify That Java 25 Is Installed {#linux-verify-that-java-is-installed}
 
 Once the installation is complete, you can verify that Java 25 is installed by opening a terminal and typing `java -version`.
 

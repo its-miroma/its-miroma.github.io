@@ -11,7 +11,7 @@ This guide will walk you through installing Java 25 on Windows.
 
 The Minecraft Launcher comes with its own Java installation, so this section is only relevant if you want to use the Fabric `.jar` based installer, or if you want to use the Minecraft Server `.jar`.
 
-## 1. Check if Java Is Already Installed {#1-check-if-java-is-already-installed}
+## 1. Check if Java Is Already Installed {#windows-check-if-java-is-already-installed}
 
 To check if Java is already installed, you must first open the command prompt.
 
@@ -33,7 +33,7 @@ If this command displays any version lower than 25, you'll need to update your e
 
 :::
 
-## 2. Download the Java 25 Installer {#2-download-the-java-installer}
+## 2. Download the Java 25 Installer {#windows-download-the-java-installer}
 
 To install Java 25, you'll need to download the installer from [Adoptium](https://adoptium.net/temurin/releases?version=25&os=windows&arch=any&mode=filter).
 
@@ -45,7 +45,7 @@ You should choose `x86` if you have a 32-bit operating system, or `x64` if you h
 
 The majority of modern computers will have a 64-bit operating system. If you are unsure, try using the 64-bit download.
 
-## 3. Run the Installer! {#3-run-the-installer}
+## 3. Run the Installer! {#windows-run-the-installer}
 
 Follow the steps in the installer to install Java 25. When you reach this page, you should set the following features to "Entire feature will be installed on local hard drive":
 
@@ -64,7 +64,7 @@ Windows won't always tell other programs that Java is installed until you restar
 
 :::
 
-## 4. Verify That Java 25 Is Installed {#4-verify-that-java-is-installed}
+## 4. Verify That Java 25 Is Installed {#windows-verify-that-java-is-installed}
 
 Once the installation is complete, you can verify that Java 25 is installed by opening the command prompt again and typing `java -version`.
 
