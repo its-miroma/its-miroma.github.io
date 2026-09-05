@@ -14,8 +14,8 @@ export default {
   enhanceApp: ({ app }) => {
     enhanceAppWithTabs(app);
 
-    for (const [path, module] of Object.entries(modules)) {
-      app.component(path.match(/[/]([^/]+)[.]vue$/)![1], module.default);
+    for (const [modulePath, { default: component }] of Object.entries(modules)) {
+      app.component(modulePath.match(/[/]([^/]+)[.]vue$/)![1], component);
     }
   },
 } satisfies Theme;

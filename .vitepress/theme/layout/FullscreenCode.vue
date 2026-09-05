@@ -6,10 +6,10 @@ import { computed, nextTick, onUnmounted, ref } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
 const prefersReducedMotion = usePreferredReducedMotion();
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 const markdown = computed(() => data.site.value.locales[data.localeIndex.value].markdown!);
 
-const options = computed(() => data.theme.value.code as Fabric.FullscreenCodeOptions);
+const options = computed(() => data.theme.value.code);
 const copyOptions = computed(() => markdown.value.codeCopyButton!);
 
 const dialog = ref<HTMLDialogElement>();
@@ -26,7 +26,7 @@ const loadCodeBlock = async (originalCodeBlock: HTMLDivElement) => {
   if (!dialog.value) return;
 
   originalCopyButton.value =
-    originalCodeBlock.querySelector<HTMLButtonElement>("button.copy:not(.fullscreen)") ?? undefined;
+    originalCodeBlock.querySelector<HTMLButtonElement>("button.copy:not(.fullscreen)") || undefined;
 
   const clonedCodeBlock = originalCodeBlock.cloneNode(true) as HTMLDivElement;
   clonedCodeBlock.style.viewTransitionName = "code-block-view-transition";
@@ -120,7 +120,7 @@ onContentUpdated(() =>
 
       const enterFullscreenButton =
         codeBlock.querySelector<HTMLButtonElement>("button.copy.fullscreen")
-        ?? document.createElement("button");
+        || document.createElement("button");
       enterFullscreenButton.title = options.value.enterFullscreen;
       enterFullscreenButton.setAttribute("aria-label", options.value.enterFullscreen);
       enterFullscreenButton.className = "copy fullscreen";

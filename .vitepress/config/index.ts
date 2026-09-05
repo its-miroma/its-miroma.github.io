@@ -1,6 +1,5 @@
 // @ts-expect-error
 import snippetPlugin from "markdown-it-vuepress-code-snippet-enhanced";
-import * as fs from "node:fs";
 import * as path from "node:path";
 import * as process from "node:process";
 import bytecode from "syntax-java-bytecode/java-bytecode.tmLanguage.json" with { type: "json" };
@@ -8,36 +7,29 @@ import mcfunction from "syntax-mcfunction/mcfunction.tmLanguage.json" with { typ
 import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
-import AT from "../at.ts";
-import { downloadImagePlugin, zipDownloadAssets } from "../plugins/downloadImage.ts";
+import AT from "../constants/at.ts";
+import ENV from "../constants/env.ts";
+import LATEST_VERSION from "../constants/latestVersion.ts";
+import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
 import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
 
-const latestVersion = fs
-  .readFileSync(path.resolve(AT, "reference", "latest", "build.gradle"), "utf-8")
-  .match(/def minecraftVersion = "([^"]+)"/)![1];
-
-// https://docs.github.com/en/actions/reference/workflows-and-actions/variables#default-environment-variables
-// https://docs.netlify.com/build/configure-builds/environment-variables/#read-only-variables
-const env = process.env.GITHUB_ACTIONS
-  ? "github"
-  : process.env.NETLIFY
-    ? Number(process.env.REVIEW_ID)
-    : process.env.NODE_ENV === "production"
-      ? "build"
-      : "dev";
+// TODO: should all constants be in a single common file .vitepress/constants.ts instead of one file for each?
+// TODO: review deps and devDeps, why we have them, and if they are in the right place.
 
 const hostname =
-  env === "github"
-    ? "https://docs.fabricmc.net/"
-    : env === "build"
+  ENV === "dev"
+    ? "http://fabric-docs.localhost:5173/"
+    : ENV === "build"
       ? "http://fabric-docs.localhost:4173/"
-      : env === "dev"
-        ? "http://fabric-docs.localhost:5173/"
-        : `${process.env.DEPLOY_PRIME_URL!}/`;
+      : ENV === "github"
+        ? "https://docs.fabricmc.net/"
+        : ENV === "netlify"
+          ? "https://fabric-docs.netlify.app/"
+          : process.env.DEPLOY_PRIME_URL!;
 
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
@@ -47,7 +39,7 @@ export default defineVersionedConfig(
     cleanUrls: true,
 
     // Set head tags on the client side
-    head: [["script", { "data-gen": "" }, getClientTransformHead(latestVersion)]],
+    head: [["script", { "data-gen": "" }, getClientTransformHead()]],
 
     // Ignore dead links under translated/. Allows builds with incomplete translations
     ignoreDeadLinks: [
@@ -107,23 +99,29 @@ export default defineVersionedConfig(
       transformItems: (items) => {
         const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
         return items.filter((i) => {
+          // TODO: why not split at :// ? if that's possible, then we can inline hostname earlier.
           const relativePath = i.url.replace(hostname, "");
           return !config.rewrites.inv[relativePath]?.startsWith("versions/");
         });
       },
     },
 
-    srcExclude: ["README.md", ...(typeof env === "number" ? ["versions"] : [])],
+    srcExclude: [
+      "README.md",
+      (process.env.WITH_VERSIONS !== undefined
+        ? !Number(process.env.WITH_VERSIONS)
+        : typeof ENV === "number") && "versions",
+    ].filter(Boolean),
 
     themeConfig: {
-      env,
+      env: ENV,
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },
       search: {
         options: {
           _render: async (src, env, md) => {
-            src = transformFile(src, env.path, latestVersion);
+            src = transformFile(src, env.path);
             const html = await md.renderAsync(src, env);
             return env.frontmatter?.search === false ? "" : html;
           },
@@ -133,11 +131,11 @@ export default defineVersionedConfig(
     },
 
     // Set head tags at build time
-    transformHead: getBuildTransformHead(latestVersion),
+    transformHead: getBuildTransformHead(),
 
     // Versioning plugin configuration.
     versioning: {
-      latestVersion,
+      latestVersion: LATEST_VERSION,
       rewrites: { localePrefix: "translated" },
       sidebars: {
         sidebarContentProcessor: (s) =>
@@ -157,11 +155,11 @@ export default defineVersionedConfig(
     },
 
     buildEnd: (siteConfig) => {
-      zipDownloadAssets(siteConfig);
+      createDownloadZips(siteConfig);
     },
 
     vite: {
-      plugins: [transformFilesPlugin(latestVersion), watchTranslationsPlugin()],
+      plugins: [transformFilesPlugin(), watchTranslationsPlugin()],
     },
 
     vue: {

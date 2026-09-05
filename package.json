@@ -1,7 +1,7 @@
 {
   "name": "fabric-docs",
   "type": "module",
-  "packageManager": "pnpm@11.23.0",
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
@@ -24,19 +24,19 @@
     "vitepress": "2.0.0-alpha.19",
     "vitepress-plugin-tabs": "^0.9.1",
     "vitepress-versioning-plugin": "github:FabricMC/vitepress-versioning-plugin#3710e8b43e0484731e79c0fce5e1d623609435f0",
-    "vue": "^3.5.41"
+    "vue": "^3.5.42"
   },
   "devDependencies": {
+    "@archiver/archiver": "^0.2.0",
     "@csstools/stylelint-formatter-github": "^2.0.0",
-    "@types/archiver": "^8.0.0",
     "@types/cross-spawn": "^6.0.6",
-    "@types/node": "^26.2.0",
-    "archiver": "^8.0.0",
+    "@types/node": "^26.4.1",
     "cross-spawn": "^7.0.6",
     "markdownlint": "^0.41.1",
     "markdownlint-rule-search-replace": "^1.2.0",
     "markdownlint-rule-titlecase": "^0.1.0",
-    "oxc-minify": "^0.146.0",
+    "oxc-minify": "^0.148.0",
+    "p-limit": "^7.3.2",
     "postcss-html": "^2.0.0",
     "prettier": "^3.9.6",
     "stylelint": "^17.14.1",
@@ -45,7 +45,7 @@
     "stylelint-config-standard": "^40.0.0",
     "stylelint-plugin-use-baseline": "^1.4.6",
     "stylelint-use-nesting": "^6.0.2",
-    "tsx": "^4.23.12",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.3"
   }
 }

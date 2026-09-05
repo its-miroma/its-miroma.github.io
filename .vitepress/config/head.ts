@@ -1,3 +1,4 @@
+import LATEST_VERSION from "../constants/latestVersion.ts";
 import type { Fabric } from "../types.d.ts";
 
 type NewHeadContext = {
@@ -100,8 +101,9 @@ const _getNewHead = (context: NewHeadContext): string | [string, Record<string, 
 
   split[0] =
     versionMap[split[0]]
-    ?? versionMap[`${split[0]}.0`]
-    ?? (/^(?!404$)[0-9.]+$/.test(split[0]) ? "" : split[0]);
+    || versionMap[`${split[0]}.0`]
+    // TODO: use VERSION_RE from transformFiles? should it be among ../constants?
+    || (/^(?!404$)[0-9.]+$/.test(split[0]) ? "" : split[0]);
   if (!split[0] || split[0] === context.latestVersion) split.shift();
 
   const seenPaths = new Set([split.join("/")]);
@@ -143,7 +145,7 @@ const _getNewHead = (context: NewHeadContext): string | [string, Record<string, 
     ["meta", { property: "og:locale", content: ogLocale }],
   ];
 
-  if ((context.lastUpdated ?? 0) > 0) {
+  if ((context.lastUpdated || 0) > 0) {
     returned.push([
       "meta",
       { property: "article:modified_time", content: new Date(context.lastUpdated!).toISOString() },
@@ -157,7 +159,7 @@ const _getNewHead = (context: NewHeadContext): string | [string, Record<string, 
   return returned;
 };
 
-export const getClientTransformHead = (latestVersion: string) => {
+export const getClientTransformHead = () => {
   const script = (getNewHead: typeof _getNewHead, latestVersion: string) => {
     const headData = getNewHead({
       ...window.location,
@@ -191,25 +193,23 @@ export const getClientTransformHead = (latestVersion: string) => {
     }
   };
 
-  return `(${script.toString()})(${_getNewHead.toString()}, ${JSON.stringify(latestVersion)})`;
+  return `(${script.toString()})(${_getNewHead.toString()}, ${JSON.stringify(LATEST_VERSION)})`;
 };
 
-export const getBuildTransformHead =
-  (latestVersion: string): Fabric.Config["transformHead"] =>
-  (context) => {
-    const returned = _getNewHead({
-      latestVersion,
-      pathname: context.pageData.relativePath,
-      origin: context.siteConfig.sitemap!.hostname,
-      hash: "",
-      search: "",
-      description: context.pageData.description,
-      title: context.pageData.title,
-      isNotFound: context.pageData.isNotFound,
-      isVersioned: context.pageData.filePath.startsWith("versions/"),
-      siteName: context.siteData.locales[context.siteData.localeIndex!].title!,
-      lastUpdated: context.pageData.lastUpdated,
-    });
+export const getBuildTransformHead = (): Fabric.Config["transformHead"] => (context) => {
+  const returned = _getNewHead({
+    latestVersion: LATEST_VERSION,
+    pathname: context.pageData.relativePath,
+    origin: context.siteConfig.sitemap!.hostname,
+    hash: "",
+    search: "",
+    description: context.pageData.description,
+    title: context.pageData.title,
+    isNotFound: context.pageData.isNotFound,
+    isVersioned: context.pageData.filePath.startsWith("versions/"),
+    siteName: context.siteData.locales[context.siteData.localeIndex!].title!,
+    lastUpdated: context.pageData.lastUpdated,
+  });
 
-    if (typeof returned !== "string") return returned;
-  };
+  if (typeof returned !== "string") return returned;
+};

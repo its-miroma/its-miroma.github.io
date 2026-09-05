@@ -6,17 +6,19 @@ import { computed, onMounted, ref, watchEffect } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
 // TODO: make it so that the HTML page having a scrollbar or not does not affect the banner. In other words: the scrollbar's top edge should be under the banner - the banner should span from left to right 100% width despite the scrollbar, the banner should not cover the scrollbar.
+// TODO: can we use <template> or <slot> in the value of options.pr?
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 const banner = ref<HTMLDivElement>();
 const { height } = useElementSize(banner);
 
-const env = computed(() => data.theme.value.env as Fabric.EnvOptions);
-const options = computed(() => data.theme.value.banner as Fabric.BannerOptions);
+const env = computed(() => data.theme.value.env);
+const options = computed(() => data.theme.value.banner);
 
 const strings = computed(() => {
   switch (env.value) {
     case "github":
+    case "netlify":
       return [];
 
     case "build":

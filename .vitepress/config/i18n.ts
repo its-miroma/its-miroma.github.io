@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
-import AT from "../at.ts";
+import AT from "../constants/at.ts";
 import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
 import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
 import type { Fabric } from "../types.d.ts";
@@ -15,6 +15,7 @@ export const getLocales = () => [
     .map((d) => path.basename(d)),
 ];
 
+// TODO: this currently persists through dev server restarts.
 const translationFileCache = new Map<string, Record<string, any>>();
 const readTranslationFile = <T extends Record<string, any>>(file: string, locale: string): T => {
   const filePath = path.resolve(AT, "translated", locale === "en_us" ? ".." : locale, file);
@@ -73,20 +74,20 @@ export const getSidebar = (locale: string) => {
       .map((item) => (typeof item === "string" ? { link: item } : item));
 
     for (const item of returned) {
-      const k = item.text ?? `${item.base ?? base}${item.link ?? ""}`;
+      const k = item.text || `${item.base || base}${item.link || ""}`;
 
       // @ts-expect-error
-      item.text = resolver(k) ?? (item.link && k.endsWith("/") ? resolver("introduction") : "");
+      item.text = resolver(k) || (item.link && k.endsWith("/") ? resolver("introduction") : "");
 
       if (locale === "en_us" && !item.text) {
         console.warn(`${file}: missing translation for key '${k}'`);
       }
 
       if (item.items) {
-        item.items = normalizeSidebar(item.items, item.base ?? base);
+        item.items = normalizeSidebar(item.items, item.base || base);
       }
 
-      item.base = `${localePrefix}${item.base ?? base}`;
+      item.base = `${localePrefix}${item.base || base}`;
     }
 
     return returned;
@@ -119,7 +120,7 @@ export const getLocaleConfig = () => {
   for (const locale of getLocales()) {
     const intlLocale =
       intlLocaleOverrides[locale]
-      ?? locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
+      || locale.replace(/..$/, (m) => m.toUpperCase()).replace("_", "-");
     const crowdinLocale = crowdinLocaleOverrides[locale] ?? locale.split("_")[0];
 
     const label = new Intl.DisplayNames(intlLocale, {
@@ -193,7 +194,7 @@ export const getLocaleConfig = () => {
         },
 
         download: {
-          text: resolver("download"),
+          text: resolver("download.button"),
         },
 
         editLink:

@@ -12,11 +12,11 @@ const props = defineProps<{
   screenMenu?: boolean;
 }>();
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 const collator = new Intl.Collator(undefined, { numeric: true });
 
-const env = computed(() => data.theme.value.env as Fabric.EnvOptions);
-const options = computed(() => data.theme.value.version as Fabric.VersionOptions);
+const env = computed(() => data.theme.value.env);
+const options = computed(() => data.theme.value.version);
 const currentV = computed(() => {
   if (data.frontmatter.value.version) return data.frontmatter.value.version as string;
 

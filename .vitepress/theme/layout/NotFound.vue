@@ -10,7 +10,7 @@ import { VPLink } from "vitepress/theme";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 const prefersReducedMotion = usePreferredReducedMotion();
 
 const root = ref<HTMLDivElement>();
@@ -23,7 +23,7 @@ const showContent = ref(false);
 
 const random = Math.random();
 const options = computed(() => {
-  const { quotes, pooh, title, ...rest } = data.theme.value.notFound as Fabric.NotFoundOptions;
+  const { quotes, pooh, title, ...rest } = data.theme.value.notFound;
   const i = Math.floor(random * quotes.length);
 
   return {
@@ -226,7 +226,7 @@ const TEXTURE = [
       <br />
       <VPLink
         v-if="data.localeIndex.value !== 'root'"
-        :href="String((data.theme.value as Fabric.ThemeConfig).editLink!.pattern)"
+        :href="String(data.theme.value.editLink!.pattern)"
         :aria-label="options.crowdinLinkLabel"
       >
         {{ options.crowdinLinkText }}

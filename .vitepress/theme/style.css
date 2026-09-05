@@ -82,19 +82,21 @@ div[class*="language-"] button.copy.fullscreen {
   }
 }
 
-/* Download button on {download} images */
-.download-image {
+/* TODO: for some reason, when two download images are one under the other, they are shown side-by-side. */
+
+/* Download button */
+p:has(> a[download]) {
+  /* TODO: this breaks the image centering (margin-inline: auto). */
   position: relative;
   display: inline-block;
 }
 
-.download-image-button {
-  cursor: pointer;
-
+/* TODO: drop .VPButton once DownloadEntry is removed */
+a[download]:not(.VPButton) {
   position: absolute;
   z-index: 3;
-  top: 12px;
-  right: 12px;
+  top: 20px; /* p has a margin of 16px */
+  right: 4px;
 
   width: 40px;
   height: 40px;
@@ -113,11 +115,16 @@ div[class*="language-"] button.copy.fullscreen {
     background-color 0.25s,
     opacity 0.25s;
 
-  &:hover,
-  &:focus {
+  &[href]:hover,
+  &[href]:focus {
     border-color: var(--vp-code-copy-code-hover-border-color);
     opacity: 100%;
     background-color: var(--vp-code-copy-code-hover-bg);
+  }
+
+  &:not([href]) {
+    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the downlaod icon. No need for a separate icon because it's a dev-only issue */
+    cursor: not-allowed;
   }
 }
 

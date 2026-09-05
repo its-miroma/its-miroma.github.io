@@ -1,8 +1,9 @@
 import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin } from "vitepress";
-import AT from "../at.ts";
 import { getWebsiteResolver } from "../config/i18n.ts";
+import AT from "../constants/at.ts";
+import LATEST_VERSION from "../constants/latestVersion.ts";
 
 // the value is the number of segments in the path that indicate the version
 enum VersionType {
@@ -26,7 +27,7 @@ interface PagePath {
 export const VERSION_RE = /^[0-9]+[.][0-9]+([.][0-9]+)?$/;
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
-const parsePagePath = (relativePath: string, latestVersion: string): PagePath => {
+const parsePagePath = (relativePath: string): PagePath => {
   const returned = {} as PagePath;
 
   const split = relativePath.split("/");
@@ -41,7 +42,7 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
     returned.version = split[2];
     returned.versionType = VersionType.FUTURE;
   } else {
-    returned.version = latestVersion;
+    returned.version = LATEST_VERSION;
     returned.versionType = VersionType.LATEST;
   }
 
@@ -61,12 +62,12 @@ const parsePagePath = (relativePath: string, latestVersion: string): PagePath =>
   return returned;
 };
 
-export const transformFile = (src: string, id: string, latestVersion: string) => {
+export const transformFile = (src: string, id: string) => {
   const { data, content } = matter(src, {});
 
   // Version and locale information
   const relativePath = path.relative(AT, id);
-  Object.assign(data, parsePagePath(relativePath, latestVersion));
+  Object.assign(data, parsePagePath(relativePath));
 
   if (data.versionType === VersionType.OLD) {
     data.editLink = false;
@@ -126,17 +127,17 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
     data.files = [];
   } else {
     // Find files referenced in the page
-    const matches = [...content.matchAll(FILE_PATH_RE)].map((m) => (m[1] ?? m[2]).trim());
+    const matches = [...content.matchAll(FILE_PATH_RE)].map((m) => (m[1] || m[2]).trim());
 
-    matches.push(...(data.files ?? []));
+    matches.push(...(data.files || []));
 
-    data.files = [...new Set(matches)].filter((f) => !(data.filesExclude ?? []).includes(f));
+    data.files = [...new Set(matches)].filter((f) => !(data.filesExclude || []).includes(f));
   }
 
   return matter.stringify(newContent.join("\n\n"), data);
 };
 
-export const transformFilesPlugin = (latestVersion: string): Plugin => ({
+export const transformFilesPlugin = (): Plugin => ({
   name: "fabric-docs:transform-files",
   enforce: "pre",
 
@@ -144,7 +145,7 @@ export const transformFilesPlugin = (latestVersion: string): Plugin => ({
     filter: { id: /[.]md$/ },
     handler(src, id) {
       this.addWatchFile(id);
-      return { code: transformFile(src, id, latestVersion) };
+      return { code: transformFile(src, id) };
     },
   },
 });

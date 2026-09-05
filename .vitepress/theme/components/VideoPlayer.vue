@@ -14,12 +14,12 @@ const props = defineProps<{
   warn?: boolean;
 }>();
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 const slots = useSlots();
 
-const options = computed(() => data.theme.value.video as Fabric.VideoOptions);
+const options = computed(() => data.theme.value.video);
 
-const videoTitle = String(slots.default?.()?.[0]?.children ?? "");
+const videoTitle = String(slots.default?.()?.[0]?.children || "");
 
 const showWarning = ref(props.warn);
 </script>

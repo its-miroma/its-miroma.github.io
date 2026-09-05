@@ -1,9 +1,13 @@
-import { ZipArchive } from "archiver";
+import { ZipArchive } from "@archiver/archiver";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import * as stream from "node:stream";
+import pLimit from "p-limit";
+import * as tinyglobby from "tinyglobby";
 import type { MarkdownRenderer, SiteConfig } from "vitepress";
-import AT from "../at.ts";
 import { getWebsiteResolver } from "../config/i18n.ts";
+import AT from "../constants/at.ts";
+import ENV from "../constants/env.ts";
 
 // {download} on an image marks it as having a downloadable counterpart:
 //   ![Condensed Oak Log texture](/assets/develop/blocks/condensed_oak_log.png){download}
@@ -11,16 +15,21 @@ import { getWebsiteResolver } from "../config/i18n.ts";
 // An explicit path can still be given with {download=/download/...} if needed.
 // If the download path resolves to a directory, it will be zipped after build.
 
-// TODO: disable this cache in dev mode to avoid excessive memory usage.
+// TODO: seeing that this is becoming a rather large plugin, should it still be called downloadImage.ts? I guess so
+// TODO: review whether to use console.error instead of console.warn in some of these cases.
+
 const directoriesToBeZipped = new Set<string>();
 
-// TODO: I don't like this helper pattern :/ meh maybe it's fine
 const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
   const expectedParent = `/assets/${purePath.replace(/[.]md$/, "")}/`;
 
-  const relativeSrc = path.relative(expectedParent, src);
-  if (!relativeSrc || relativeSrc.startsWith("../") || path.isAbsolute(relativeSrc)) {
-    0 != 0 && console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
+  const relativeSrc = path.posix.relative(expectedParent, src);
+  if (relativeSrc.startsWith("../") || path.isAbsolute(relativeSrc)) {
+    console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
+  }
+
+  if (src !== src.toLowerCase()) {
+    console.warn(`${relativePath}: unexpected uppercase in '${src}'`);
   }
 };
 
@@ -32,8 +41,15 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     const token = tokens[idx];
+    const locale = env.frontmatter.localeIndex === "root" ? "en_us" : env.frontmatter.localeIndex;
+    const resolver = getWebsiteResolver(locale);
 
-    const src = path.resolve(token.attrGet("src")!);
+    const srcValue = token.attrGet("src");
+    const src = path.posix.normalize(srcValue!);
+    if (srcValue !== src) {
+      console.warn(`${env.relativePath}: expected normalized '${src}', got '${srcValue}'`);
+    }
+
     checkAssetPathConvention(env.relativePath, env.frontmatter.purePath, src);
 
     let downloadPath = token.attrGet("download");
@@ -43,68 +59,81 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
 
     token.attrs!.splice(token.attrIndex("download"), 1);
     const renderedImage = image(tokens, idx, options, env, self);
-    if (!downloadPath && !src.startsWith("/assets/")) {
+    if (downloadPath) {
+      if (downloadPath !== downloadPath.toLowerCase()) {
+        console.warn(`${env.relativePath}: unexpected uppercase in {download="${downloadPath}"}`);
+      }
+    } else if (!src.startsWith("/assets/")) {
       console.warn(`${env.relativePath}: cannot determine {download} path for ${src}.`);
 
       return renderedImage;
     }
 
     downloadPath ||= src.replace("/assets/", "/download/");
-    const fullDownloadPath = path.resolve(AT, "public", `./${downloadPath}`);
-    if (!fs.existsSync(fullDownloadPath)) {
+    downloadPath = downloadPath.replace(/[/]+$/, "");
+
+    const absoluteDownloadPath = path.resolve(AT, "public", `./${downloadPath}`);
+    if (!absoluteDownloadPath.startsWith(`${AT}${path.sep}`)) {
+      console.warn(`${env.relativePath}: out of project traversal in {download="${downloadPath}"}`);
+
+      return renderedImage;
+    }
+
+    const stat = fs.statSync(absoluteDownloadPath, { throwIfNoEntry: false });
+    if (!stat) {
       console.warn(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
 
       return renderedImage;
     }
 
-    if (fs.statSync(fullDownloadPath).isDirectory()) {
-      directoriesToBeZipped.add(downloadPath);
+    if (stat.isDirectory()) {
+      if (ENV !== "dev") {
+        directoriesToBeZipped.add(downloadPath);
+      }
+
       downloadPath += ".zip";
     }
 
-    const locale = env.frontmatter.localeIndex === "root" ? "en_us" : env.frontmatter.localeIndex;
-    const resolver = getWebsiteResolver(locale);
-    const tooltip = resolver("download").replace("%s", token.content || src);
-
-    return (
-      // TODO: instead of wrapping in span.download-image, would it be possible to apply the styles to the surrounding p?
-      // currently, this breaks the styling of images that can be found in styles.css.
-      // Current DOM: p > span.download-image > :is(img, a.download-image-button)
-      // Expected:    p > :is(img, a.download), and apply styles to p:has(a.download) maybe?
-      `<span class="download-image">${renderedImage}`
-      // TODO: should this be a button instead of an anchor? maybe not?
-      // TODO: disable the button for ZIP files in dev mode.
-      + `<a class="download-image-button" href="${md.utils.escapeHtml(downloadPath)}" `
-      + `title="${md.utils.escapeHtml(tooltip)}" download></a></span>`
-    );
+    return `${renderedImage} <a download ${
+      downloadPath.endsWith(".zip") && ENV === "dev"
+        ? `title="${md.utils.escapeHtml(resolver("download.unavailable_in_dev"))}"`
+        : `title="${md.utils.escapeHtml(
+            resolver("download.button").replace("%s", token.content || path.basename(downloadPath))
+          )}" href="${md.utils.escapeHtml(downloadPath)}"`
+    }></a>`;
   };
 };
 
-export const zipDownloadAssets = async (siteConfig: SiteConfig) => {
+export const createDownloadZips = async (siteConfig: SiteConfig) => {
   if (directoriesToBeZipped.size === 0) return;
 
-  await Promise.all(
-    [...directoriesToBeZipped].map(async (d) => {
-      const dir = path.resolve(siteConfig.outDir, `.${d}`);
-      if (!fs.existsSync(dir)) {
-        return;
+  const limit = pLimit(5);
+
+  const tasks = [...directoriesToBeZipped].map((relativeD) =>
+    limit(async () => {
+      const d = path.resolve(siteConfig.outDir, `./${relativeD}`);
+      const stat = await fs.promises.stat(d, { throwIfNoEntry: false });
+      if (!stat?.isDirectory()) return;
+
+      const z = `${d}.zip`;
+      if (fs.existsSync(z)) {
+        console.warn(`${z}: found unexpected zip before generation`);
+        await fs.promises.rm(z);
       }
 
-      await new Promise<void>((resolve, reject) => {
-        const output = fs.createWriteStream(`${dir}.zip`);
-        output.on("close", resolve);
-        output.on("error", reject);
+      const subDirectories = await tinyglobby.glob("*", { cwd: d, onlyDirectories: true });
+      if (subDirectories.length) {
+        console.warn(`${z}: unexpected subdirectories: '${subDirectories.join("', '")}'`);
+      }
 
-        const archive = new ZipArchive({ zlib: { level: 9 } });
-        archive.on("error", reject);
-        archive.on("warning", reject);
+      // @ts-expect-error: https://github.com/node-archiver/archiver/pull/95
+      const archive = new ZipArchive({ zlib: { level: 9 } }).directory(d, false);
+      const pipeline = stream.promises.pipeline(archive, fs.createWriteStream(z));
 
-        archive.pipe(output);
-        archive.directory(dir, false);
-        void archive.finalize();
-      });
-
-      await fs.promises.rm(dir, { recursive: true, force: true });
+      await archive.finalize();
+      await pipeline;
     })
   );
+
+  await Promise.all(tasks);
 };

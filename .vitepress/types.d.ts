@@ -1,3 +1,4 @@
+// TODO: if this is a .d.ts file, why do we need import type?
 import type { DefaultTheme, UserConfig } from "vitepress";
 import type { Versioned } from "vitepress-versioning-plugin";
 
@@ -7,10 +8,11 @@ import type { Versioned } from "vitepress-versioning-plugin";
 // whether we shall generate the files in CI before pushing - trivial with fs.writeFileSync(JSON.stringify(...)).
 // This can also open the door to not having sidebar_translations.json and localizing the sidebar files directly.
 
-// TODO: explore whether we should simplify this file's exports by using Fabric.ThemeConfig["video"] instead of VideoOptions. There is also a possibility that we can use 'useData<Fabric.ThemeConfig>()' instead of 'as Fabric.ThemeConfig'
+// TODO: inline all non-exported interfaces.
+// TODO: consider whether we should move the types declared in other files here.
 
 export namespace Fabric {
-  export interface AuthorsOptions {
+  interface AuthorsOptions {
     /**
      * @default "Page Authors"
      */
@@ -22,7 +24,7 @@ export namespace Fabric {
     noGitHub: string;
   }
 
-  export interface BannerOptions {
+  interface BannerOptions {
     local: {
       /**
        * @default "This is a local build"
@@ -48,7 +50,7 @@ export namespace Fabric {
     };
   }
 
-  export interface FullscreenCodeOptions {
+  interface FullscreenCodeOptions {
     /**
      * @default "Full Screen"
      */
@@ -65,6 +67,7 @@ export namespace Fabric {
     wrap: string;
   }
 
+  /** @deprecated */
   export interface DownloadOptions {
     /**
      * Set custom text for download button.
@@ -74,9 +77,7 @@ export namespace Fabric {
     text: string;
   }
 
-  export type EnvOptions = "build" | "dev" | "github" | number;
-
-  export interface NotFoundOptions {
+  interface NotFoundOptions {
     /**
      * @default "404"
      */
@@ -144,7 +145,7 @@ export namespace Fabric {
     pooh: string;
   }
 
-  export interface ReferencesOptions {
+  interface ReferencesOptions {
     /**
      * @default "Files Referenced"
      */
@@ -156,7 +157,7 @@ export namespace Fabric {
     resources: string;
   }
 
-  export interface VersionOptions {
+  interface VersionOptions {
     /**
      * @default "Minecraft %s"
      */
@@ -168,7 +169,7 @@ export namespace Fabric {
     noOtherVersions: string;
   }
 
-  export interface VideoOptions {
+  interface VideoOptions {
     /**
      * @default "Warning"
      */
@@ -200,7 +201,7 @@ export namespace Fabric {
     | (_SidebarItemRest & { text?: never; link: string; base?: never; items?: SidebarItem[] });
 
   export interface Sidebar extends DefaultTheme.SidebarMulti {
-    [path: string]: SidebarItem[];
+    [base: string]: SidebarItem[];
   }
 
   export interface ThemeConfig extends Versioned.ThemeConfig {
@@ -208,7 +209,7 @@ export namespace Fabric {
     banner: BannerOptions;
     code: FullscreenCodeOptions;
     download: DownloadOptions;
-    env: EnvOptions;
+    env: typeof import("./constants/env.ts").default;
     notFound: NotFoundOptions;
     references: ReferencesOptions;
     sidebar: Sidebar;

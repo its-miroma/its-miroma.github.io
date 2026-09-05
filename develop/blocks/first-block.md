@@ -151,6 +151,8 @@ All block textures can be found in the `assets/example-mod/textures/block` folde
 
 ![Texture](/assets/develop/blocks/first_block_1.png){download=/assets/develop/blocks/first_block_1_small.png}
 
+![Texture](/assets/develop/blocks/first_block_1.png){download=/assets/develop/blocks/}
+
 To make the texture show up in-game, you must create a block model which can be found in the `assets/example-mod/models/block/condensed_dirt.json` file for the "Condensed Dirt" block. For this block, we're going to use the `block/cube_all` model type.
 
 <<< @/reference/latest/src/main/generated/assets/example-mod/models/block/condensed_dirt.json

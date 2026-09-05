@@ -2,9 +2,11 @@ import * as crossSpawn from "cross-spawn";
 import * as fs from "node:fs";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
-import AT from "./at.ts";
 import { getLocales, getSidebar } from "./config/i18n.ts";
+import AT from "./constants/at.ts";
 import { VERSION_RE } from "./plugins/transformFiles.ts";
+
+// TODO: should this be refactored to use async methods everywhere?
 
 const git = (...args: string[]) => {
   const res = crossSpawn.sync("git", args, { encoding: "utf8" });

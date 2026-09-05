@@ -7,18 +7,18 @@ import type { Fabric } from "../../types.d.ts";
 
 // TODO: on mobile (narrow viewport) references should be placed akin to "On this page", instead of at the footer.
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 
-const options = computed(() => data.theme.value.references as Fabric.ReferencesOptions);
+const options = computed(() => data.theme.value.references);
 
 const resources = computed(() =>
-  Object.entries(data.frontmatter.value.resources ?? {}).map(([href, title]) => {
+  Object.entries(data.frontmatter.value.resources || {}).map(([href, title]) => {
     const newHref = new URL(href, "https://a.com").href.replace("https://a.com", "");
-    return [newHref, title ?? newHref] as [string, string];
+    return [newHref, (title as string) || newHref] as const;
   })
 );
 
-const files = computed(() => (data.frontmatter.value.files ?? []) as string[]);
+const files = computed(() => (data.frontmatter.value.files || []) as string[]);
 
 const shortestUniquePaths = computed(() =>
   files.value.map((file, i) => {
@@ -37,14 +37,14 @@ const shortestUniquePaths = computed(() =>
 const getImageSrc = (href: string) =>
   `https://www.google.com/s2/favicons?domain=${new URL(href, "https://docs.fabricmc.net").hostname}&sz=16`;
 
-const getFileHref = (path: string) =>
-  path.replace(/^@/, "https://github.com/FabricMC/fabric-docs/blob/-");
+const getFileHref = (filePath: string) =>
+  filePath.replace(/^@/, "https://github.com/FabricMC/fabric-docs/blob/-");
 
-const getFileTitle = (path: string) =>
-  path.replace(/^@[/]reference[/][^/]+[/]/, "").replace("com/example/docs", "...");
+const getFileTitle = (filePath: string) =>
+  filePath.replace(/^@[/]reference[/][^/]+[/]/, "").replace("com/example/docs", "...");
 
-const getFileExtension = (path: string) =>
-  path
+const getFileExtension = (filePath: string) =>
+  filePath
     .replace("fabric.mod.json", "minecraft-fabric")
     .replace(/^.*[.]([^.]+)$/, "$1")
     .replace(/^classtweaker$/, "minecraft-fabric")

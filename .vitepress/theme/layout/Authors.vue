@@ -6,9 +6,9 @@ import type { Fabric } from "../../types.d.ts";
 
 type Author = { name: string; noGitHub?: true };
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 
-const options = computed(() => data.theme.value.authors as Fabric.AuthorsOptions);
+const options = computed(() => data.theme.value.authors);
 
 const authors = computed<Author[]>(() =>
   [

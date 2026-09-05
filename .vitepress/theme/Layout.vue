@@ -23,6 +23,7 @@ router.onAfterRouteChange = () => {
   oldScript.parentNode!.replaceChild(newScript, oldScript);
 };
 
+// TODO: this breaks on changes to a page in dev? like hot reload?
 // Medium zoom handler
 watchImmediate(
   () => router.route.path,
