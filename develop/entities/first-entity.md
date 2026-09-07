@@ -80,7 +80,7 @@ The `MiniGolemEntityModel` class defines how your entity looks by describing its
 
 ::: warning
 
-Blockbench supports multiple [mappings](../migrating-mappings/#mappings) (such as Mojang Mappings, Yarn, and others). Ensure you select the correct mapping that matches your development environment - this tutorial uses Mojang Mappings.
+Blockbench supports multiple [mappings](../porting/mappings/#mappings) (such as Mojang Mappings, Yarn, and others). Ensure you select the correct mapping that matches your development environment - this tutorial uses Mojang Mappings.
 
 Mismatched mappings can cause errors when integrating Blockbench generated code.
 
