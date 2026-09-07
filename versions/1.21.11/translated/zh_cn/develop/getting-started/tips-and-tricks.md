@@ -21,7 +21,7 @@ outline: false
 {
  name: 'Visual Studio Code',
  href: './vscode/tips-and-tricks',
- icon: 'codicon:vscode',
+ icon: 'material-icon-theme:vscode',
  color: '#007ACC',
 },
 ]" />

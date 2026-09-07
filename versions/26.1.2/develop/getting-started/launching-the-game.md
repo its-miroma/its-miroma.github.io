@@ -20,7 +20,7 @@ authors:
   {
     name: 'Visual Studio Code',
     href: './vscode/launching-the-game',
-    icon: 'codicon:vscode',
+    icon: 'material-icon-theme:vscode',
     color: '#007ACC',
   },
 ]" />

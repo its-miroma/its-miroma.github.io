@@ -18,7 +18,7 @@ authors:
   {
     name: 'Visual Studio Code',
     href: './vscode/generating-sources',
-    icon: 'codicon:vscode',
+    icon: 'material-icon-theme:vscode',
     color: '#007ACC',
   },
 ]" />
