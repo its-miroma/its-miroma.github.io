@@ -167,6 +167,13 @@ config:
         replace: ""
         searchScope: code
 customRules:
-  # TODO: add      markdownlint-rule-max-one-sentence-per-line/rule.js
+  # TODO(not-for-llm): add markdownlint-rule-max-one-sentence-per-line/rule.js
   - ./node_modules/markdownlint-rule-search-replace/rule.js
   - ./node_modules/markdownlint-rule-titlecase/rule.js
+globs:
+  - "**/*.md"
+  - "!.git/**"
+  - "!node_modules/**"
+  - "!README.md"
+  - "!translated/**"
+  - "!versions/**"

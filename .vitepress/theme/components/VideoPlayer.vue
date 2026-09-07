@@ -7,14 +7,14 @@ import "vidstack/player/ui";
 import { useData } from "vitepress";
 import { VPButton } from "vitepress/theme";
 import { computed, ref, useSlots } from "vue";
-import type { Fabric } from "../../types.d.ts";
+import type { ThemeConfig } from "../../types.d.ts";
 
 const props = defineProps<{
   src: string;
   warn?: boolean;
 }>();
 
-const data = useData<Fabric.ThemeConfig>();
+const data = useData<ThemeConfig>();
 const slots = useSlots();
 
 const options = computed(() => data.theme.value.video);
@@ -40,16 +40,22 @@ const showWarning = ref(props.warn);
 <style scoped>
 dialog {
   z-index: 10;
-  width: 100%;
-  height: 100%;
-  background-color: #000e;
-  padding: 2rem;
-  border-radius: 6px;
-  text-align: center;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border-radius: 6px;
+
+  /* TODO: are these the right colors to use? or should I use some variables from vp? the background should always be black even in light mode, and text should be white too */
+  color: #fff;
+  text-align: center;
+
+  background-color: #000e;
 }
 
 h3 {

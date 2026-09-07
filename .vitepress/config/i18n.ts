@@ -4,7 +4,7 @@ import * as tinyglobby from "tinyglobby";
 import AT from "../constants/at.ts";
 import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
 import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
-import type { Fabric } from "../types.d.ts";
+import type { Config, SidebarItem, ThemeConfig, Translations } from "../types.d.ts";
 
 const REQUIRED_FILES = ["index.md", "website_translations.json"] as const;
 export const getLocales = () => [
@@ -38,9 +38,9 @@ const getResolver = <T extends Record<string, any>>(file: string, locale: string
   return (k) => strings[k] || fallback[k];
 };
 
-export const getWebsiteResolver = (locale: string): Resolver<Fabric.Translations["website"]> => {
+export const getWebsiteResolver = (locale: string): Resolver<Translations["website"]> => {
   const file = "website_translations.json";
-  const resolver = getResolver<Fabric.Translations["website"]>(file, locale);
+  const resolver = getResolver<Translations["website"]>(file, locale);
 
   if (locale === "en_us") {
     for (const k of Object.keys(readTranslationFile(file, locale))) {
@@ -62,15 +62,15 @@ export const getWebsiteResolver = (locale: string): Resolver<Fabric.Translations
 };
 
 export const getSidebar = (locale: string) => {
-  const returned: Fabric.Sidebar = {};
+  const returned: ThemeConfig["sidebar"] = {};
 
   const file = "sidebar_translations.json";
-  const resolver = getResolver<Fabric.Translations["sidebar"]>(file, locale);
+  const resolver = getResolver<Translations["sidebar"]>(file, locale);
 
   const localePrefix = locale === "en_us" ? "" : `/${locale}`;
 
-  const normalizeSidebar = (sidebar: Fabric.SidebarItem[], base = "") => {
-    const returned = (JSON.parse(JSON.stringify(sidebar)) as Fabric.SidebarItem[]) //
+  const normalizeSidebar = (sidebar: SidebarItem[], base = "") => {
+    const returned = (JSON.parse(JSON.stringify(sidebar)) as SidebarItem[]) //
       .map((item) => (typeof item === "string" ? { link: item } : item));
 
     for (const item of returned) {
@@ -100,7 +100,7 @@ export const getSidebar = (locale: string) => {
 };
 
 export const getLocaleConfig = () => {
-  const returned: Fabric.Config["locales"] = {};
+  const returned: Config["locales"] = {};
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
   const intlLocaleOverrides: Record<string, string> = {
@@ -328,17 +328,17 @@ export const getLocaleConfig = () => {
 
         socialLinks: [
           {
-            icon: "github",
+            icon: "simple-icons:github",
             link: "https://github.com/FabricMC/fabric-docs",
             ariaLabel: resolver("social.github"),
           },
           {
-            icon: "discord",
+            icon: "simple-icons:discord",
             link: "https://discord.fabricmc.net/",
             ariaLabel: resolver("social.discord"),
           },
           {
-            icon: "crowdin",
+            icon: "simple-icons:crowdin",
             link: `https://crowdin.com/project/fabricmc/${crowdinLocale}`,
             ariaLabel: resolver("social.crowdin"),
           },

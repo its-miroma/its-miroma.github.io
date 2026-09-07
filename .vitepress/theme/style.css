@@ -26,7 +26,6 @@
   --vp-font-family-mono:
     "JetBrains Mono", ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
     monospace;
-  --vp-icon-download: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='rgba(128,128,128,1)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3Cpath d='M12 15V3m9 12v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpath d='m7 10l5 5l5-5'/%3E%3C/g%3E%3C/svg%3E");
 
   &:where(:lang(zh)) {
     /* TODO(not-for-llm): review breakage after https://github.com/vuejs/vitepress/commit/91b06b67a302ebfa210e888fe9d03d27fb291b31 */
@@ -69,11 +68,17 @@ pre {
   tab-size: 2 !important;
 }
 
+/*
+  TODO: unsure where the values of width and height should come from.
+  TODO: the icon is not vertically centered in the button.
+  TODO: at this point let's just replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, and not have the classes "copy fullscreen" (this was done to avoid cloning the styles of the copy button. this is why .fullscreen's listener stopsImmediatePropagation, to avoid firing .copy's listener.
+*/
 div[class*="language-"] button.copy.fullscreen {
   background-image: unset;
 
-  svg {
-    margin: auto;
+  span {
+    width: 20px;
+    height: 20px;
     color: #808080;
   }
 
@@ -91,7 +96,7 @@ p:has(> a[download]) {
   display: inline-block;
 }
 
-/* TODO: drop .VPButton once DownloadEntry is removed */
+/* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
 a[download]:not(.VPButton) {
   position: absolute;
   z-index: 3;
@@ -105,7 +110,9 @@ a[download]:not(.VPButton) {
 
   opacity: 50%;
   background-color: var(--vp-code-copy-code-bg);
-  background-image: var(--vp-icon-download);
+
+  /* TODO: the icon, when rendered like this, is black. */
+  background-image: url("/_vpi/lucide/download.svg");
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: 20px;
@@ -157,6 +164,14 @@ body:has(.VPFooter:not(.has-sidebar)) .aside-container {
   p.tagline {
     text-wrap: balance;
   }
+}
+
+.VPNav .content-body > *::before {
+  content: unset;
+}
+
+button.VPSwitchAppearance {
+  margin: 0 0.75rem;
 }
 
 .VPLocalSearchBox > .backdrop {

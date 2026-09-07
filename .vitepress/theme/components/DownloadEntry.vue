@@ -2,9 +2,16 @@
 import { useData } from "vitepress";
 import { VPButton } from "vitepress/theme";
 import { computed, useSlots } from "vue";
-import type { Fabric } from "../../types.d.ts";
 
-// TODO(not-for-llm): this is being replaced with {download}
+/** @deprecated use {download} instead */
+interface DownloadOptions {
+  /**
+   * Set custom text for download button.
+   *
+   * @default "Download %s"
+   */
+  text: string;
+}
 
 defineProps<{
   downloadURL: string;
@@ -16,7 +23,7 @@ const data = useData();
 const title = useSlots().default?.() ?? [""];
 
 const text = computed(() =>
-  (data.theme.value.download as Fabric.DownloadOptions).text.replace(
+  (data.theme.value.download as DownloadOptions).text.replace(
     "%s",
     title.length > 0 ? ((title[0] as any).children ?? "") : "%s"
   )

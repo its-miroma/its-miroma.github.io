@@ -11,14 +11,14 @@ import AT from "../constants/at.ts";
 import ENV from "../constants/env.ts";
 import LATEST_VERSION from "../constants/latestVersion.ts";
 import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
+import { moreWatchesPlugin } from "../plugins/moreWatches.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
-import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
-import type { Fabric } from "../types.d.ts";
+import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
 
 // TODO: should all constants be in a single common file .vitepress/constants.ts instead of one file for each?
-// TODO: review deps and devDeps, why we have them, and if they are in the right place.
+// TODO: review deps and devDeps, why we have them, and if they are in the right place. if it can be a devDep, it probably should be. especially deps that vitepress does not depend on.
 
 const hostname =
   ENV === "dev"
@@ -31,6 +31,11 @@ const hostname =
           ? "https://fabric-docs.netlify.app/"
           : process.env.DEPLOY_PRIME_URL!;
 
+const excludeVersions =
+  process.env.WITH_VERSIONS !== undefined
+    ? !Number(process.env.WITH_VERSIONS)
+    : typeof ENV === "number";
+
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
 export default defineVersionedConfig(
@@ -41,12 +46,16 @@ export default defineVersionedConfig(
     // Set head tags on the client side
     head: [["script", { "data-gen": "" }, getClientTransformHead()]],
 
+    icons: {
+      include: ["lucide:download"],
+    },
+
     // Ignore dead links under translated/. Allows builds with incomplete translations
     ignoreDeadLinks: [
       (_, filePath) => {
-        const split = filePath.split("/");
+        const split = path.relative(AT, filePath).split("/");
         if (split[0] === "versions") split.splice(0, 2);
-        return split[0] !== "translated";
+        return split[0] === "translated";
       },
     ],
 
@@ -98,23 +107,15 @@ export default defineVersionedConfig(
       hostname,
       transformItems: (items) => {
         const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
-        return items.filter((i) => {
-          // TODO: why not split at :// ? if that's possible, then we can inline hostname earlier.
-          const relativePath = i.url.replace(hostname, "");
-          return !config.rewrites.inv[relativePath]?.startsWith("versions/");
-        });
+        return items.filter((i) => !config.rewrites.inv[i.url]?.startsWith("versions/"));
       },
     },
 
-    srcExclude: [
-      "README.md",
-      (process.env.WITH_VERSIONS !== undefined
-        ? !Number(process.env.WITH_VERSIONS)
-        : typeof ENV === "number") && "versions",
-    ].filter(Boolean),
+    srcExclude: ["README.md", excludeVersions && "versions"].filter(Boolean),
 
     themeConfig: {
       env: ENV,
+      excludeVersions,
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },
@@ -159,7 +160,7 @@ export default defineVersionedConfig(
     },
 
     vite: {
-      plugins: [transformFilesPlugin(), watchTranslationsPlugin()],
+      plugins: [moreWatchesPlugin(), transformFilesPlugin()],
     },
 
     vue: {
@@ -169,6 +170,6 @@ export default defineVersionedConfig(
         },
       },
     },
-  } as Fabric.Config,
+  } as Config,
   path.resolve(AT, ".vitepress")
 );

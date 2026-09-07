@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import { useData } from "vitepress";
-import { VPLink } from "vitepress/theme";
+import { VPIcon, VPLink } from "vitepress/theme";
 import { computed } from "vue";
-import type { Fabric } from "../../types.d.ts";
+import type { ThemeConfig } from "../../types.d.ts";
 
 // TODO: on mobile (narrow viewport) references should be placed akin to "On this page", instead of at the footer.
 
-const data = useData<Fabric.ThemeConfig>();
+const data = useData<ThemeConfig>();
 
 const options = computed(() => data.theme.value.references);
 
@@ -45,7 +44,7 @@ const getFileTitle = (filePath: string) =>
 
 const getFileExtension = (filePath: string) =>
   filePath
-    .replace("fabric.mod.json", "minecraft-fabric")
+    .replace(/^.*(?<=^|[/])fabric.mod.json$/, "minecraft-fabric")
     .replace(/^.*[.]([^.]+)$/, "$1")
     .replace(/^classtweaker$/, "minecraft-fabric")
     .replace(/^md$/, "markdown");
@@ -69,7 +68,8 @@ const getFileExtension = (filePath: string) =>
     <ul>
       <li v-for="(f, i) in files" :key="f">
         <VPLink :href="getFileHref(f)" :title="getFileTitle(f)" no-icon>
-          <Icon :icon="`material-icon-theme:${getFileExtension(f)}`" />
+          <!-- TODO: these are now missing the color :( -->
+          <VPIcon :icon="`material-icon-theme:${getFileExtension(f)}`" />
           <code>
             <template v-for="(seg, j) in shortestUniquePaths[i].split('/')" :key="j">
               <template v-if="j !== 0">/<wbr /></template>{{ seg }}

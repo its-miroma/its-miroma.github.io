@@ -8,7 +8,6 @@ on:
       - reference/latest/src/main/generated/**
       - translated/**
       - versions/**
-    types: [opened, ready_for_review, synchronize]
   workflow_dispatch:
 
 concurrency:
@@ -26,16 +25,10 @@ jobs:
       - uses: pnpm/action-setup@58e6119fe4f3092a76a7771efb55e04d25b6b26f
         with:
           run_install: true
+      # TODO: should we use pnpm exec markdownlint-cli2 for consistency? this should mean that we can remove the devDep markdownlint (replaced with markdownlint-cli2). Also, we should define these pnpm exec as scripts. in that case, we'll move the globs back here from .markdownlint-cli2.yaml
       - uses: FabricMCBot/markdownlint-cli2-action@b4c9feab76d8025d1e83c653fa3990936df0e6c8
         with:
           config: .markdownlint-cli2.yaml
-          globs: |
-            **/*.md
-            !.git/**
-            !node_modules/**
-            !README.md
-            !translated/**
-            !versions/**
 
   prettier:
     runs-on: ubuntu-24.04

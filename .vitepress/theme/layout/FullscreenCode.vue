@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { Icon, loadIcon } from "@iconify/vue";
 import { usePreferredReducedMotion } from "@vueuse/core";
 import { onContentUpdated, useData } from "vitepress";
+import { VPIcon } from "vitepress/theme";
 import { computed, nextTick, onUnmounted, ref } from "vue";
-import type { Fabric } from "../../types.d.ts";
+import type { ThemeConfig } from "../../types.d.ts";
+import { useIconSpan } from "../composables/iconSpan.ts";
 
 const prefersReducedMotion = usePreferredReducedMotion();
-const data = useData<Fabric.ThemeConfig>();
+const data = useData<ThemeConfig>();
 const markdown = computed(() => data.site.value.locales[data.localeIndex.value].markdown!);
 
 const options = computed(() => data.theme.value.code);
@@ -107,9 +108,6 @@ onContentUpdated(() =>
 
     handleExitFullscreen();
 
-    const enterFullscreenIconData = await loadIcon("lucide:maximize-2");
-    const enterFullscreenIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">${enterFullscreenIconData.body}</svg>`;
-
     const codeBlocks = //
       document.querySelectorAll<HTMLDivElement>("div.vp-doc:not(.slot) div[class*='language-']");
 
@@ -124,7 +122,7 @@ onContentUpdated(() =>
       enterFullscreenButton.title = options.value.enterFullscreen;
       enterFullscreenButton.setAttribute("aria-label", options.value.enterFullscreen);
       enterFullscreenButton.className = "copy fullscreen";
-      enterFullscreenButton.innerHTML = enterFullscreenIcon;
+      enterFullscreenButton.innerHTML = useIconSpan("lucide:maximize-2");
       enterFullscreenButton.onclick = (event) => {
         if (!(event.currentTarget instanceof HTMLButtonElement)) return;
 
@@ -173,9 +171,11 @@ onUnmounted(() => dialog.value?.close());
         :aria-label="copyOptions.tooltipText"
         @click="handleCopy"
       >
+        <!-- TODO: VPIcon uses span too, so now the copiedText styling gets clunky. Possible solutions: unwrap the span, use another element, add a class (my least favorite) -->
         <span>{{ copyOptions.copiedText }}</span>
-        <Icon icon="lucide:clipboard" />
-        <Icon class="clicked" icon="lucide:clipboard-check" />
+        <!-- TODO: this had to use two icons because Icon from iconify would take some time to fetch the new icon on click (empty content flash). Since VPIcon has all icons preloaded, this issue probably does not exist and we can avoid two VPIcons and using .clicked. same thing a little further down. -->
+        <VPIcon icon="lucide:clipboard" />
+        <VPIcon icon="lucide:clipboard-check" class="clicked" />
       </button>
       <button
         class="wrap"
@@ -184,8 +184,8 @@ onUnmounted(() => dialog.value?.close());
         :aria-label="options.wrap"
         @click="handleWrap"
       >
-        <Icon icon="lucide:text-wrap" />
-        <Icon class="clicked" icon="lucide:text" />
+        <VPIcon icon="lucide:text-wrap" />
+        <VPIcon icon="lucide:text" class="clicked" />
       </button>
       <button
         class="fullscreen"
@@ -193,7 +193,7 @@ onUnmounted(() => dialog.value?.close());
         :aria-label="options.exitFullscreen"
         @click="handleExitFullscreen"
       >
-        <Icon icon="lucide:minimize-2" />
+        <VPIcon icon="lucide:minimize-2" />
       </button>
     </div>
     <div class="slot vp-doc" :class="{ wrapped: isWrapped, tabbed: originalTabs.length }" />
@@ -208,6 +208,7 @@ dialog#fullscreen {
 
   max-width: none;
   max-height: none;
+  padding: 1em;
   border: none;
 
   background: transparent;
@@ -405,7 +406,7 @@ div.toolbar {
       background-color: var(--vp-code-copy-code-hover-bg);
     }
 
-    svg.iconify {
+    [class^="vpi-"] {
       width: 20px;
       height: 20px;
 
@@ -419,12 +420,12 @@ div.toolbar {
       width: auto;
       min-width: 40px;
 
-      svg.iconify {
+      [class^="vpi-"] {
         margin-right: 9px;
         margin-left: 8px;
       }
 
-      span {
+      span:not([class^="vpi-"]) {
         overflow: hidden;
         display: inline-flex;
         align-items: center;
@@ -444,25 +445,25 @@ div.toolbar {
           border-color 0.3s ease;
       }
 
-      &.copied span {
+      &.copied span:not([class^="vpi-"]) {
         max-width: 100px;
         padding-inline: 9px;
         border-right-color: var(--vp-code-copy-code-hover-border-color);
       }
     }
 
-    &.wrap.wrapped svg.iconify.clicked {
+    &.wrap.wrapped [class^="vpi-"].clicked {
       width: 24px;
       height: 24px;
     }
 
     &.copy.copied,
     &.wrap.wrapped {
-      svg.iconify.clicked {
+      [class^="vpi-"].clicked {
         display: revert;
       }
 
-      svg.iconify:not(.clicked) {
+      [class^="vpi-"]:not(.clicked) {
         display: none;
       }
     }

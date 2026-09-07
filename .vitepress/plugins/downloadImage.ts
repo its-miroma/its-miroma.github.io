@@ -15,17 +15,17 @@ import ENV from "../constants/env.ts";
 // An explicit path can still be given with {download=/download/...} if needed.
 // If the download path resolves to a directory, it will be zipped after build.
 
-// TODO: seeing that this is becoming a rather large plugin, should it still be called downloadImage.ts? I guess so
 // TODO: review whether to use console.error instead of console.warn in some of these cases.
+// TODO: p-limit is not used by vitepress. does it use an alternative? if so, i'd rather use that. else, maybe we can write the queue code here.... :/
 
 const directoriesToBeZipped = new Set<string>();
 
 const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
-  const expectedParent = `/assets/${purePath.replace(/[.]md$/, "")}/`;
-
+  const expectedParent = `/assets/${purePath}/`;
   const relativeSrc = path.posix.relative(expectedParent, src);
+
   if (relativeSrc.startsWith("../") || path.isAbsolute(relativeSrc)) {
-    console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
+    // TODO(not-for-llm): console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
   }
 
   if (src !== src.toLowerCase()) {

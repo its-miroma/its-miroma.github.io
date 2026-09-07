@@ -4,6 +4,7 @@ import type { Plugin } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
 import AT from "../constants/at.ts";
 import LATEST_VERSION from "../constants/latestVersion.ts";
+import VERSION_RE from "../constants/versionRE.ts";
 
 // the value is the number of segments in the path that indicate the version
 enum VersionType {
@@ -17,18 +18,15 @@ enum VersionType {
   OLD = 2,
 }
 
-interface PagePath {
-  version: string;
-  versionType: VersionType;
-  localeIndex: string;
-  purePath: string;
-}
-
-export const VERSION_RE = /^[0-9]+[.][0-9]+([.][0-9]+)?$/;
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
-const parsePagePath = (relativePath: string): PagePath => {
-  const returned = {} as PagePath;
+const parsePagePath = (relativePath: string) => {
+  const returned = {} as {
+    version: string;
+    versionType: VersionType;
+    localeIndex: string;
+    purePath: string;
+  };
 
   const split = relativePath.split("/");
 
@@ -57,7 +55,8 @@ const parsePagePath = (relativePath: string): PagePath => {
   returned.purePath = split
     .slice(returned.versionType)
     .slice(returned.localeIndex === "root" ? 0 : 2)
-    .join("/");
+    .join("/")
+    .replace(/((?<=^|[/])index)?[.]md$/, "");
 
   return returned;
 };

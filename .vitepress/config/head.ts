@@ -1,5 +1,6 @@
 import LATEST_VERSION from "../constants/latestVersion.ts";
-import type { Fabric } from "../types.d.ts";
+import VERSION_RE from "../constants/versionRE.ts";
+import type { Config } from "../types.d.ts";
 
 type NewHeadContext = {
   latestVersion: string;
@@ -102,8 +103,7 @@ const _getNewHead = (context: NewHeadContext): string | [string, Record<string, 
   split[0] =
     versionMap[split[0]]
     || versionMap[`${split[0]}.0`]
-    // TODO: use VERSION_RE from transformFiles? should it be among ../constants?
-    || (/^(?!404$)[0-9.]+$/.test(split[0]) ? "" : split[0]);
+    || (VERSION_RE.test(split[0]) ? "" : split[0]);
   if (!split[0] || split[0] === context.latestVersion) split.shift();
 
   const seenPaths = new Set([split.join("/")]);
@@ -196,11 +196,11 @@ export const getClientTransformHead = () => {
   return `(${script.toString()})(${_getNewHead.toString()}, ${JSON.stringify(LATEST_VERSION)})`;
 };
 
-export const getBuildTransformHead = (): Fabric.Config["transformHead"] => (context) => {
+export const getBuildTransformHead = (): Config["transformHead"] => (context) => {
   const returned = _getNewHead({
     latestVersion: LATEST_VERSION,
     pathname: context.pageData.relativePath,
-    origin: context.siteConfig.sitemap!.hostname,
+    origin: context.siteConfig.sitemap!.hostname.replace(/[/]$/, ""),
     hash: "",
     search: "",
     description: context.pageData.description,

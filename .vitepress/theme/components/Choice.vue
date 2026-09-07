@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { VPLink } from "vitepress/theme";
+import { VPIcon, VPLink } from "vitepress/theme";
 
 /* TODO(not-for-llm): I am tempted to drop this component altogether, and instead adopt a simpler system by reusing existing features:
 
@@ -37,7 +36,7 @@ defineProps<{
   <ul :style="{ '--grid-columns': Math.min(choices.length, 3) }">
     <li v-for="(c, key) in choices" :key>
       <VPLink :href="c.href" :style="{ '--color': c.color }">
-        <Icon v-if="c.icon" :icon="c.icon" width="48" height="48" />
+        <VPIcon v-if="c.icon" :icon="c.icon" />
         {{ c.name }}
       </VPLink>
     </li>
@@ -88,8 +87,9 @@ li + li {
     border-color 0.25s ease,
     color 0.25s ease;
 
-  .iconify {
-    min-width: 48px;
+  [class^="vpi-"] {
+    width: 48px;
+    height: 48px;
   }
 }
 

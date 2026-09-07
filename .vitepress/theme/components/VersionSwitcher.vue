@@ -1,23 +1,35 @@
 <script setup lang="ts">
-import { Icon, loadIcon } from "@iconify/vue";
-import { computedAsync } from "@vueuse/core";
-import { useData } from "vitepress";
-import VPFlyout from "vitepress/dist/client/theme-default/components/VPFlyout.vue";
-import { VPLink } from "vitepress/theme";
-import { computed, ref } from "vue";
-import type { Fabric } from "../../types.d.ts";
+import { type DefaultTheme, useData, useRoute } from "vitepress";
+import VPNavMenuGroup from "vitepress/dist/client/theme-default/components/VPNavMenuGroup.vue";
+import { computed } from "vue";
+import type { ThemeConfig } from "../../types.d.ts";
+import { useIconSpan } from "../composables/iconSpan.ts";
+
+/*
+TODO: there is a warning message in console:
+
+[Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+*/
 
 const props = defineProps<{
-  versioningPlugin: { versions: string[]; latestVersion: string };
   screenMenu?: boolean;
+  versioningPlugin: {
+    versions: string[];
+    latestVersion: string;
+  };
 }>();
 
-const data = useData<Fabric.ThemeConfig>();
-const collator = new Intl.Collator(undefined, { numeric: true });
+const data = useData<ThemeConfig>();
+const route = useRoute();
 
-const env = computed(() => data.theme.value.env);
 const options = computed(() => data.theme.value.version);
-const currentV = computed(() => {
+
+// TODO: revert the removal of version checking.
+const currentV = computed(
+  () => (data.frontmatter.value.version as string) || props.versioningPlugin.latestVersion
+);
+
+const _currentV = computed(() => {
   if (data.frontmatter.value.version) return data.frontmatter.value.version as string;
 
   const split = data.page.value.relativePath.split("/");
@@ -26,150 +38,61 @@ const currentV = computed(() => {
   return props.versioningPlugin.latestVersion;
 });
 
-const body = computedAsync(async () => (await loadIcon("lucide:git-graph")).body);
-
-const button = computed(() => {
-  if (!body.value) return;
-
-  const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">${body.value}</svg>`;
-  return `<span style="display:flex;align-items:center;gap:4px">${icon} ${currentV.value}</span>`;
-});
+// TODO: the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. this is an upstream issue, and ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
+const text = computed(() => `${useIconSpan("lucide:git-graph")} ${currentV.value}`);
 
 // TODO(not-for-llm): add future versions to the supported pages
+const collator = new Intl.Collator(undefined, { numeric: true });
 const versions = computed(() => [
   props.versioningPlugin.latestVersion,
-  ...(typeof env.value === "number"
+  ...(data.theme.value.excludeVersions
     ? []
     : props.versioningPlugin.versions.toSorted(collator.compare).reverse()),
 ]);
 
-const open = ref(false);
-
 /**
-route format: `[locale/][version/]path/to/[file-name]`
+route format: `/[locale/][version/]path/to/[file-name]`
 - `[locale/]` is not added for pages in English
 - `[version/]` is not added for the latest version
 - `[file-name]` is not added for index.md files
 */
-const getRoute = (newVersion: string) => {
-  if (newVersion === data.frontmatter.value.version) return;
+const getRoute = (v: string) => {
+  if (v === data.frontmatter.value.version) return route.hash || ".";
 
-  return [
-    "",
+  return `/${[
     data.localeIndex.value !== "root" ? data.localeIndex.value : undefined,
-    newVersion !== props.versioningPlugin.latestVersion ? newVersion : undefined,
+    v !== props.versioningPlugin.latestVersion ? v : undefined,
     data.frontmatter.value.purePath,
   ]
-    .filter((s) => s !== undefined)
-    .join("/")
-    .replace(/((?<=^|[/])index)?[.]md$/, "");
+    .filter(Boolean)
+    .join("/")}`;
 };
+
+const items = computed(
+  () =>
+    [
+      ...versions.value.map((v) => ({
+        text: options.value.switcherLabel.replace("%s", v),
+        link: getRoute(v),
+        activeMatch: v === currentV.value ? "(?=)" : "(?!)",
+      })),
+      versions.value.length <= 1 && {
+        text: options.value.noOtherVersions,
+        link: "",
+      },
+    ].filter(Boolean) as DefaultTheme.NavItemWithLink[]
+);
 </script>
 
 <template>
-  <component
-    :is="screenMenu ? 'div' : VPFlyout"
-    :class="{ open }"
-    :button
-    :label="options.switcherLabel.replace('%s', currentV)"
-  >
-    <button v-if="screenMenu" :aria-expanded="open" @click="open = !open">
-      <span>
-        <Icon icon="lucide:git-graph" width="16" height="16" />
-        {{ options.switcherLabel.replace("%s", currentV) }}
-      </span>
-      <span class="vpi-plus" />
-    </button>
-
-    <ul>
-      <li v-for="v in versions" :key="v">
-        <VPLink :href="getRoute(v)">{{ options.switcherLabel.replace("%s", v) }}</VPLink>
-      </li>
-      <li v-if="versions.length <= 1" class="none">
-        <VPLink>{{ options.noOtherVersions }}</VPLink>
-      </li>
-    </ul>
-  </component>
+  <VPNavMenuGroup :item="{ text, items, activeMatch: '(?!)' }" :screen="screenMenu" />
 </template>
 
 <style scoped>
-div:not(.VPFlyout) {
-  overflow: hidden;
-  height: 48px;
-  border-bottom: 1px solid var(--vp-c-divider);
-  transition: border-color 0.5s;
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: 100%;
-    padding: 12px 4px 11px 0;
-
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 24px;
-    color: var(--vp-c-text-1);
-
-    transition: color 0.25s;
-
-    span {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .vpi-plus {
-      transition: transform 0.25s;
-    }
-
-    &:hover {
-      color: var(--vp-c-brand-1);
-    }
-  }
-}
-
-.open:not(.VPFlyout) {
-  height: auto;
-  padding-bottom: 10px;
-
-  button {
-    color: var(--vp-c-brand-1);
-  }
-
-  .vpi-plus {
-    transform: rotate(45deg);
-  }
-}
-
-li:not(.none) > span.VPLink {
-  font-weight: bold;
-}
-
-li.none > span.VPLink {
+:deep(span.VPLink) {
+  padding-inline: 0.75rem;
+  font-size: 0.875rem;
   font-style: italic;
-}
-
-.VPLink {
-  display: block;
-
-  padding: 0 12px;
-  border-radius: 6px;
-
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 32px;
   color: var(--vp-c-text-1);
-  white-space: nowrap;
-
-  transition:
-    background-color 0.25s,
-    color 0.25s;
-}
-
-a.VPLink:hover {
-  color: var(--vp-c-brand-1);
-  background-color: var(--vp-c-default-soft);
 }
 </style>
