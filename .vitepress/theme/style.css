@@ -111,12 +111,6 @@ a[download]:not(.VPButton) {
   opacity: 50%;
   background-color: var(--vp-code-copy-code-bg);
 
-  /* TODO: the icon, when rendered like this, is black. */
-  background-image: url("/_vpi/lucide/download.svg");
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: 20px;
-
   transition:
     border-color 0.25s,
     background-color 0.25s,
@@ -130,8 +124,12 @@ a[download]:not(.VPButton) {
   }
 
   &:not([href]) {
-    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the downlaod icon. No need for a separate icon because it's a dev-only issue */
+    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the downlaod icon. This because I couldn't find another icon that meant "cannot download" in lucide. */
     cursor: not-allowed;
+  }
+
+  [class^="vpi-"] {
+    /* TODO: the icon is not centered and it's tiny up top. Also, once should clean up the styles if anything is unnecessary. */
   }
 }
 

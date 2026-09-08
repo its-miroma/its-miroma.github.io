@@ -20,17 +20,6 @@ import { getLocaleConfig } from "./i18n.ts";
 // TODO: should all constants be in a single common file .vitepress/constants.ts instead of one file for each?
 // TODO: review deps and devDeps, why we have them, and if they are in the right place. if it can be a devDep, it probably should be. especially deps that vitepress does not depend on.
 
-const hostname =
-  ENV === "dev"
-    ? "http://fabric-docs.localhost:5173/"
-    : ENV === "build"
-      ? "http://fabric-docs.localhost:4173/"
-      : ENV === "github"
-        ? "https://docs.fabricmc.net/"
-        : ENV === "netlify"
-          ? "https://fabric-docs.netlify.app/"
-          : process.env.DEPLOY_PRIME_URL!;
-
 const excludeVersions =
   process.env.WITH_VERSIONS !== undefined
     ? !Number(process.env.WITH_VERSIONS)
@@ -47,7 +36,7 @@ export default defineVersionedConfig(
     head: [["script", { "data-gen": "" }, getClientTransformHead()]],
 
     icons: {
-      include: ["lucide:download"],
+      include: ["lucide:download", "lucide:git-graph", "lucide:maximize-2"],
     },
 
     // Ignore dead links under translated/. Allows builds with incomplete translations
@@ -104,7 +93,13 @@ export default defineVersionedConfig(
     rewrites: { "translated/:locale/(.*)": ":locale/(.*)" },
 
     sitemap: {
-      hostname,
+      hostname:
+        {
+          dev: "http://fabric-docs.localhost:5173/",
+          build: "http://fabric-docs.localhost:4173/",
+          github: "https://docs.fabricmc.net/",
+          netlify: "https://fabric-docs.netlify.app/",
+        }[ENV] || process.env.DEPLOY_PRIME_URL!,
       transformItems: (items) => {
         const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
         return items.filter((i) => !config.rewrites.inv[i.url]?.startsWith("versions/"));

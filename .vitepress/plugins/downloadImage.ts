@@ -94,13 +94,15 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
       downloadPath += ".zip";
     }
 
+    const icon = `<span class="vpi-lucide-download"${ENV === "dev" ? ` style="--icon: url('/_vpi/lucide/download.svg')"` : ""}></span>`;
+
     return `${renderedImage} <a download ${
       downloadPath.endsWith(".zip") && ENV === "dev"
         ? `title="${md.utils.escapeHtml(resolver("download.unavailable_in_dev"))}"`
         : `title="${md.utils.escapeHtml(
             resolver("download.button").replace("%s", token.content || path.basename(downloadPath))
           )}" href="${md.utils.escapeHtml(downloadPath)}"`
-    }></a>`;
+    }>${icon}</a>`;
   };
 };
 

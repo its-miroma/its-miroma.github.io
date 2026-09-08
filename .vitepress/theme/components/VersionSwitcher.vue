@@ -24,17 +24,12 @@ const route = useRoute();
 
 const options = computed(() => data.theme.value.version);
 
-// TODO: revert the removal of version checking.
-const currentV = computed(
-  () => (data.frontmatter.value.version as string) || props.versioningPlugin.latestVersion
-);
-
-const _currentV = computed(() => {
+const currentV = computed(() => {
   if (data.frontmatter.value.version) return data.frontmatter.value.version as string;
 
   const split = data.page.value.relativePath.split("/");
-  if (/^[0-9.]+$/.test(split[0])) return split[0];
-  if (/^.._..$/.test(split[0]) && /^[0-9.]+$/.test(split[1])) return split[1];
+  if (/^.._..$/.test(split[0])) split.splice(0, 1);
+  if (/^[0-9]+[.][0-9]+([.][0-9]+)?$/.test(split[0])) return split[0];
   return props.versioningPlugin.latestVersion;
 });
 

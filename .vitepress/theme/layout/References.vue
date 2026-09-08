@@ -124,7 +124,7 @@ li {
   }
 }
 
-svg {
+[class^="vpi-"] {
   flex-shrink: 0;
   margin-top: 2px;
 }
