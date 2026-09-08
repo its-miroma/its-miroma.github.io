@@ -41,7 +41,7 @@ Per iniziare a sviluppare mod con Fabric, avrai bisogno d'impostare un ambiente 
 {
  name: 'Visual Studio Code',
  href: './vscode/setting-up',
- icon: 'material-icon-theme:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

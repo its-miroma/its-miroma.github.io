@@ -22,7 +22,7 @@ authors:
 {
  name: 'Visual Studio Code',
  href: './vscode/opening-a-project',
- icon: 'material-icon-theme:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />

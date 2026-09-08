@@ -40,7 +40,7 @@ authors-nogithub:
 {
  name: 'Visual Studio Code',
  href: './vscode/setting-up',
- icon: 'material-icon-theme:vscode',
+ icon: 'simple-icons:visualstudiocode',
  color: '#007ACC',
 },
 ]" />
