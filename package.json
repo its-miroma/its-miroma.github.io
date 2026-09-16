@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
+    "build": "tsx ./.vitepress/build.ts",
     "preview": "vitepress preview",
     "bump": "tsx ./.vitepress/bump.ts"
   },
