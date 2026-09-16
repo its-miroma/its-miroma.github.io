@@ -9,7 +9,7 @@ import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import AT from "../constants/at.ts";
 import ENV from "../constants/env.ts";
-import LATEST_VERSION from "../constants/latestVersion.ts";
+import { EXCLUDED_VERSIONS, LATEST_VERSION } from "../constants/versions.ts";
 import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
 import { moreWatchesPlugin } from "../plugins/moreWatches.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
@@ -19,11 +19,6 @@ import { getLocaleConfig } from "./i18n.ts";
 
 // TODO: should all constants be in a single common file .vitepress/constants.ts instead of one file for each?
 // TODO: review deps and devDeps, why we have them, and if they are in the right place. if it can be a devDep, it probably should be. especially deps that vitepress does not depend on.
-
-const excludeVersions =
-  process.env.WITH_VERSIONS !== undefined
-    ? !Number(process.env.WITH_VERSIONS)
-    : typeof ENV === "number";
 
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
@@ -102,15 +97,19 @@ export default defineVersionedConfig(
         }[ENV] || process.env.DEPLOY_PRIME_URL!,
       transformItems: (items) => {
         const config = (globalThis as any).VITEPRESS_CONFIG as SiteConfig;
-        return items.filter((i) => !config.rewrites.inv[i.url]?.startsWith("versions/"));
+        const getFilePath = (url: string) => `${url.replace(/[/]$/, "/index")}.md`;
+
+        return items.filter(
+          (i) => !config.rewrites.inv[getFilePath(i.url)]?.startsWith("versions/")
+        );
       },
     },
 
-    srcExclude: ["README.md", excludeVersions && "versions"].filter(Boolean),
+    srcExclude: ["README.md", ...EXCLUDED_VERSIONS.map((v) => `versions/${v}`)],
 
     themeConfig: {
       env: ENV,
-      excludeVersions,
+      excludedVersions: process.env.SHOW_ALL_VERSIONS ? [] : EXCLUDED_VERSIONS,
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },

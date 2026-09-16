@@ -1,5 +1,4 @@
-import LATEST_VERSION from "../constants/latestVersion.ts";
-import VERSION_RE from "../constants/versionRE.ts";
+import { LATEST_VERSION, VERSION_RE } from "../constants/versions.ts";
 import type { Config } from "../types.d.ts";
 
 type NewHeadContext = {

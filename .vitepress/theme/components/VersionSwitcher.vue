@@ -40,9 +40,10 @@ const text = computed(() => `${useIconSpan("lucide:git-graph")} ${currentV.value
 const collator = new Intl.Collator(undefined, { numeric: true });
 const versions = computed(() => [
   props.versioningPlugin.latestVersion,
-  ...(data.theme.value.excludeVersions
-    ? []
-    : props.versioningPlugin.versions.toSorted(collator.compare).reverse()),
+  ...props.versioningPlugin.versions
+    .filter((v) => !data.theme.value.excludedVersions.includes(v))
+    .toSorted(collator.compare)
+    .reverse(),
 ]);
 
 /**
