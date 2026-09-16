@@ -83,7 +83,7 @@ export interface ThemeConfig extends Versioned.ThemeConfig {
 
   env: typeof import("./constants/env.ts").default;
 
-  excludeVersions: boolean;
+  excludedVersions: string[];
 
   notFound: {
     /**

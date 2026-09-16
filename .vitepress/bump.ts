@@ -4,7 +4,7 @@ import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
 import { getLocales, getSidebar } from "./config/i18n.ts";
 import AT from "./constants/at.ts";
-import VERSION_RE from "./constants/versionRE.ts";
+import { VERSION_RE } from "./constants/versions.ts";
 
 // TODO: should this be refactored to use async methods everywhere?
 
