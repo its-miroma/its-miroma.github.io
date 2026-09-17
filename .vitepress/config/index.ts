@@ -92,7 +92,7 @@ export default defineVersionedConfig(
         {
           dev: "http://fabric-docs.localhost:5173/",
           build: "http://fabric-docs.localhost:4173/",
-          github: "https://docs.fabricmc.net/",
+          github: "https://its-miroma.github.io/",
           netlify: "https://fabric-docs.netlify.app/",
         }[ENV] || process.env.DEPLOY_PRIME_URL!,
       transformItems: (items) => {
