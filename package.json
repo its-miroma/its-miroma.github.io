@@ -25,18 +25,18 @@
     "vue": "^3.5.42"
   },
   "devDependencies": {
-    "@archiver/archiver": "^0.2.0",
+    "@archiver/archiver": "^0.3.0",
     "@csstools/stylelint-formatter-github": "^2.0.0",
-    "@iconify-json/lucide": "^1.2.129",
+    "@iconify-json/lucide": "^1.2.132",
     "@iconify-json/material-icon-theme": "^1.2.70",
-    "@iconify-json/simple-icons": "^1.2.94",
+    "@iconify-json/simple-icons": "^1.2.96",
     "@types/cross-spawn": "^6.0.6",
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.5.1",
     "cross-spawn": "^7.0.6",
     "markdownlint": "^0.41.1",
     "markdownlint-rule-search-replace": "^1.2.0",
     "markdownlint-rule-titlecase": "^0.1.0",
-    "oxc-minify": "^0.148.0",
+    "oxc-minify": "^0.150.0",
     "p-limit": "^7.3.2",
     "postcss-html": "^2.0.0",
     "prettier": "^3.9.6",
@@ -52,7 +52,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.3.4",
+      "version": "12.4.2",
       "onFail": "download"
     },
     "runtime": {
