@@ -38,7 +38,7 @@ export default defineVersionedConfig(
     ignoreDeadLinks: [
       (_, filePath) => {
         const split = path.relative(AT, filePath).split("/");
-        if (split[0] === "versions") split.splice(0, 2);
+        if (split[0] === "versions") return true; // split.splice(0, 2);
         return split[0] === "translated";
       },
     ],
