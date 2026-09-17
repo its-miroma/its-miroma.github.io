@@ -210,7 +210,7 @@ const TEXTURE = [
       <blockquote>{{ options.quote }}</blockquote>
 
       <VPLink
-        :href="data.site.value.locales[data.localeIndex.value].link"
+        :href="data.localeIndex.value === 'root' ? '/' : `/${data.localeIndex.value}/`"
         :aria-label="options.linkLabel"
       >
         {{ options.linkText }}
