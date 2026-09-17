@@ -128,7 +128,6 @@ export const createDownloadZips = async (siteConfig: SiteConfig) => {
         console.warn(`${z}: unexpected subdirectories: '${subDirectories.join("', '")}'`);
       }
 
-      // @ts-expect-error: https://github.com/node-archiver/archiver/pull/95
       const archive = new ZipArchive({ zlib: { level: 9 } }).directory(d, false);
       const pipeline = stream.promises.pipeline(archive, fs.createWriteStream(z));
 
