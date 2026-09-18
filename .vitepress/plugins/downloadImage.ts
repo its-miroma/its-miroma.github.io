@@ -6,8 +6,7 @@ import pLimit from "p-limit";
 import * as tinyglobby from "tinyglobby";
 import type { MarkdownRenderer, SiteConfig } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
-import AT from "../constants/at.ts";
-import ENV from "../constants/env.ts";
+import { AT, ENV } from "../constants.ts";
 
 // {download} on an image marks it as having a downloadable counterpart:
 //   ![Condensed Oak Log texture](/assets/develop/blocks/condensed_oak_log.png){download}

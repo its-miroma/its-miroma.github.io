@@ -5,8 +5,9 @@ import * as path from "node:path";
 import * as perfHooks from "node:perf_hooks";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
-import AT from "./constants/at.ts";
-import { ALL_VERSIONS, LATEST_VERSION } from "./constants/versions.ts";
+import { AT, LATEST_VERSION, OLD_VERSIONS } from "./constants.ts";
+
+// TODO: should this be refactored to use async methods everywhere?
 
 const start = perfHooks.performance.now();
 process.chdir(AT);
@@ -15,16 +16,14 @@ const includedVersions = new Set(
   process.argv
     .slice(2)
     .map((v) => path.basename(v))
-    .filter((v) => ALL_VERSIONS.includes(v))
+    .filter((v) => OLD_VERSIONS.includes(v))
 );
 
 if (includedVersions.size < 1) {
-  for (const v of ALL_VERSIONS) {
+  for (const v of OLD_VERSIONS) {
     includedVersions.add(v);
   }
 }
-
-includedVersions.delete(LATEST_VERSION);
 
 if (process.argv.slice(2).includes("--latest-only")) {
   includedVersions.clear();
@@ -48,7 +47,7 @@ for (const version of builtVersions) {
   const outDir = getOutDir(version);
   fs.mkdirSync(outDir, { recursive: true });
 
-  const otherVersions = ALL_VERSIONS.filter((v) => ![version, LATEST_VERSION].includes(v));
+  const otherVersions = OLD_VERSIONS.filter((v) => v !== version);
 
   const buildProcess = crossSpawn.sync(
     "pnpm",

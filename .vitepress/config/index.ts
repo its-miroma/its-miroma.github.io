@@ -7,9 +7,7 @@ import mcfunction from "syntax-mcfunction/mcfunction.tmLanguage.json" with { typ
 import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
-import AT from "../constants/at.ts";
-import ENV from "../constants/env.ts";
-import { EXCLUDED_VERSIONS, LATEST_VERSION } from "../constants/versions.ts";
+import { AT, ENV, EXCLUDED_OLD_VERSIONS, LATEST_VERSION } from "../constants.ts";
 import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
 import { moreWatchesPlugin } from "../plugins/moreWatches.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
@@ -17,7 +15,6 @@ import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
 
-// TODO: should all constants be in a single common file .vitepress/constants.ts instead of one file for each?
 // TODO: review deps and devDeps, why we have them, and if they are in the right place. if it can be a devDep, it probably should be. especially deps that vitepress does not depend on.
 
 // https://vitepress.dev/reference/site-config
@@ -105,11 +102,11 @@ export default defineVersionedConfig(
       },
     },
 
-    srcExclude: ["README.md", ...EXCLUDED_VERSIONS.map((v) => `versions/${v}`)],
+    srcExclude: ["README.md", ...EXCLUDED_OLD_VERSIONS.map((v) => `versions/${v}`)],
 
     themeConfig: {
       env: ENV,
-      excludedVersions: process.env.SHOW_ALL_VERSIONS ? [] : EXCLUDED_VERSIONS,
+      excludedVersions: process.env.SHOW_ALL_VERSIONS ? [] : EXCLUDED_OLD_VERSIONS,
       externalLinkIcon: true,
       logo: "/logo.png",
       outline: { level: "deep" },

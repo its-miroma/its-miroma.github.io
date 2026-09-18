@@ -1,6 +1,6 @@
 import * as path from "node:path";
 import type { Plugin } from "vitepress";
-import AT from "../constants/at.ts";
+import { AT } from "../constants.ts";
 
 export const moreWatchesPlugin = (): Plugin => ({
   name: "fabric-docs:watch-translations",

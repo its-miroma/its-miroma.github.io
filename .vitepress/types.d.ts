@@ -81,7 +81,7 @@ export interface ThemeConfig extends Versioned.ThemeConfig {
   /** @deprecated TODO(not-for-llm): remove */
   download: unknown;
 
-  env: typeof import("./constants/env.ts").default;
+  env: typeof import("./constants.ts").ENV;
 
   excludedVersions: string[];
 

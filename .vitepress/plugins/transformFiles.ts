@@ -2,8 +2,7 @@ import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
-import AT from "../constants/at.ts";
-import { LATEST_VERSION, VERSION_RE } from "../constants/versions.ts";
+import { AT, LATEST_VERSION, VERSION_RE } from "../constants.ts";
 
 // the value is the number of segments in the path that indicate the version
 enum VersionType {
