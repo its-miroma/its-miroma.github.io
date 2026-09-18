@@ -3,9 +3,9 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "tsx ./.vitepress/build.ts",
+    "build": "tsx ./.vitepress/scripts/build.ts",
     "preview": "vitepress preview",
-    "bump": "tsx ./.vitepress/bump.ts"
+    "bump": "tsx ./.vitepress/scripts/bump.ts"
   },
   "dependencies": {
     "@emnapi/core": "^1.11.3",

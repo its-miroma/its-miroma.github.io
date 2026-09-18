@@ -5,7 +5,7 @@ import * as path from "node:path";
 import * as perfHooks from "node:perf_hooks";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
-import { AT, LATEST_VERSION, OLD_VERSIONS } from "./constants.ts";
+import { AT, LATEST_VERSION, OLD_VERSIONS } from "../constants.ts";
 
 // TODO: should this be refactored to use async methods everywhere?
 
@@ -74,7 +74,7 @@ const getNewHash = (content: string) => crypto.hash("sha256", content, "hex").sl
 
 const hashes: string[] = [];
 const hashMap: Record<string, string> = {};
-let siteData: unknown = null;
+let siteData: unknown;
 
 for (const version of builtVersions) {
   const window = ((globalThis as any).window = {} as any);
