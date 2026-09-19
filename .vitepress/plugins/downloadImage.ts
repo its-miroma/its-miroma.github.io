@@ -15,7 +15,7 @@ import { AT, ENV } from "../constants.ts";
 // If the download path resolves to a directory, it will be zipped after build.
 
 // TODO: review whether to use console.error instead of console.warn in some of these cases.
-// TODO: p-limit is not used by vitepress. does it use an alternative? if so, i'd rather use that. else, maybe we can write the queue code here.... :/
+// TODO: p-limit is not used by vitepress. does it use an alternative? if so, i'd rather use that. else, maybe we can implement the queue code here.... :/
 
 const directoriesToBeZipped = new Set<string>();
 

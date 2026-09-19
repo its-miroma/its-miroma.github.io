@@ -12,6 +12,7 @@ TODO: there is a warning message in console:
 */
 
 const props = defineProps<{
+  h1?: boolean;
   screenMenu?: boolean;
   versioningPlugin: {
     versions: string[];
@@ -33,7 +34,7 @@ const currentV = computed(() => {
   return props.versioningPlugin.latestVersion;
 });
 
-// TODO: the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. this is an upstream issue, and ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
+// TODO(upstream): the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
 const text = computed(() => `${useIconSpan("lucide:git-graph")} ${currentV.value}`);
 
 // TODO(not-for-llm): add future versions to the supported pages
@@ -53,7 +54,7 @@ route format: `/[locale/][version/]path/to/[file-name]`
 - `[file-name]` is not added for index.md files
 */
 const getRoute = (v: string) => {
-  if (v === data.frontmatter.value.version) return route.hash || ".";
+  if (v === data.frontmatter.value.version) return route.hash || "#";
 
   return `/${[
     data.localeIndex.value !== "root" ? data.localeIndex.value : undefined,
@@ -81,7 +82,11 @@ const items = computed(
 </script>
 
 <template>
-  <VPNavMenuGroup :item="{ text, items, activeMatch: '(?!)' }" :screen="screenMenu" />
+  <VPNavMenuGroup
+    :item="{ text, items, activeMatch: '(?!)' }"
+    :screen="screenMenu"
+    :class="h1 && ['VPBadge', currentV === versioningPlugin.latestVersion ? 'info' : 'warning']"
+  />
 </template>
 
 <style scoped>
@@ -89,6 +94,45 @@ const items = computed(
   padding-inline: 0.75rem;
   font-size: 0.875rem;
   font-style: italic;
+  font-weight: 400;
   color: var(--vp-c-text-1);
+}
+
+.VPBadge.VPFlyout {
+  z-index: 1;
+  padding: 0;
+
+  & :deep(*) {
+    letter-spacing: 0;
+
+    &.button {
+      font-family: var(--vp-font-family-mono);
+      height: auto;
+      padding-block: 2px;
+
+      .text {
+        line-height: 2.5rem;
+      }
+    }
+
+    &.menu {
+      top: 2.5rem;
+      right: unset;
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+
+        li {
+          margin-top: 0;
+
+          a {
+            text-decoration: unset;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

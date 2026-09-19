@@ -2,10 +2,10 @@ import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
-import { AT, LATEST_VERSION, VERSION_RE } from "../constants.ts";
+import { AT, LATEST_VERSION, OLD_VERSIONS, VERSION_RE } from "../constants.ts";
 
 // the value is the number of segments in the path that indicate the version
-enum VersionType {
+const enum VersionType {
   /** `[translated/locale/]path/to/file-name.md` */
   LATEST = 0,
 
@@ -18,6 +18,8 @@ enum VersionType {
 
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
+const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin="${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION }).replaceAll('"', "'")}" />`;
+
 const parsePagePath = (relativePath: string) => {
   const returned = {} as {
     version: string;
@@ -29,17 +31,17 @@ const parsePagePath = (relativePath: string) => {
   const split = relativePath.split("/");
 
   if (split[0] === "versions") {
-    returned.version = split[1];
     returned.versionType = VersionType.OLD;
+    returned.version = split[1];
   } else if (VERSION_RE.test(split[0])) {
+    returned.versionType = VersionType.FUTURE;
     returned.version = split[0];
-    returned.versionType = VersionType.FUTURE;
   } else if (split[0] === "translated" && VERSION_RE.test(split[2])) {
-    returned.version = split[2];
     returned.versionType = VersionType.FUTURE;
+    returned.version = split[2];
   } else {
-    returned.version = LATEST_VERSION;
     returned.versionType = VersionType.LATEST;
+    returned.version = LATEST_VERSION;
   }
 
   if (split[0] === "translated") {
@@ -91,8 +93,7 @@ export const transformFile = (src: string, id: string) => {
     if (data.title) {
       newContent.push("<hgroup>");
 
-      const type = data.versionType === VersionType.LATEST ? "tip" : "warning";
-      newContent.push(`# ${data.title} <Badge type="${type}" text="${data.version}" /> {#h1}`);
+      newContent.push(`# ${data.title} ${VERSION_SWITCHER} {#h1}`);
 
       if (data.description) {
         newContent.push(`${data.description} {role="doc-subtitle"} `);

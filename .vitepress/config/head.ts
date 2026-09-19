@@ -1,4 +1,4 @@
-import { LATEST_VERSION, VERSION_RE } from "../constants.ts";
+import { LATEST_VERSION } from "../constants.ts";
 import type { Config } from "../types.d.ts";
 
 type NewHeadContext = {
@@ -102,7 +102,7 @@ const _getNewHead = (context: NewHeadContext): string | [string, Record<string, 
   split[0] =
     versionMap[split[0]]
     || versionMap[`${split[0]}.0`]
-    || (VERSION_RE.test(split[0]) ? "" : split[0]);
+    || (/^[0-9]+[.][0-9]+([.][0-9]+)?$/.test(split[0]) ? "" : split[0]);
   if (!split[0] || split[0] === context.latestVersion) split.shift();
 
   const seenPaths = new Set([split.join("/")]);

@@ -124,7 +124,7 @@ a[download]:not(.VPButton) {
   }
 
   &:not([href]) {
-    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the downlaod icon. This because I couldn't find another icon that meant "cannot download" in lucide. */
+    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the download icon. This because I couldn't find another icon that meant "cannot download" in lucide. */
     cursor: not-allowed;
   }
 
@@ -226,14 +226,8 @@ button.VPSwitchAppearance {
   box-shadow: 0 4px 10px #8883;
 }
 
-h1 > .VPBadge {
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-family: var(--vp-font-family-mono);
-}
-
 /* Remove border from headings if that's the first thing in the page */
-:is(hgroup) + :is(h1, h2, h3, h4, h5, h6) {
+.vp-doc hgroup + :is(h2, h3, h4, h5, h6) {
   margin-top: 0;
   border-top: none;
 }
