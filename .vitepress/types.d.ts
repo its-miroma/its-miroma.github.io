@@ -16,10 +16,9 @@ export type SidebarItem =
   | string
   | (Omit<Versioned.SidebarItem, "text" | "link" | "base" | "items">
       & (
-        | { text: string; link?: never; base?: never; items: SidebarItem[] }
-        | { text?: never; link: string; base: string; items?: SidebarItem[] }
-        | { text?: never; link?: never; base: string; items: SidebarItem[] }
-        | { text?: never; link: string; base?: never; items?: SidebarItem[] }
+        | { text: string; base?: never; link?: never; items: SidebarItem[] }
+        | { text?: never; base?: string; link: string; items?: SidebarItem[] }
+        | { text?: never; base: string; link?: never; items: SidebarItem[] }
       ));
 
 export interface ThemeConfig extends Versioned.ThemeConfig {
