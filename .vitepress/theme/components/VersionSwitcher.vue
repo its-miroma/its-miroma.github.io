@@ -35,7 +35,7 @@ const currentV = computed(() => {
 });
 
 // TODO(upstream): the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
-const text = computed(() => `${useIconSpan("lucide:git-graph")} ${currentV.value}`);
+const text = computed(() => `${useIconSpan("material-icon-theme:minecraft")} ${currentV.value}`);
 
 // TODO(not-for-llm): add future versions to the supported pages
 const collator = new Intl.Collator(undefined, { numeric: true });
@@ -90,6 +90,12 @@ const items = computed(
 </template>
 
 <style scoped>
+:deep([class^="vpi-"]:not([class$="-icon"])) {
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-bottom: 1px;
+}
+
 :deep(span.VPLink) {
   padding-inline: 0.75rem;
   font-size: 0.875rem;
@@ -101,35 +107,31 @@ const items = computed(
 .VPBadge.VPFlyout {
   z-index: 1;
   padding: 0;
+  letter-spacing: 0;
 
-  & :deep(*) {
-    letter-spacing: 0;
+  &:deep(.button) {
+    height: auto;
+    padding-inline: 0.5rem;
 
-    &.button {
-      font-family: var(--vp-font-family-mono);
-      height: auto;
-      padding-block: 2px;
-
-      .text {
-        line-height: 2.5rem;
-      }
+    .text {
+      line-height: 2.5rem;
     }
+  }
 
-    &.menu {
-      top: 2.5rem;
-      right: unset;
+  &:deep(.menu) {
+    top: 2.5rem;
+    right: revert;
 
-      ul {
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
 
-        li {
-          margin-top: 0;
+      li {
+        margin-top: 0;
 
-          a {
-            text-decoration: unset;
-          }
+        a {
+          text-decoration: unset;
         }
       }
     }
