@@ -85,7 +85,7 @@ for (const version of builtVersions) {
     absolute: true,
   })[0];
 
-  hashes.push(path.basename(metadataFile).match(/^metadata\.(.+)\.js$/)![1]);
+  hashes.push(path.basename(metadataFile).match(/^metadata[.](.+)[.]js$/)![1]);
 
   const fileContent = fs.readFileSync(metadataFile, { encoding: "utf-8" });
   const split = fileContent

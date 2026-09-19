@@ -4,56 +4,56 @@ import type { Plugin } from "vitepress";
 import { getWebsiteResolver } from "../config/i18n.ts";
 import { AT, LATEST_VERSION, OLD_VERSIONS, VERSION_RE } from "../constants.ts";
 
-// the value is the number of segments in the path that indicate the version
-const enum VersionType {
-  /** `[translated/locale/]path/to/file-name.md` */
-  LATEST = 0,
-
-  /** `[translated/locale/]version/path/to/file-name.md` */
-  FUTURE = 1,
-
-  /** `versions/version/[translated/locale/]path/to/file-name.md` */
-  OLD = 2,
-}
-
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
 const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin="${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION }).replaceAll('"', "'")}" />`;
 
+// TODO: refactor to use early returns instead of returning returned
 const parsePagePath = (relativePath: string) => {
   const returned = {} as {
+    versionType: keyof typeof versionTypeToSegments;
     version: string;
-    versionType: VersionType;
     localeIndex: string;
     purePath: string;
   };
 
+  const versionTypeToSegments = {
+    /** `[translated/locale/]path/to/file-name.md` */
+    latest: 0,
+
+    /** `[translated/locale/]version/path/to/file-name.md` */
+    future: 1,
+
+    /** `versions/version/[translated/locale/]path/to/file-name.md` */
+    old: 2,
+  } as const;
+
   const split = relativePath.split("/");
 
   if (split[0] === "versions") {
-    returned.versionType = VersionType.OLD;
+    returned.versionType = "old";
     returned.version = split[1];
   } else if (VERSION_RE.test(split[0])) {
-    returned.versionType = VersionType.FUTURE;
+    returned.versionType = "future";
     returned.version = split[0];
   } else if (split[0] === "translated" && VERSION_RE.test(split[2])) {
-    returned.versionType = VersionType.FUTURE;
+    returned.versionType = "future";
     returned.version = split[2];
   } else {
-    returned.versionType = VersionType.LATEST;
+    returned.versionType = "latest";
     returned.version = LATEST_VERSION;
   }
 
   if (split[0] === "translated") {
     returned.localeIndex = split[1];
-  } else if (returned.versionType === VersionType.OLD && split[VersionType.OLD] === "translated") {
+  } else if (returned.versionType === "old" && split[2] === "translated") {
     returned.localeIndex = split[3];
   } else {
     returned.localeIndex = "root";
   }
 
   returned.purePath = split
-    .slice(returned.versionType)
+    .slice(versionTypeToSegments[returned.versionType])
     .slice(returned.localeIndex === "root" ? 0 : 2)
     .join("/")
     .replace(/((?<=^|[/])index)?[.]md$/, "");
@@ -68,7 +68,7 @@ export const transformFile = (src: string, id: string) => {
   const relativePath = path.relative(AT, id);
   Object.assign(data, parsePagePath(relativePath));
 
-  if (data.versionType === VersionType.OLD) {
+  if (data.versionType === "old") {
     data.editLink = false;
     data.search = false;
   }
@@ -82,7 +82,7 @@ export const transformFile = (src: string, id: string) => {
   const newContent: string[] = [];
 
   if (data.layout === "home") {
-    if (data.versionType === VersionType.OLD) {
+    if (data.versionType === "old") {
       newContent.push(
         "::: warning",
         resolver("version.reminder.old_version_home").replace("%s", data.version),
@@ -102,7 +102,7 @@ export const transformFile = (src: string, id: string) => {
       newContent.push("</hgroup>");
     }
 
-    if (data.versionType === VersionType.OLD) {
+    if (data.versionType === "old") {
       newContent.push(
         "::: warning",
         resolver("version.reminder.old_version").replace("%s", data.version),
@@ -110,7 +110,7 @@ export const transformFile = (src: string, id: string) => {
       );
     }
 
-    if (data.versionType === VersionType.FUTURE) {
+    if (data.versionType === "future") {
       newContent.push(
         "::: warning",
         resolver("version.reminder.future_version").replace("%s", data.version),
