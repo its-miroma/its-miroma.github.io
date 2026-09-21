@@ -29,10 +29,13 @@ export const DEVELOP_SIDEBAR: SidebarItem = {
           items: [
             //
             "/food",
+            "/custom-fuel",
+            "/custom-compostable",
             "/potions",
             "/spawn-egg",
             "/custom-tools",
             "/custom-armor",
+            "/custom-shields",
           ],
         },
         "/item-models",
@@ -74,10 +77,24 @@ export const DEVELOP_SIDEBAR: SidebarItem = {
       base: "/develop/entities",
       items: [
         //
-        "/first-entity",
+        {
+          link: "/first-entity",
+          items: [
+            //
+            "/projectiles",
+          ],
+        },
         "/attributes",
         "/effects",
         "/damage-types",
+      ],
+    },
+    {
+      base: "/develop/events",
+      items: [
+        //
+        "/",
+        "/loot-tables",
       ],
     },
     {
@@ -172,6 +189,13 @@ export const DEVELOP_SIDEBAR: SidebarItem = {
       ],
     },
     {
+      base: "/develop/registries",
+      items: [
+        //
+        "/dynamic-registry",
+      ],
+    },
+    {
       base: "/develop/serialization",
       items: [
         //
@@ -254,7 +278,6 @@ export const DEVELOP_SIDEBAR: SidebarItem = {
         //
         "/automatic-testing",
         "/debugging",
-        "/events",
         "/game-rules",
         "/key-mappings",
         "/networking",
