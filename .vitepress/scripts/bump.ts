@@ -5,8 +5,6 @@ import * as tinyglobby from "tinyglobby";
 import { getLocales, getSidebar } from "../config/i18n.ts";
 import { AT, VERSION_RE } from "../constants.ts";
 
-// TODO: should this be refactored to use async methods everywhere?
-
 const git = (...args: string[]) => {
   const res = crossSpawn.sync("git", args, { encoding: "utf8" });
   if (res.error) {

@@ -7,8 +7,6 @@ import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
 import { AT, LATEST_VERSION, OLD_VERSIONS } from "../constants.ts";
 
-// TODO: should this be refactored to use async methods everywhere?
-
 const start = perfHooks.performance.now();
 process.chdir(AT);
 
