@@ -1,544 +1,255 @@
 import type { Fabric } from "../types.d.ts";
 
-// TODO: it has been suggested that develop.title stay separate in the sidebar (like Players), and for the articles currently under it to go in a new uncollapsed section "Getting Started".
-export default [
+// TODO: should we make the link start with / instead of the base ending with /? this way we don't have to replaceAll("//", "/") I'm pretty sure
+// TODO: do we allow SidebarItem to be a string, which normalizes to { link: string } ?
+
+export const DEVELOP_SIDEBAR: Fabric.SidebarItem[] = [
   {
-    text: "develop.title",
-    link: "/develop/",
-    collapsed: false,
+    base: "/develop/",
+    link: "/",
     items: [
       {
-        text: "develop.getting_started.creating_project",
-        link: "/develop/getting-started/creating-a-project",
-      },
-      {
-        text: "develop.getting_started.project_structure",
-        link: "/develop/getting-started/project-structure",
-      },
-      {
-        text: "develop.getting_started.setting_up",
-        link: "/develop/getting-started/setting-up",
-      },
-      {
-        text: "develop.getting_started.opening_project",
-        link: "/develop/getting-started/opening-a-project",
-      },
-      {
-        text: "develop.getting_started.launching_game",
-        link: "/develop/getting-started/launching-the-game",
-      },
-      {
-        text: "develop.getting_started.generating_sources",
-        link: "/develop/getting-started/generating-sources",
-      },
-      {
-        text: "develop.getting_started.building_mod",
-        link: "/develop/getting-started/building-a-mod",
-      },
-      {
-        text: "develop.getting_started.tips_and_tricks",
-        link: "/develop/getting-started/tips-and-tricks",
-      },
-    ],
-  },
-  {
-    text: "develop.items",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.items.first_item",
-        link: "/develop/items/first-item",
+        collapsed: false,
+        base: "/develop/getting-started/",
         items: [
-          {
-            text: "develop.items.food",
-            link: "/develop/items/food",
-          },
-          {
-            text: "develop.items.custom_fuel",
-            link: "/develop/items/custom-fuel",
-          },
-          {
-            text: "develop.items.custom_compostable",
-            link: "/develop/items/custom-compostable",
-          },
-          {
-            text: "develop.items.potions",
-            link: "/develop/items/potions",
-          },
-          {
-            text: "develop.items.spawn_egg",
-            link: "/develop/items/spawn-egg",
-          },
-          {
-            text: "develop.items.custom_tools",
-            link: "/develop/items/custom-tools",
-          },
-          {
-            text: "develop.items.custom_armor",
-            link: "/develop/items/custom-armor",
-          },
-          {
-            text: "develop.items.custom_shields",
-            link: "/develop/items/custom-shields",
-          },
+          { link: "creating-a-project" },
+          { link: "project-structure" },
+          { link: "setting-up" },
+          { link: "opening-a-project" },
+          { link: "launching-the-game" },
+          { link: "generating-sources" },
+          { link: "building-a-mod" },
+          { link: "tips-and-tricks" },
         ],
       },
       {
-        text: "develop.items.item_models",
-        link: "/develop/items/item-models",
-      },
-      {
-        text: "develop.items.item_appearance",
-        link: "/develop/items/item-appearance",
-      },
-      {
-        text: "develop.items.custom_creative_tabs",
-        link: "/develop/items/custom-creative-tabs",
-      },
-      {
-        text: "develop.items.custom_item_interactions",
-        link: "/develop/items/custom-item-interactions",
-      },
-      {
-        text: "develop.items.custom_enchantment_effects",
-        link: "/develop/items/custom-enchantment-effects",
-      },
-      {
-        text: "develop.items.custom_data_components",
-        link: "/develop/items/custom-data-components",
-      },
-    ],
-  },
-  {
-    text: "develop.blocks",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.blocks.first_block",
-        link: "/develop/blocks/first-block",
-      },
-      {
-        text: "develop.blocks.block_models",
-        link: "/develop/blocks/block-models",
-      },
-      {
-        text: "develop.blocks.blockstates",
-        link: "/develop/blocks/blockstates",
-      },
-      {
-        text: "develop.blocks.block_entities",
-        link: "/develop/blocks/block-entities",
+        base: "/develop/items/",
         items: [
           {
-            text: "develop.blocks.block_entity_renderer",
-            link: "/develop/blocks/block-entity-renderer",
-          },
-          {
-            text: "develop.blocks.block_containers",
-            link: "/develop/blocks/block-containers",
-          },
-          {
-            text: "develop.blocks.container_menus",
-            link: "/develop/blocks/container-menus",
-          },
-        ],
-      },
-      {
-        text: "develop.blocks.block_tinting",
-        link: "/develop/blocks/block-tinting",
-      },
-      {
-        text: "develop.blocks.workstations",
-        link: "/develop/blocks/workstations",
-      },
-    ],
-  },
-  {
-    text: "develop.fluids",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.fluids.first_fluid",
-        link: "/develop/fluids/first-fluid",
-      },
-    ],
-  },
-  {
-    text: "develop.entities",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.entities.first_entity",
-        link: "/develop/entities/first-entity",
-        items: [
-          {
-            text: "develop.entities.projectiles",
-            link: "/develop/entities/projectiles",
-          },
-        ],
-      },
-      {
-        text: "develop.entities.attributes",
-        link: "/develop/entities/attributes",
-      },
-      {
-        text: "develop.entities.effects",
-        link: "/develop/entities/effects",
-      },
-      {
-        text: "develop.entities.damage_types",
-        link: "/develop/entities/damage-types",
-      },
-    ],
-  },
-  {
-    text: "develop.events",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.events.introduction",
-        link: "/develop/events/",
-      },
-      {
-        text: "develop.events.loot_tables",
-        link: "/develop/events/loot-tables",
-      },
-    ],
-  },
-  {
-    text: "develop.sounds",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.sounds.using_sounds",
-        link: "/develop/sounds/using-sounds",
-      },
-      {
-        text: "develop.sounds.custom",
-        link: "/develop/sounds/custom",
-      },
-      {
-        text: "develop.sounds.dynamic_sounds",
-        link: "/develop/sounds/dynamic-sounds",
-      },
-    ],
-  },
-  {
-    text: "develop.commands",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.commands.basics",
-        link: "/develop/commands/basics",
-      },
-      {
-        text: "develop.commands.arguments",
-        link: "/develop/commands/arguments",
-      },
-      {
-        text: "develop.commands.suggestions",
-        link: "/develop/commands/suggestions",
-      },
-    ],
-  },
-  {
-    text: "develop.recipes",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.recipes.custom_recipe_types",
-        link: "/develop/recipes/custom-recipe-types",
-      },
-      {
-        text: "develop.recipes.extending_vanilla_recipes",
-        link: "/develop/recipes/extending-vanilla-recipes",
-      },
-    ],
-  },
-  {
-    text: "develop.rendering",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.rendering.basic_concepts",
-        link: "/develop/rendering/basic-concepts",
-      },
-      {
-        text: "develop.rendering.gui_graphics",
-        link: "/develop/rendering/gui-graphics",
-      },
-      {
-        text: "develop.rendering.hud",
-        link: "/develop/rendering/hud",
-      },
-      {
-        text: "develop.rendering.world",
-        link: "/develop/rendering/world",
-      },
-      {
-        text: "develop.rendering.gui",
-        items: [
-          {
-            text: "develop.rendering.gui.custom_screens",
-            link: "/develop/rendering/gui/custom-screens",
-          },
-          {
-            text: "develop.rendering.gui.custom_widgets",
-            link: "/develop/rendering/gui/custom-widgets",
-          },
-        ],
-      },
-      {
-        text: "develop.rendering.particles",
-        items: [
-          {
-            text: "develop.rendering.particles.creating_particles",
-            link: "/develop/rendering/particles/creating-particles",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    text: "develop.data_generation",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.data_generation.setup",
-        link: "/develop/data-generation/setup",
-      },
-      {
-        text: "develop.data_generation.client",
-        items: [
-          {
-            text: "develop.data_generation.translations",
-            link: "/develop/data-generation/translations",
-          },
-          {
-            text: "develop.data_generation.models",
+            link: "first-item",
             items: [
+              { link: "food" },
+              { link: "potions" },
+              { link: "spawn-egg" },
+              { link: "custom-tools" },
+              { link: "custom-armor" },
+            ],
+          },
+          { link: "item-models" },
+          { link: "item-appearance" },
+          { link: "custom-creative-tabs" },
+          { link: "custom-item-interactions" },
+          { link: "custom-enchantment-effects" },
+          { link: "custom-data-components" },
+        ],
+      },
+      {
+        base: "/develop/blocks/",
+        items: [
+          { link: "first-block" },
+          { link: "block-models" },
+          { link: "blockstates" },
+          {
+            link: "block-entities",
+            items: [
+              { link: "block-entity-renderer" },
+              { link: "block-containers" },
+              { link: "container-menus" },
+            ],
+          },
+          { link: "block-tinting" },
+          { link: "workstations" },
+        ],
+      },
+      {
+        base: "/develop/fluids/",
+        items: [
+          //
+          { link: "first-fluid" },
+        ],
+      },
+      {
+        base: "/develop/entities/",
+        items: [
+          { link: "first-entity" },
+          { link: "attributes" },
+          { link: "effects" },
+          { link: "damage-types" },
+        ],
+      },
+      {
+        base: "/develop/sounds/",
+        items: [
+          //
+          { link: "using-sounds" },
+          { link: "custom" },
+          { link: "dynamic-sounds" },
+        ],
+      },
+      {
+        base: "/develop/commands/",
+        items: [
+          //
+          { link: "basics" },
+          { link: "arguments" },
+          { link: "suggestions" },
+        ],
+      },
+      {
+        base: "/develop/recipes/",
+        items: [
+          //
+          { link: "custom-recipe-types" },
+          { link: "extending-vanilla-recipes" },
+        ],
+      },
+      {
+        base: "/develop/rendering/",
+        items: [
+          { link: "basic-concepts" },
+          { link: "gui-graphics" },
+          { link: "hud" },
+          { link: "world" },
+          {
+            base: "/develop/rendering/gui/",
+            items: [
+              //
+              { link: "custom-screens" },
+              { link: "custom-widgets" },
+            ],
+          },
+          {
+            base: "/develop/rendering/particles/",
+            items: [
+              //
+              { link: "creating-particles" },
+            ],
+          },
+        ],
+      },
+      {
+        base: "/develop/data-generation/",
+        items: [
+          { link: "setup" },
+          {
+            text: "/develop/data-generation//client",
+            items: [
+              { link: "translations" },
               {
-                text: "develop.data_generation.block_models",
-                link: "/develop/data-generation/block-models",
+                text: "/develop/data-generation//models",
+                items: [
+                  //
+                  { link: "block-models" },
+                  { link: "item-models" },
+                ],
               },
+            ],
+          },
+          {
+            text: "/develop/data-generation//server",
+            items: [
+              { link: "advancements" },
+              { link: "enchantments" },
+              { link: "loot-tables" },
+              { link: "recipes" },
+              { link: "tags" },
               {
-                text: "develop.data_generation.item_models",
-                link: "/develop/data-generation/item-models",
+                text: "/develop/data-generation//world-generation",
+                items: [
+                  //
+                  { link: "features" },
+                ],
               },
             ],
           },
         ],
       },
       {
-        text: "develop.data_generation.server",
+        base: "/develop/serialization/",
+        items: [
+          //
+          { link: "codecs" },
+          { link: "data-attachments" },
+          { link: "saved-data" },
+        ],
+      },
+      {
+        base: "/develop/loom/",
+        link: "/",
+        items: [
+          { link: "fabric-api" },
+          { link: "options" },
+          { link: "production-run-tasks" },
+          { link: "classpath-groups" },
+          { link: "tasks" },
+        ],
+      },
+      {
+        base: "/develop/loader/",
+        link: "/",
+        items: [
+          //
+          { link: "fabric-mod-json" },
+        ],
+      },
+      {
+        text: "/develop/porting//",
         items: [
           {
-            text: "develop.data_generation.advancements",
-            link: "/develop/data-generation/advancements",
-          },
-          {
-            text: "develop.data_generation.enchantments",
-            link: "/develop/data-generation/enchantments",
-          },
-          {
-            text: "develop.data_generation.loot_tables",
-            link: "/develop/data-generation/loot-tables",
-          },
-          {
-            text: "develop.data_generation.recipes",
-            link: "/develop/data-generation/recipes",
-          },
-          {
-            text: "develop.data_generation.tags",
-            link: "/develop/data-generation/tags",
-          },
-          {
-            text: "develop.data_generation.world_generation",
+            link: "porting/",
             items: [
               {
-                text: "develop.data_generation.features",
-                link: "/develop/data-generation/features",
+                base: "/",
+                link: "/26.1/develop/porting/fabric-api",
+              },
+            ],
+          },
+          {
+            link: "porting/mappings/",
+            items: [
+              {
+                base: "/",
+                link: "/1.21.11/develop/porting/mappings/loom",
+              },
+              {
+                base: "/",
+                link: "/1.21.11/develop/porting/mappings/ravel",
               },
             ],
           },
         ],
       },
-    ],
-  },
-  {
-    text: "develop.registries",
-    collapsed: true,
-    items: [
       {
-        text: "develop.registries.dynamic_registries",
-        link: "/develop/registries/dynamic-registry",
-      },
-    ],
-  },
-  {
-    text: "develop.serialization",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.serialization.codecs",
-        link: "/develop/serialization/codecs",
-      },
-      {
-        text: "develop.serialization.data_attachments",
-        link: "/develop/serialization/data-attachments",
-      },
-      {
-        text: "develop.serialization.saved_data",
-        link: "/develop/serialization/saved-data",
-      },
-    ],
-  },
-  {
-    text: "develop.loom",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.loom.introduction",
-        link: "/develop/loom/",
-      },
-      {
-        text: "develop.loom.fabric_api",
-        link: "/develop/loom/fabric-api",
-      },
-      {
-        text: "develop.loom.options",
-        link: "/develop/loom/options",
-      },
-      {
-        text: "develop.loom.prod",
-        link: "/develop/loom/production-run-tasks",
-      },
-      {
-        text: "develop.loom.classpath_groups",
-        link: "/develop/loom/classpath-groups",
-      },
-      {
-        text: "develop.loom.tasks",
-        link: "/develop/loom/tasks",
-      },
-    ],
-  },
-  {
-    text: "develop.loader",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.loader.index",
-        link: "/develop/loader/",
-      },
-      {
-        text: "develop.loader.fabric.mod.json",
-        link: "/develop/loader/fabric-mod-json",
-      },
-    ],
-  },
-  {
-    text: "develop.porting",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.porting.release",
-        link: "/develop/porting/",
+        base: "/develop/mixins/",
         items: [
-          {
-            text: "develop.porting.fabric_api",
-            link: "/26.1/develop/porting/fabric-api",
-          },
+          //
+          { link: "bytecode" },
+          { link: "accessors" },
         ],
       },
       {
-        text: "develop.porting.mappings",
-        link: "/develop/porting/mappings/",
+        base: "/develop/class-tweakers/",
+        link: "/",
         items: [
-          {
-            text: "develop.porting.mappings.loom",
-            link: "/1.21.11/develop/porting/mappings/loom",
-          },
-          {
-            text: "develop.porting.mappings.ravel",
-            link: "/1.21.11/develop/porting/mappings/ravel",
-          },
+          { link: "access-widening" },
+          { link: "interface-injection" },
+          { link: "enum-extension" },
         ],
       },
-    ],
+      {
+        text: "/develop//misc",
+        items: [
+          { link: "automatic-testing" },
+          { link: "debugging" },
+          { link: "events" },
+          { link: "game-rules" },
+          { link: "key-mappings" },
+          { link: "networking" },
+          { link: "resource-conditions" },
+          { link: "statistics" },
+          { link: "text-and-translations" },
+        ],
+      },
+    ].map((i) => ({ collapsed: true, ...i })),
   },
-  {
-    text: "develop.mixins",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.mixins.bytecode",
-        link: "/develop/mixins/bytecode",
-      },
-      {
-        text: "develop.mixins.accessors",
-        link: "/develop/mixins/accessors",
-      },
-    ],
-  },
-  {
-    text: "develop.class_tweakers",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.class_tweakers.introduction",
-        link: "/develop/class-tweakers/",
-      },
-      {
-        text: "develop.class_tweakers.access_widening",
-        link: "/develop/class-tweakers/access-widening",
-      },
-      {
-        text: "develop.class_tweakers.interface_injection",
-        link: "/develop/class-tweakers/interface-injection",
-      },
-      {
-        text: "develop.class_tweakers.enum_extension",
-        link: "/develop/class-tweakers/enum-extension",
-      },
-    ],
-  },
-  {
-    text: "develop.misc",
-    collapsed: true,
-    items: [
-      {
-        text: "develop.misc.automatic_testing",
-        link: "/develop/automatic-testing",
-      },
-      {
-        text: "develop.misc.debugging",
-        link: "/develop/debugging",
-      },
-      {
-        text: "develop.misc.game_rules",
-        link: "/develop/game-rules",
-      },
-      {
-        text: "develop.misc.key_mappings",
-        link: "/develop/key-mappings",
-      },
-      {
-        text: "develop.misc.networking",
-        link: "/develop/networking",
-      },
-      {
-        text: "develop.misc.resource_conditions",
-        link: "/develop/resource-conditions",
-      },
-      {
-        text: "develop.misc.statistics",
-        link: "/develop/statistics",
-      },
-      {
-        text: "develop.misc.text_and_translations",
-        link: "/develop/text-and-translations",
-      },
-    ],
-  },
-] satisfies Fabric.SidebarItem[];
+];

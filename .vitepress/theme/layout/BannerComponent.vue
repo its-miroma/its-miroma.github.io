@@ -5,6 +5,8 @@ import { VPLink } from "vitepress/theme";
 import { computed, onMounted, ref, watchEffect } from "vue";
 import type { Fabric } from "../../types.d.ts";
 
+// TODO: make it so that the HTML page having a scrollbar or not does not affect the banner. In other words: the scrollbar's top edge should be under the banner - the banner should span from left to right 100% width despite the scrollbar, the banner should not cover the scrollbar.
+
 const data = useData();
 const banner = ref<HTMLDivElement>();
 const { height } = useElementSize(banner);

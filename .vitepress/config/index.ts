@@ -8,16 +8,16 @@ import mcfunction from "syntax-mcfunction/mcfunction.tmLanguage.json" with { typ
 import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
+import AT from "../at.ts";
 import { downloadImagePlugin, zipDownloadAssets } from "../plugins/downloadImage.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { watchTranslationsPlugin } from "../plugins/watchTranslations.ts";
-import ROOT from "../root.ts";
 import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
 
 const latestVersion = fs
-  .readFileSync(path.resolve(ROOT, "reference", "latest", "build.gradle"), "utf-8")
+  .readFileSync(path.resolve(AT, "reference", "latest", "build.gradle"), "utf-8")
   .match(/def minecraftVersion = "([^"]+)"/)![1];
 
 // https://docs.github.com/en/actions/reference/workflows-and-actions/variables#default-environment-variables
@@ -130,7 +130,6 @@ export default defineVersionedConfig(
         },
         provider: "local",
       },
-      versionSwitcher: false,
     },
 
     // Set head tags at build time
@@ -173,5 +172,5 @@ export default defineVersionedConfig(
       },
     },
   } as Fabric.Config,
-  path.resolve(ROOT, ".vitepress")
+  path.resolve(AT, ".vitepress")
 );

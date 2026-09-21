@@ -1,93 +1,101 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
-import ROOT from "../root.ts";
-import Develop from "../sidebars/develop.ts";
-import Players from "../sidebars/players.ts";
+import AT from "../at.ts";
+import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
+import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
 import type { Fabric } from "../types.d.ts";
-
-type SidebarTranslations = typeof import("../../sidebar_translations.json");
-type WebsiteTranslations = typeof import("../../website_translations.json");
 
 const REQUIRED_FILES = ["index.md", "website_translations.json"] as const;
 export const getLocales = () => [
   "en_us",
   ...tinyglobby
-    .globSync("*", { cwd: path.resolve(ROOT, "translated"), onlyDirectories: true, absolute: true })
+    .globSync("*", { cwd: path.resolve(AT, "translated"), onlyDirectories: true, absolute: true })
     .filter((d) => REQUIRED_FILES.every((f) => fs.existsSync(path.resolve(d, f))))
     .map((d) => path.basename(d)),
 ];
 
-const resolverDataCache = new Map<string, Record<string, any>>();
-const getResolver = //
-  <T extends Record<string, any>>(
-    file: string,
-    locale: string
-  ): (<K extends keyof T>(k: K) => T[K]) => {
-    const readStrings = (locale: string) => {
-      const filePath = path.resolve(ROOT, "translated", locale === "en_us" ? ".." : locale, file);
-      if (!resolverDataCache.has(filePath)) {
-        try {
-          resolverDataCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
-        } catch {
-          return {} as T;
-        }
-      }
+const translationFileCache = new Map<string, Record<string, any>>();
+const readTranslationFile = <T extends Record<string, any>>(file: string, locale: string): T => {
+  const filePath = path.resolve(AT, "translated", locale === "en_us" ? ".." : locale, file);
+  if (!translationFileCache.has(filePath)) {
+    try {
+      translationFileCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
+    } catch {
+      return {} as T;
+    }
+  }
 
-      return resolverDataCache.get(filePath) as T;
-    };
+  return translationFileCache.get(filePath) as T;
+};
 
-    const strings = readStrings(locale);
+type Resolver<T extends Record<string, any>> = <K extends string & keyof T>(k: K) => T[K];
+const getResolver = <T extends Record<string, any>>(file: string, locale: string): Resolver<T> => {
+  const strings = readTranslationFile<T>(file, locale);
 
-    if (locale !== "en_us") {
-      const fallback = readStrings("en_us");
+  if (locale !== "en_us") {
+    const fallback = readTranslationFile<T>(file, "en_us");
 
-      return (k) => strings[k] || fallback[k];
+    return (k) => strings[k] || fallback[k];
+  }
+
+  return (k) => {
+    if (strings[k] === undefined && !k.endsWith("/")) {
+      console.warn(`${file}: missing translation for key '${k}'`);
     }
 
+    return strings[k];
+  };
+};
+
+export const getWebsiteResolver = (locale: string) => {
+  const file = "website_translations.json";
+
+  if (locale === "en_us") {
+    const strings = readTranslationFile<Fabric.Translations["website"]>(file, "en_us");
     for (const k of Object.keys(strings)) {
       if (!/^([/][/])?[a-z0-9_.]*$/.test(k)) {
-        console.warn(`${file}: unusual character in key: ${k}`);
+        console.warn(`${file}: unusual character in key '${k}'`);
       }
     }
+  }
 
-    return (k) => {
-      if (strings[k] === undefined) {
-        console.warn(`${file}: missing translation for key: ${String(k)}`);
-      }
-
-      return strings[k];
-    };
-  };
-
-const getSidebarResolver = (locale: string) =>
-  getResolver<SidebarTranslations>("sidebar_translations.json", locale);
-
-export const getWebsiteResolver = (locale: string) =>
-  getResolver<WebsiteTranslations>("website_translations.json", locale);
+  return getResolver<Fabric.Translations["website"]>(file, locale);
+};
 
 export const getSidebar = (locale: string) => {
   const returned: Fabric.Sidebar = {};
-  const resolver = getSidebarResolver(locale);
 
-  const normalizeSidebar = (sidebar: Fabric.SidebarItem[]) => {
+  const localePrefix = locale === "en_us" ? "" : `/${locale}`;
+
+  const file = "sidebar_translations.json";
+  const resolver = getResolver<Fabric.Translations["sidebar"]>("sidebar_translations.json", locale);
+
+  const normalizeSidebar = (sidebar: Fabric.SidebarItem[], base = "") => {
     const returned: Fabric.SidebarItem[] = JSON.parse(JSON.stringify(sidebar));
 
     for (const item of returned) {
-      // TODO: perhaps to avoid scope duplication, can we reuse item.link to be the key in the resolver? I feel like all sidebar items (both in Develop and in Players) just have link = /develop/whatever/page and text = develop.whatever.page - can we not reuse the link? Please review whether they are all unique. Maybe, since most sections in the sidebar are like "Section Title" and start with "Introduction", perhaps that can also be assumed. Also, maybe I should check out SidebarItem.base and use it to reduce the duplication even further. idk, needs review.
+      const k = item.text ?? `${item.base ?? base}${item.link ?? ""}`.replaceAll("//", "/");
+
       // @ts-expect-error
-      item.text = resolver(item.text);
-      if (item.items) item.items = normalizeSidebar(item.items);
-      if (locale !== "en_us" && item.link?.startsWith("/")) {
-        item.link = `/${locale}${item.link}`;
+      item.text = resolver(k) ?? (item.link && k.endsWith("/") ? resolver("introduction") : "");
+
+      if (!item.text) {
+        console.warn(`${file}: missing translation for key '${k}'`);
       }
+
+      if (item.items) {
+        item.items = normalizeSidebar(item.items, item.base ?? base);
+      }
+
+      item.base = `${localePrefix}${item.base ?? base}`;
     }
 
     return returned;
   };
 
-  returned[`${locale === "en_us" ? "" : `/${locale}`}/develop/`] = normalizeSidebar(Develop);
-  returned[`${locale === "en_us" ? "" : `/${locale}`}/players/`] = normalizeSidebar(Players);
+  returned[`${localePrefix}/develop/`] = normalizeSidebar(DEVELOP_SIDEBAR);
+  returned[`${localePrefix}/players/`] = normalizeSidebar(PLAYERS_SIDEBAR);
 
   return returned;
 };
@@ -341,6 +349,8 @@ export const getLocaleConfig = () => {
           switcherLabel: resolver("version.switcher.label"),
           noOtherVersions: resolver("version.switcher.none"),
         },
+
+        versionSwitcher: false,
       },
     };
   }

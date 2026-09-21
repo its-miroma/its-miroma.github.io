@@ -2,9 +2,9 @@ import * as crossSpawn from "cross-spawn";
 import * as fs from "node:fs";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
+import AT from "./at.ts";
 import { getLocales, getSidebar } from "./config/i18n.ts";
 import { VERSION_RE } from "./plugins/transformFiles.ts";
-import ROOT from "./root.ts";
 
 const git = (...args: string[]) => {
   const res = crossSpawn.sync("git", args, { encoding: "utf8" });
@@ -15,7 +15,7 @@ const git = (...args: string[]) => {
   return res;
 };
 
-process.chdir(ROOT);
+process.chdir(AT);
 
 if (git("status", "--porcelain").stdout.toString().trim().length > 0) {
   console.error("Working directory must be clean!");

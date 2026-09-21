@@ -2,8 +2,8 @@ import { ZipArchive } from "archiver";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { MarkdownRenderer, SiteConfig } from "vitepress";
+import AT from "../at.ts";
 import { getWebsiteResolver } from "../config/i18n.ts";
-import ROOT from "../root.ts";
 
 // {download} on an image marks it as having a downloadable counterpart:
 //   ![Condensed Oak Log texture](/assets/develop/blocks/condensed_oak_log.png){download}
@@ -15,11 +15,6 @@ import ROOT from "../root.ts";
 // - Caches
 // - zipping files
 // - ???
-
-// TODO: should the attr value be allowed to be a relative path?
-// this way we can do `download=../whatever.png` for like the installing-java/{os} pages
-
-// TODO: support @ prefix, which means ROOT. hmm, do you think path.resolve("@", "...") can be supported?
 
 const directoriesToBeZipped = new Set<string>();
 
@@ -59,7 +54,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     downloadPath ||= src.replace("/assets/", "/download/");
-    const fullDownloadPath = path.resolve(ROOT, "public", `./${downloadPath}`);
+    const fullDownloadPath = path.resolve(AT, "public", `./${downloadPath}`);
     if (!fs.existsSync(fullDownloadPath)) {
       console.warn(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
 

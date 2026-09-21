@@ -1,8 +1,8 @@
 import matter from "gray-matter";
 import * as path from "node:path";
 import type { Plugin } from "vitepress";
+import AT from "../at.ts";
 import { getWebsiteResolver } from "../config/i18n.ts";
-import ROOT from "../root.ts";
 
 // the value is the number of segments in the path that indicate the version
 enum VersionType {
@@ -65,7 +65,7 @@ export const transformFile = (src: string, id: string, latestVersion: string) =>
   const { data, content } = matter(src, {});
 
   // Version and locale information
-  const relativePath = path.relative(ROOT, id);
+  const relativePath = path.relative(AT, id);
   Object.assign(data, parsePagePath(relativePath, latestVersion));
 
   if (data.versionType === VersionType.OLD) {

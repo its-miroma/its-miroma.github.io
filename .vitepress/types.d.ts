@@ -160,8 +160,13 @@ export namespace Fabric {
     noOtherVersions: string;
   }
 
+  export interface Translations {
+    sidebar: typeof import("../sidebar_translations.json");
+    website: typeof import("../website_translations.json");
+  }
+
+  // TODO: require at least one of link, base to be defined, or else text.
   export interface SidebarItem extends Versioned.SidebarItem {
-    text: string;
     items?: SidebarItem[];
   }
 

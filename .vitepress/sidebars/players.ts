@@ -1,51 +1,24 @@
 import type { Fabric } from "../types.d.ts";
 
-export default [
+export const PLAYERS_SIDEBAR: Fabric.SidebarItem[] = [
   {
-    text: "players.title",
-    link: "/players/",
+    base: "/players/",
+    link: "/",
     items: [
+      { link: "installing-java/" },
+      { link: "installing-fabric/" },
+      { link: "updating-fabric/" },
+      { link: "finding-mods" },
+      { link: "installing-mods" },
       {
-        text: "players.installing_java",
-        link: "/players/installing-java/",
-      },
-      {
-        text: "players.installing_fabric",
-        link: "/players/installing-fabric/",
-      },
-      {
-        text: "players.updating_fabric",
-        link: "/players/updating-fabric/",
-      },
-      {
-        text: "players.finding_mods",
-        link: "/players/finding-mods",
-      },
-      {
-        text: "players.installing_mods",
-        link: "/players/installing-mods",
-      },
-      {
-        text: "players.troubleshooting",
+        base: "/players/troubleshooting/",
         items: [
-          {
-            text: "players.troubleshooting.uploading_logs",
-            link: "/players/troubleshooting/uploading-logs",
-          },
-          {
-            text: "players.troubleshooting.crash_reports",
-            link: "/players/troubleshooting/crash-reports",
-          },
-          {
-            text: "players.troubleshooting.dependency_overrides",
-            link: "/players/troubleshooting/dependency-overrides",
-          },
+          { link: "uploading-logs" },
+          { link: "crash-reports" },
+          { link: "dependency-overrides" },
         ],
       },
-      {
-        text: "players.faq",
-        link: "/players/faq",
-      },
+      { link: "faq" },
     ],
   },
-] satisfies Fabric.SidebarItem[];
+];

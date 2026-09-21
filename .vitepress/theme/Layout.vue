@@ -10,6 +10,8 @@ import FullscreenCode from "./layout/FullscreenCode.vue";
 import NotFoundComponent from "./layout/NotFoundComponent.vue";
 import References from "./layout/References.vue";
 
+// TODO: rename all files under ./layout and ./components to not end with `Component` (warning: must rename all usages.)
+
 const router = useRouter();
 
 // Replace data-gen head script, which updates head tags
