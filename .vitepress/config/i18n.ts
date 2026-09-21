@@ -209,7 +209,7 @@ export const getLocaleConfig = () => {
               },
 
         footer: {
-          // TODO(not-for-llm): if vuejs/vitepress#5390 is merged, use Markdown
+          // TODO(upstream): if vuejs/vitepress#5390 is merged, use Markdown
           copyright: resolver("footer.copyright").replace(
             "%s",
             [

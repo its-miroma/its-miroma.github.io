@@ -1,7 +1,7 @@
 import { UserConfig } from "vitepress";
 import { Versioned } from "vitepress-versioning-plugin";
 
-// TODO: worth exploration: Is there a way to use a .ts file instead of website_translations.json?
+// TODO(not-for-llm): worth exploration: Is there a way to use a .ts file instead of website_translations.json?
 // with this we would reduce the duplication stemming from @default here + values in .json
 // the only question is whether Crowdin supports translating .ts files, or
 // whether we shall generate the files in CI before pushing - trivial with fs.writeFileSync(JSON.stringify(...)).

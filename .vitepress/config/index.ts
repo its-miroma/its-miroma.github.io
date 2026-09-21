@@ -56,9 +56,8 @@ export default defineVersionedConfig(
         md.use(downloadImagePlugin);
       },
       container: {
-        // TODO(not-for-llm): decide
         // TODO(not-for-llm): acknowledge ::: caution and ::: note
-        // TODO(not-for-llm): review all ::: containers with a title, except ::: details, because that shouldn't be needed
+        // TODO(not-for-llm): review all ::: containers with unnecessary title, except ::: details
         // TODO(not-for-llm): migrate ::: info PREREQUISITES
         // TODO(not-for-llm): migrate ::: warning IMPORTANT
         customContainers: {

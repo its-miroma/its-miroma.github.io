@@ -8,5 +8,3 @@ export const useIconSpan = (icon: MaybeRefOrGetter<string>) => {
     ? `<span class="${iconClass}" style="--icon: url('${withBase(`/_vpi/${toValue(icon).replace(":", "/")}.svg`)}');"></span>`
     : `<span class="${iconClass}"></span>`;
 };
-
-// TODO: should this repo use composables for other things?

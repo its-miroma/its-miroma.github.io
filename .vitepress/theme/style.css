@@ -71,7 +71,7 @@ pre {
 /*
   TODO: unsure where the values of width and height should come from.
   TODO: the icon is not vertically centered in the button.
-  TODO: at this point let's just replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, and not have the classes "copy fullscreen" (this was done to avoid cloning the styles of the copy button. this is why .fullscreen's listener stopsImmediatePropagation, to avoid firing .copy's listener.
+  TODO: at this point let's just replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, and not have the classes "copy fullscreen". this was done to avoid cloning the styles of the copy button. this is why .fullscreen's listener stopsImmediatePropagation, to avoid firing .copy's listener.
 */
 div[class*="language-"] button.copy.fullscreen {
   background-image: unset;
@@ -129,7 +129,7 @@ a[download]:not(.VPButton) {
   }
 
   [class^="vpi-"] {
-    /* TODO: the icon is not centered and it's tiny up top. Also, once should clean up the styles if anything is unnecessary. */
+    /* TODO: the icon is not centered and it's tiny up top. */
   }
 }
 

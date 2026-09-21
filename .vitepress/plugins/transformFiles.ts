@@ -8,71 +8,53 @@ const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
 const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin="${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION }).replaceAll('"', "'")}" />`;
 
-// TODO: refactor to use early returns instead of returning returned
-const parsePagePath = (relativePath: string) => {
-  const returned = {} as {
-    versionType: keyof typeof versionTypeToSegments;
-    version: string;
-    localeIndex: string;
-    purePath: string;
-  };
-
-  const versionTypeToSegments = {
-    /** `[translated/locale/]path/to/file-name.md` */
-    latest: 0,
-
-    /** `[translated/locale/]version/path/to/file-name.md` */
-    future: 1,
-
-    /** `versions/version/[translated/locale/]path/to/file-name.md` */
-    old: 2,
-  } as const;
-
-  const split = relativePath.split("/");
+const parsePagePath = (id: string) => {
+  const split = path.relative(AT, id).split("/");
+  const purify = (parts: string[]) => parts.join("/").replace(/((?<=^|[/])index)?[.]md$/, "");
 
   if (split[0] === "versions") {
-    returned.versionType = "old";
-    returned.version = split[1];
-  } else if (VERSION_RE.test(split[0])) {
-    returned.versionType = "future";
-    returned.version = split[0];
-  } else if (split[0] === "translated" && VERSION_RE.test(split[2])) {
-    returned.versionType = "future";
-    returned.version = split[2];
-  } else {
-    returned.versionType = "latest";
-    returned.version = LATEST_VERSION;
+    // versions/version/[translated/locale/]path/to/file-name.md
+    const versionType = "old" as const;
+    const version = split[1];
+    const localeIndex = split[2] === "translated" ? split[3] : "root";
+    const purePath = purify(split.slice(localeIndex === "root" ? 2 : 4));
+
+    return { versionType, version, localeIndex, purePath };
   }
 
-  if (split[0] === "translated") {
-    returned.localeIndex = split[1];
-  } else if (returned.versionType === "old" && split[2] === "translated") {
-    returned.localeIndex = split[3];
-  } else {
-    returned.localeIndex = "root";
+  // [translated/locale/][version/]path/to/file-name.md
+  const localeIndex = split[0] === "translated" ? split[1] : "root";
+  if (localeIndex !== "root") {
+    split.splice(0, 2);
   }
 
-  returned.purePath = split
-    .slice(versionTypeToSegments[returned.versionType])
-    .slice(returned.localeIndex === "root" ? 0 : 2)
-    .join("/")
-    .replace(/((?<=^|[/])index)?[.]md$/, "");
+  if (VERSION_RE.test(split[0])) {
+    const versionType = "future" as const;
+    const version = split[0];
+    const purePath = purify(split.slice(1));
 
-  return returned;
+    return { versionType, version, localeIndex, purePath };
+  }
+
+  const versionType = "latest" as const;
+  const version = LATEST_VERSION;
+  const purePath = purify(split);
+
+  return { versionType, version, localeIndex, purePath };
 };
 
 export const transformFile = (src: string, id: string) => {
   const { data, content } = matter(src, {});
 
   // Version and locale information
-  const relativePath = path.relative(AT, id);
-  Object.assign(data, parsePagePath(relativePath));
+  Object.assign(data, parsePagePath(id));
 
   if (data.versionType === "old") {
     data.editLink = false;
     data.search = false;
   }
 
+  // TODO(not-for-llm): consider restoring search for other languages, since localSearch appears to index locales separately now
   if (data.localeIndex !== "root") {
     data.search = false;
   }
