@@ -68,7 +68,6 @@ const getFileExtension = (filePath: string) =>
     <ul>
       <li v-for="(f, i) in files" :key="f">
         <VPLink :href="getFileHref(f)" :title="getFileTitle(f)" no-icon>
-          <!-- TODO: these are now missing the color :( -->
           <VPIcon :icon="`material-icon-theme:${getFileExtension(f)}`" />
           <code>
             <template v-for="(seg, j) in shortestUniquePaths[i].split('/')" :key="j">

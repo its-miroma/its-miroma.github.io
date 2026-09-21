@@ -14,23 +14,9 @@ import { AT, ENV } from "../constants.ts";
 // An explicit path can still be given with {download=/download/...} if needed.
 // If the download path resolves to a directory, it will be zipped after build.
 
-// TODO: review whether to use console.error instead of console.warn in some of these cases.
 // TODO: p-limit is not used by vitepress. does it use an alternative? if so, i'd rather use that. else, maybe we can implement the queue code here.... :/
 
 const directoriesToBeZipped = new Set<string>();
-
-const checkAssetPathConvention = (relativePath: string, purePath: string, src: string) => {
-  const expectedParent = `/assets/${purePath}/`;
-  const relativeSrc = path.posix.relative(expectedParent, src);
-
-  if (relativeSrc.startsWith("../") || path.isAbsolute(relativeSrc)) {
-    // TODO(not-for-llm): console.warn(`${relativePath}: expected assets under ${expectedParent}, got ${src}`);
-  }
-
-  if (src !== src.toLowerCase()) {
-    console.warn(`${relativePath}: unexpected uppercase in '${src}'`);
-  }
-};
 
 export const downloadImagePlugin = (md: MarkdownRenderer) => {
   const image = md.renderer.rules.image!;
@@ -49,7 +35,15 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
       console.warn(`${env.relativePath}: expected normalized '${src}', got '${srcValue}'`);
     }
 
-    checkAssetPathConvention(env.relativePath, env.frontmatter.purePath, src);
+    const expectedParent = `/assets/${env.frontmatter.purePath}/`;
+    const relativeSrc = path.posix.relative(expectedParent, src);
+    if (/^[.][.]([/]|$)/.test(relativeSrc) || path.isAbsolute(relativeSrc)) {
+      // TODO(not-for-llm): console.warn(`${env.relativePath}: expected assets under ${expectedParent}, got ${src}`);
+    }
+
+    if (src !== src.toLowerCase()) {
+      console.warn(`${env.relativePath}: unexpected uppercase in '${src}'`);
+    }
 
     let downloadPath = token.attrGet("download");
     if (downloadPath === null) {
@@ -63,7 +57,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
         console.warn(`${env.relativePath}: unexpected uppercase in {download="${downloadPath}"}`);
       }
     } else if (!src.startsWith("/assets/")) {
-      console.warn(`${env.relativePath}: cannot determine {download} path for ${src}.`);
+      console.error(`${env.relativePath}: cannot determine {download} path for ${src}.`);
 
       return renderedImage;
     }
@@ -73,14 +67,14 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
 
     const absoluteDownloadPath = path.resolve(AT, "public", `./${downloadPath}`);
     if (!absoluteDownloadPath.startsWith(`${AT}${path.sep}`)) {
-      console.warn(`${env.relativePath}: out of project traversal in {download="${downloadPath}"}`);
+      console.error(`${env.relativePath}: path out of bounds in {download="${downloadPath}"}`);
 
       return renderedImage;
     }
 
     const stat = fs.statSync(absoluteDownloadPath, { throwIfNoEntry: false });
     if (!stat) {
-      console.warn(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
+      console.error(`${env.relativePath}: no {download} asset found at /${downloadPath}`);
 
       return renderedImage;
     }

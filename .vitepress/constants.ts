@@ -3,7 +3,6 @@ import * as path from "node:path";
 import * as process from "node:process";
 import * as tinyglobby from "tinyglobby";
 
-// TODO: btw, this corresponds to the dir of package.json, if that can simplify things
 export const AT = path.resolve(import.meta.dirname, "..");
 
 // https://docs.github.com/en/actions/reference/workflows-and-actions/variables#default-environment-variables

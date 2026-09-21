@@ -9,6 +9,8 @@ import { useIconSpan } from "../composables/iconSpan.ts";
 TODO: there is a warning message in console:
 
 [Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+might be related to useIconSpan.
 */
 
 const props = defineProps<{
