@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
-import { AT } from "../constants.ts";
+import { AT, ENV } from "../constants.ts";
 import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
 import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
 import type { Config, SidebarItem, ThemeConfig, Translations } from "../types.d.ts";
@@ -15,11 +15,10 @@ export const getLocales = () => [
     .map((d) => path.basename(d)),
 ];
 
-// TODO: this currently persists through dev server restarts.
 const translationFileCache = new Map<string, Record<string, any>>();
 const readTranslationFile = <T extends Record<string, any>>(file: string, locale: string): T => {
   const filePath = path.resolve(AT, "translated", locale === "en_us" ? ".." : locale, file);
-  if (!translationFileCache.has(filePath)) {
+  if (ENV === "dev" || !translationFileCache.has(filePath)) {
     try {
       translationFileCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
     } catch {

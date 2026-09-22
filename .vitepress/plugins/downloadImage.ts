@@ -14,8 +14,6 @@ import { AT, ENV } from "../constants.ts";
 // An explicit path can still be given with {download=/download/...} if needed.
 // If the download path resolves to a directory, it will be zipped after build.
 
-// TODO: p-limit is not used by vitepress. does it use an alternative? if so, i'd rather use that. else, maybe we can implement the queue code here.... :/
-
 const directoriesToBeZipped = new Set<string>();
 
 export const downloadImagePlugin = (md: MarkdownRenderer) => {

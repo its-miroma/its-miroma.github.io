@@ -5,14 +5,6 @@ import { computed } from "vue";
 import type { ThemeConfig } from "../../types.d.ts";
 import { useIconSpan } from "../composables/iconSpan.ts";
 
-/*
-TODO: there is a warning message in console:
-
-[Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
-
-might be related to useIconSpan.
-*/
-
 const props = defineProps<{
   h1?: boolean;
   screenMenu?: boolean;
@@ -37,7 +29,8 @@ const currentV = computed(() => {
 });
 
 // TODO(upstream): the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
-const text = computed(() => `${useIconSpan("material-icon-theme:minecraft")} ${currentV.value}`);
+// TODO: as a temporary workaround for the upstream issue seen above ^^, use the value of screenMenu to decide whether to show the icon or not. Please look at VPNavMenuGroup.vue, and figure out when it evaluates to VPMenuGroup depending on props.screen
+const icon = useIconSpan("material-icon-theme:minecraft");
 
 // TODO(not-for-llm): add future versions to the supported pages
 const collator = new Intl.Collator(undefined, { numeric: true });
@@ -59,8 +52,8 @@ const getRoute = (v: string) => {
   if (v === data.frontmatter.value.version) return route.hash || "#";
 
   return `/${[
-    data.localeIndex.value !== "root" ? data.localeIndex.value : undefined,
-    v !== props.versioningPlugin.latestVersion ? v : undefined,
+    data.localeIndex.value !== "root" && data.localeIndex.value,
+    data.frontmatter.value.versionType !== "latest" && v,
     data.frontmatter.value.purePath,
   ]
     .filter(Boolean)
@@ -85,7 +78,7 @@ const items = computed(
 
 <template>
   <VPNavMenuGroup
-    :item="{ text, items, activeMatch: '(?!)' }"
+    :item="{ text: `${icon} ${currentV}`, items, activeMatch: '(?!)' }"
     :screen="screenMenu"
     :class="h1 && ['VPBadge', currentV === versioningPlugin.latestVersion ? 'info' : 'warning']"
   />
