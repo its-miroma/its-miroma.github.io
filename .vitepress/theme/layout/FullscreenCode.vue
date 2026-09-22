@@ -13,6 +13,8 @@ const markdown = computed(() => data.site.value.locales[data.localeIndex.value].
 const options = computed(() => data.theme.value.code);
 const copyOptions = computed(() => markdown.value.codeCopyButton!);
 
+const icon = useIconSpan("lucide:maximize-2");
+
 const dialog = ref<HTMLDialogElement>();
 const originalCopyButton = ref<HTMLButtonElement>();
 
@@ -122,7 +124,7 @@ onContentUpdated(() =>
       enterFullscreenButton.title = options.value.enterFullscreen;
       enterFullscreenButton.setAttribute("aria-label", options.value.enterFullscreen);
       enterFullscreenButton.className = "copy fullscreen";
-      enterFullscreenButton.innerHTML = useIconSpan("lucide:maximize-2");
+      enterFullscreenButton.innerHTML = icon;
       enterFullscreenButton.onclick = (event) => {
         if (!(event.currentTarget instanceof HTMLButtonElement)) return;
 
