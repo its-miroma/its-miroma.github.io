@@ -31,9 +31,13 @@ const includedVersions = new Set(
 );
 
 if (includedVersions.size < 1) {
-  for (const v of isMergeOnly
-    ? tinyglobby.globSync("*", { cwd: tempDir, onlyDirectories: true }).map((v) => path.basename(v))
-    : OLD_VERSIONS) {
+  const detectedVersions = isMergeOnly
+    ? tinyglobby
+        .globSync("*", { cwd: tempDir, onlyDirectories: true, ignore: LATEST_VERSION })
+        .map((v) => path.basename(v))
+    : OLD_VERSIONS;
+
+  for (const v of detectedVersions) {
     includedVersions.add(v);
   }
 }
