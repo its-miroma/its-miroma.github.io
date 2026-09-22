@@ -51,8 +51,6 @@ if (isListOnly) {
 
 if (builtVersions.length > 1) {
   console.log(`building ${builtVersions.length} versions...`);
-} else {
-  console.log(`building only ${builtVersions[0]}...`);
 }
 
 console.warn("PLEASE DO NOT TOUCH ANY FILE DURING BUILD\n");

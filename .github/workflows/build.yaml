@@ -14,12 +14,18 @@ jobs:
   versions:
     runs-on: ubuntu-24.04
     outputs:
+      latest: ${{ steps.versions.outputs.latest }}
       versions: ${{ steps.versions.outputs.versions }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
       - id: versions
-        run: echo versions="$(pnpm build --list-only)" >>"${GITHUB_OUTPUT}"
+        run: |
+          VERSIONS="$(pnpm build --list-only)"
+          echo versions="${VERSIONS}" >>"${GITHUB_OUTPUT}"
+
+          LATEST="$(echo "${VERSIONS}" | jq -r ".[-1]")"
+          echo latest="${LATEST}" >>"${GITHUB_OUTPUT}"
 
   docs:
     runs-on: ubuntu-24.04
@@ -36,6 +42,11 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
       - run: pnpm build ${{ matrix.version }}
+      - if: matrix.version != needs.versions.outputs.latest
+        run: |
+          find public/assets -mindepth 1 -maxdepth 1 -type d | while read -r d; do
+            rm -rf ".vitepress/.versions/${{ matrix.version }}/assets/$(basename "${d}")"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.version }}
