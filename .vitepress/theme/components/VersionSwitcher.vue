@@ -28,8 +28,6 @@ const currentV = computed(() => {
   return props.versioningPlugin.latestVersion;
 });
 
-// TODO(upstream): the icon is not rendered correctly by VPMenuGroup, which uses {{ text }}, not v-html. ideally NavItem should support an icon (now made easy by vitepress' icon pipeline)
-// TODO: as a temporary workaround for the upstream issue seen above ^^, use the value of screenMenu to decide whether to show the icon or not. Please look at VPNavMenuGroup.vue, and figure out when it evaluates to VPMenuGroup depending on props.screen
 const icon = useIconSpan("material-icon-theme:minecraft");
 
 // TODO(not-for-llm): add future versions to the supported pages
