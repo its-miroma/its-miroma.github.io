@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { watchImmediate } from "@vueuse/core";
 import mediumZoom from "medium-zoom";
-import { inBrowser, useRouter } from "vitepress";
+import { inBrowser, onContentUpdated, useRouter } from "vitepress";
 import DefaultTheme from "vitepress/theme";
-import { nextTick } from "vue";
 import Authors from "./layout/Authors.vue";
 import Banner from "./layout/Banner.vue";
 import FullscreenCode from "./layout/FullscreenCode.vue";
@@ -23,16 +21,11 @@ router.onAfterRouteChange = () => {
   oldScript.parentNode!.replaceChild(newScript, oldScript);
 };
 
-// TODO: this breaks on changes to a page in dev? like hot reload?
 // Medium zoom handler
-watchImmediate(
-  () => router.route.path,
-  () =>
-    nextTick(() => {
-      if (!inBrowser) return;
-      mediumZoom(".main img", { background: "var(--vp-c-bg)" });
-    })
-);
+onContentUpdated(() => {
+  if (!inBrowser) return;
+  mediumZoom(".main img", { background: "var(--vp-c-bg)" });
+});
 </script>
 
 <template>

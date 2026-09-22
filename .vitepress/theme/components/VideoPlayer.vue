@@ -51,11 +51,10 @@ dialog {
   padding: 2rem;
   border-radius: 6px;
 
-  /* TODO: are these the right colors to use? or should I use some variables from vp? the background should always be black even in light mode, and text should be white too */
-  color: #fff;
+  color: var(--vp-c-white);
   text-align: center;
 
-  background-color: #000e;
+  background-color: color-mix(in srgb, var(--vp-c-black) 93%, transparent);
 }
 
 h3 {
