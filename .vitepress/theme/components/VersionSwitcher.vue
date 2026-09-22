@@ -53,7 +53,7 @@ const getRoute = (v: string) => {
 
   return `/${[
     data.localeIndex.value !== "root" && data.localeIndex.value,
-    data.frontmatter.value.versionType !== "latest" && v,
+    v !== props.versioningPlugin.latestVersion && v,
     data.frontmatter.value.purePath,
   ]
     .filter(Boolean)
