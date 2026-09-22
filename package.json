@@ -11,7 +11,7 @@
     "@emnapi/core": "^1.11.3",
     "@emnapi/runtime": "^1.11.3",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
-    "@vueuse/core": "^14.4.0",
+    "@vueuse/core": "^15.0.0",
     "gray-matter": "^4.0.3",
     "markdown-it-vuepress-code-snippet-enhanced": "github:IMB11/md-it-enhanced-snippets#dfb9fa25527b2f772d50ca37ae526484c890b8ae",
     "medium-zoom": "^1.1.0",
@@ -22,24 +22,24 @@
     "vitepress": "2.0.0-alpha.20",
     "vitepress-plugin-tabs": "^0.9.1",
     "vitepress-versioning-plugin": "github:FabricMC/vitepress-versioning-plugin#3710e8b43e0484731e79c0fce5e1d623609435f0",
-    "vue": "^3.5.42"
+    "vue": "^3.5.43"
   },
   "devDependencies": {
     "@archiver/archiver": "^0.3.0",
     "@csstools/stylelint-formatter-github": "^2.0.0",
-    "@iconify-json/lucide": "^1.2.132",
+    "@iconify-json/lucide": "^1.2.134",
     "@iconify-json/material-icon-theme": "^1.2.70",
     "@iconify-json/simple-icons": "^1.2.96",
     "@types/cross-spawn": "^6.0.6",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.2",
     "cross-spawn": "^7.0.6",
     "markdownlint": "^0.41.1",
     "markdownlint-rule-search-replace": "^1.2.0",
     "markdownlint-rule-titlecase": "^0.1.0",
     "oxc-minify": "^0.150.0",
-    "p-limit": "^7.3.2",
+    "p-limit": "^7.3.3",
     "postcss-html": "^2.0.0",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "stylelint": "^17.15.0",
     "stylelint-config-clean-order": "^10.0.0",
     "stylelint-config-recommended-vue": "^2.0.0",
@@ -52,7 +52,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.4.2",
+      "version": "12.5.1",
       "onFail": "download"
     },
     "runtime": {
