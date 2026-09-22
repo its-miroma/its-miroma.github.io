@@ -11,9 +11,13 @@ const start = perfHooks.performance.now();
 process.chdir(AT);
 
 const argv = process.argv.slice(2);
-const isLatestOnly = argv.includes("--latest-only");
-const isListOnly = argv.includes("--list-only");
-const isMergeOnly = argv.includes("--merge-only");
+const args = argv.filter((a) => !a.startsWith("--"));
+const flags = new Set(argv.filter((a) => a.startsWith("--")));
+
+const isLatestOnly =
+  flags.has("--latest-only") || (args.length === 1 && args[0] === LATEST_VERSION);
+const isListOnly = flags.has("--list-only");
+const isMergeOnly = flags.has("--merge-only");
 
 const tempDir = path.join(AT, ".vitepress", ".versions");
 
@@ -23,7 +27,7 @@ if (isMergeOnly && !fs.statSync(tempDir, { throwIfNoEntry: false })?.isDirectory
 }
 
 const includedVersions = new Set(
-  argv.map((v) => path.basename(v)).filter((v) => OLD_VERSIONS.includes(v))
+  args.map((v) => path.basename(v)).filter((v) => OLD_VERSIONS.includes(v))
 );
 
 if (includedVersions.size < 1) {
