@@ -10,14 +10,14 @@ const REQUIRED_FILES = ["index.md", "website_translations.json"] as const;
 export const getLocales = () => [
   "en_us",
   ...tinyglobby
-    .globSync("*", { cwd: path.resolve(AT, "translated"), onlyDirectories: true, absolute: true })
-    .filter((d) => REQUIRED_FILES.every((f) => fs.existsSync(path.resolve(d, f))))
+    .globSync("*", { cwd: path.join(AT, "translated"), onlyDirectories: true, absolute: true })
+    .filter((d) => REQUIRED_FILES.every((f) => fs.existsSync(path.join(d, f))))
     .map((d) => path.basename(d)),
 ];
 
 const translationFileCache = new Map<string, Record<string, any>>();
 const readTranslationFile = <T extends Record<string, any>>(file: string, locale: string): T => {
-  const filePath = path.resolve(AT, "translated", locale === "en_us" ? ".." : locale, file);
+  const filePath = path.join(AT, "translated", locale === "en_us" ? ".." : locale, file);
   if (ENV === "dev" || !translationFileCache.has(filePath)) {
     try {
       translationFileCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));

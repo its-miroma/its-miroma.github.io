@@ -161,5 +161,5 @@ export default defineVersionedConfig(
       },
     },
   } as Config,
-  path.resolve(AT, ".vitepress")
+  path.join(AT, ".vitepress")
 );

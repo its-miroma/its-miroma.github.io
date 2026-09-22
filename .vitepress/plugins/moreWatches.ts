@@ -7,8 +7,8 @@ export const moreWatchesPlugin = (): Plugin => ({
   enforce: "pre",
 
   configureServer(server) {
-    const buildGradle = path.resolve(AT, "reference", "latest", "build.gradle");
-    const translations = path.resolve(AT, "**", "*_translations.json");
+    const buildGradle = path.join(AT, "reference", "latest", "build.gradle");
+    const translations = path.join(AT, "**", "*_translations.json");
 
     server.watcher.add([buildGradle, translations]).on("change", (f) => {
       if (f !== buildGradle && !f.endsWith("_translations.json")) return;

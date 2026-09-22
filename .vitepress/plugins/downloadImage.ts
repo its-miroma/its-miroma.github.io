@@ -63,7 +63,7 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     downloadPath ||= src.replace("/assets/", "/download/");
     downloadPath = downloadPath.replace(/[/]+$/, "");
 
-    const absoluteDownloadPath = path.resolve(AT, "public", `./${downloadPath}`);
+    const absoluteDownloadPath = path.join(AT, "public", downloadPath);
     if (!absoluteDownloadPath.startsWith(`${AT}${path.sep}`)) {
       console.error(`${env.relativePath}: path out of bounds in {download="${downloadPath}"}`);
 
@@ -104,7 +104,7 @@ export const createDownloadZips = async (siteConfig: SiteConfig) => {
 
   const tasks = [...directoriesToBeZipped].map((relativeD) =>
     limit(async () => {
-      const d = path.resolve(siteConfig.outDir, `./${relativeD}`);
+      const d = path.join(siteConfig.outDir, relativeD);
       const stat = await fs.promises.stat(d, { throwIfNoEntry: false });
       if (!stat?.isDirectory()) return;
 
