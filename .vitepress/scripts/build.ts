@@ -10,24 +10,40 @@ import { AT, LATEST_VERSION, OLD_VERSIONS } from "../constants.ts";
 const start = perfHooks.performance.now();
 process.chdir(AT);
 
+const argv = process.argv.slice(2);
+const isLatestOnly = argv.includes("--latest-only");
+const isListOnly = argv.includes("--list-only");
+const isMergeOnly = argv.includes("--merge-only");
+
+const tempDir = path.join(AT, ".vitepress", ".versions");
+
+if (isMergeOnly && !fs.statSync(tempDir, { throwIfNoEntry: false })?.isDirectory()) {
+  console.error(`couldn't find built versions directory`);
+  process.exit(1);
+}
+
 const includedVersions = new Set(
-  process.argv
-    .slice(2)
-    .map((v) => path.basename(v))
-    .filter((v) => OLD_VERSIONS.includes(v))
+  argv.map((v) => path.basename(v)).filter((v) => OLD_VERSIONS.includes(v))
 );
 
 if (includedVersions.size < 1) {
-  for (const v of OLD_VERSIONS) {
+  for (const v of isMergeOnly
+    ? tinyglobby.globSync("*", { cwd: tempDir, onlyDirectories: true }).map((v) => path.basename(v))
+    : OLD_VERSIONS) {
     includedVersions.add(v);
   }
 }
 
-if (process.argv.slice(2).includes("--latest-only")) {
+if (isLatestOnly) {
   includedVersions.clear();
 }
 
 const builtVersions = [...includedVersions, LATEST_VERSION];
+
+if (isListOnly) {
+  console.log(JSON.stringify(builtVersions));
+  process.exit(0);
+}
 
 if (builtVersions.length > 1) {
   console.log(`building ${builtVersions.length} versions...`);
@@ -37,9 +53,15 @@ if (builtVersions.length > 1) {
 
 console.warn("PLEASE DO NOT TOUCH ANY FILE DURING BUILD\n");
 
-const getOutDir = (version: string) => path.resolve(AT, ".vitepress", ".versions", version);
+if (!isMergeOnly) {
+  fs.rmSync(tempDir, { recursive: true, force: true });
+}
+
+const getOutDir = (version: string) => path.join(tempDir, version);
 
 for (const version of builtVersions) {
+  if (isMergeOnly) break;
+
   console.log(`building ${version}...`);
 
   const outDir = getOutDir(version);
@@ -79,7 +101,7 @@ for (const version of builtVersions) {
   const outDir = getOutDir(version);
 
   const metadataFile = tinyglobby.globSync("metadata.*.js", {
-    cwd: path.resolve(outDir, "assets", "chunks"),
+    cwd: path.join(outDir, "assets", "chunks"),
     absolute: true,
   })[0];
 
@@ -117,19 +139,16 @@ for (const version of builtVersions) {
   Object.assign(hashMap, versionHashMap);
 }
 
-const targetDir = path.resolve(AT, ".vitepress", "dist");
-fs.mkdirSync(path.resolve(targetDir, "assets", "chunks"), { recursive: true });
+const targetDir = path.join(AT, ".vitepress", "dist");
+fs.rmSync(targetDir, { recursive: true, force: true });
 
-const newMetadataContent = [
-  `window.__VP_HASH_MAP__=JSON.parse(${JSON.stringify(JSON.stringify(hashMap))})`,
-  `window.__VP_SITE_DATA__=JSON.parse(${JSON.stringify(JSON.stringify(siteData))})`,
-  "\n",
-].join(";");
+const newMetadataContent = `window.__VP_HASH_MAP__=JSON.parse(${JSON.stringify(JSON.stringify(hashMap))});window.__VP_SITE_DATA__=JSON.parse(${JSON.stringify(JSON.stringify(siteData))});`;
 const newHash = getNewHash(newMetadataContent);
 
-const newMetadataPath = path.resolve(targetDir, "assets", "chunks", `metadata.${newHash}.js`);
-const newHashmapJsonPath = path.resolve(targetDir, "hashmap.json");
+const newMetadataPath = path.join(targetDir, "assets", "chunks", `metadata.${newHash}.js`);
+const newHashmapJsonPath = path.join(targetDir, "hashmap.json");
 
+fs.mkdirSync(path.dirname(newMetadataPath), { recursive: true });
 fs.writeFileSync(newMetadataPath, newMetadataContent, "utf-8");
 fs.writeFileSync(newHashmapJsonPath, JSON.stringify(hashMap), "utf-8");
 
