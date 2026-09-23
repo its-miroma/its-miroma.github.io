@@ -11,12 +11,5 @@
     "*": "public/assets/${documentRelativeDirName}/${documentBaseName}/${fileName}"
   },
   "markdown.validate.enabled": true,
-  "markdownlint.lintWorkspaceGlobs": [
-    "**/*.md",
-    "!node_modules/**",
-    "!README.md",
-    "!translated/**",
-    "!versions/**"
-  ],
   "vue.server.includeLanguages": ["vue", "markdown"]
 }
