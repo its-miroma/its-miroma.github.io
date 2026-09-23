@@ -1,5 +1,7 @@
 name: Format
 
+# TODO: add script entries to package.json and use pnpm run * instead of writing the command here. Maybe even something like pnpm run lint:*
+
 on:
   pull_request:
     paths-ignore:
@@ -20,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
-      # TODO: should we use pnpm exec markdownlint-cli2 for consistency? this should mean that we can remove the devDep markdownlint (replaced with markdownlint-cli2). Also, we should define these pnpm exec as scripts. in that case, we'll move the globs back here from .markdownlint-cli2.yaml
+      # TODO: use pnpm exec markdownlint-cli2 for consistency, this should mean that we can remove the devDep markdownlint (replaced with markdownlint-cli2).
       - uses: FabricMCBot/markdownlint-cli2-action@b4c9feab76d8025d1e83c653fa3990936df0e6c8
         with:
           config: .markdownlint-cli2.yaml

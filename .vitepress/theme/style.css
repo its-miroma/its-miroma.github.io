@@ -69,9 +69,7 @@ pre {
   tab-size: 2 !important;
 }
 
-/*
-  TODO: at this point let's just replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, and not have the classes "copy fullscreen". this was done to avoid cloning the styles of the copy button. this is why .fullscreen's listener stopsImmediatePropagation, to avoid firing .copy's listener.
-*/
+/* TODO: let's replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, instead of having the classes "copy fullscreen". that was originally done to avoid cloning the styles of the copy button, and it is why .fullscreen's listener stopsImmediatePropagation - to avoid firing .copy's listener */
 div[class*="language-"] button.copy.fullscreen {
   display: flex;
   align-items: center;
