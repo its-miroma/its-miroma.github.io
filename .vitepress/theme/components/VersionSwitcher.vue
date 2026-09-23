@@ -84,16 +84,17 @@ const items = computed(
 
 <style scoped>
 :deep([class^="vpi-"]:not([class$="-icon"])) {
+  margin-bottom: 1px;
   font-size: 1.5rem;
   vertical-align: middle;
-  margin-bottom: 1px;
 }
 
 :deep(span.VPLink) {
   padding-inline: 0.75rem;
+
   font-size: 0.875rem;
+  font-weight: normal;
   font-style: italic;
-  font-weight: 400;
   color: var(--vp-c-text-1);
 }
 
@@ -116,9 +117,9 @@ const items = computed(
     right: revert;
 
     ul {
-      list-style: none;
-      padding-left: 0;
       margin: 0;
+      padding-left: 0;
+      list-style: none;
 
       li {
         margin-top: 0;

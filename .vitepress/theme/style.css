@@ -27,6 +27,8 @@
     "JetBrains Mono", ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
     monospace;
 
+  scrollbar-gutter: stable;
+
   &:where(:lang(zh)) {
     /* TODO(not-for-llm): review breakage after https://github.com/vuejs/vitepress/commit/91b06b67a302ebfa210e888fe9d03d27fb291b31 */
     --vp-font-family-base: "Punctuation SC", var(--font-family-base);
@@ -49,7 +51,6 @@
 }
 
 html:has(dialog#fullscreen[open], div.VPLocalSearchBox) {
-  scrollbar-gutter: stable;
   overflow: hidden;
 }
 

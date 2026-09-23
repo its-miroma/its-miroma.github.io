@@ -15,8 +15,6 @@ import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
 
-// TODO: review deps and devDeps, why we have them, and if they are in the right place. if it can be a devDep, it probably should be. especially deps that vitepress does not depend on.
-
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
 export default defineVersionedConfig(
