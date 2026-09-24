@@ -6,13 +6,19 @@ import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
 import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
 import type { Config, SidebarItem, ThemeConfig, Translations } from "../types.d.ts";
 
-const REQUIRED_FILES = ["index.md", "website_translations.json"] as const;
+const allLocales = tinyglobby
+  .globSync("*", { cwd: path.join(AT, "translated"), onlyDirectories: true })
+  .map((d) => path.basename(d));
+
+export const excludedLocales = allLocales.filter((l) =>
+  ["index.md", "website_translations.json"].some(
+    (f) => !fs.existsSync(path.join(AT, "translated", l, f))
+  )
+);
+
 export const getLocales = () => [
   "en_us",
-  ...tinyglobby
-    .globSync("*", { cwd: path.join(AT, "translated"), onlyDirectories: true, absolute: true })
-    .filter((d) => REQUIRED_FILES.every((f) => fs.existsSync(path.join(d, f))))
-    .map((d) => path.basename(d)),
+  ...allLocales.filter((l) => !excludedLocales.includes(l)),
 ];
 
 const translationFileCache = new Map<string, Record<string, any>>();

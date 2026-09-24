@@ -13,7 +13,7 @@ import { moreWatchesPlugin } from "../plugins/moreWatches.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
-import { getLocaleConfig } from "./i18n.ts";
+import { excludedLocales, getLocaleConfig } from "./i18n.ts";
 
 // TODO: consider pinning deps and devDeps to exact versions: instead of "^0.0.1", use "0.0.1"
 
@@ -101,7 +101,11 @@ export default defineVersionedConfig(
       },
     },
 
-    srcExclude: ["README.md", ...EXCLUDED_OLD_VERSIONS.map((v) => `versions/${v}`)],
+    srcExclude: [
+      "README.md",
+      ...excludedLocales.map((l) => `translated/${l}`),
+      ...EXCLUDED_OLD_VERSIONS.map((v) => `versions/${v}`),
+    ],
 
     themeConfig: {
       env: ENV,

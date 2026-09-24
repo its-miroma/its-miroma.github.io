@@ -8,56 +8,37 @@ const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
 const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin="${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION }).replaceAll('"', "'")}" />`;
 
-const parsePagePath = (id: string) => {
+export const transformFile = (src: string, id: string) => {
+  const { data, content } = matter(src, {});
   const split = path.relative(AT, id).split("/");
-  const purify = (parts: string[]) => parts.join("/").replace(/((?<=^|[/])index)?[.]md$/, "");
+
+  data.versionType = "latest";
+  data.version = LATEST_VERSION;
+  data.localeIndex = "root";
 
   if (split[0] === "versions") {
     // versions/version/[translated/locale/]path/to/file-name.md
-    const versionType = "old" as const;
-    const version = split[1];
-    const localeIndex = split[2] === "translated" ? split[3] : "root";
-    const purePath = purify(split.slice(localeIndex === "root" ? 2 : 4));
+    data.versionType = "old";
+    data.version = split[1];
+    data.editLink = false;
+    data.search = false;
 
-    return { versionType, version, localeIndex, purePath };
-  }
-
-  // [translated/locale/][version/]path/to/file-name.md
-  const localeIndex = split[0] === "translated" ? split[1] : "root";
-  if (localeIndex !== "root") {
     split.splice(0, 2);
   }
 
-  if (VERSION_RE.test(split[0])) {
-    const versionType = "future" as const;
-    const version = split[0];
-    const purePath = purify(split.slice(1));
-
-    return { versionType, version, localeIndex, purePath };
+  // [translated/locale/][version/]path/to/file-name.md
+  if (split[0] === "translated") {
+    data.localeIndex = split[1];
+    split.splice(0, 2);
   }
 
-  const versionType = "latest" as const;
-  const version = LATEST_VERSION;
-  const purePath = purify(split);
-
-  return { versionType, version, localeIndex, purePath };
-};
-
-export const transformFile = (src: string, id: string) => {
-  const { data, content } = matter(src, {});
-
-  // Version and locale information
-  Object.assign(data, parsePagePath(id));
-
-  if (data.versionType === "old") {
-    data.editLink = false;
-    data.search = false;
+  if (data.version === LATEST_VERSION && VERSION_RE.test(split[0])) {
+    data.versionType = "future";
+    data.version = split[0];
+    split.splice(0, 1);
   }
 
-  // TODO(not-for-llm): consider restoring search for other languages, since localSearch appears to index locales separately now
-  if (data.localeIndex !== "root") {
-    data.search = false;
-  }
+  data.purePath = split.join("/").replace(/((?<=^|[/])index)?[.]md$/, "");
 
   const locale = data.localeIndex === "root" ? "en_us" : data.localeIndex;
   const resolver = getWebsiteResolver(locale);

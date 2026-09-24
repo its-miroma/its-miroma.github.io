@@ -4,7 +4,7 @@ import { VPIcon, VPLink } from "vitepress/theme";
 import { computed } from "vue";
 import type { ThemeConfig } from "../../types.d.ts";
 
-// TODO(not-for-llm): on mobile (narrow viewport) references should be placed akin to "On this page", instead of at the footer.
+// TODO(upstream): on mobile (narrow viewport) references should be placed akin to "On this page", instead of at the footer.
 
 const data = useData<ThemeConfig>();
 
