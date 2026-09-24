@@ -1,5 +1,7 @@
 name: Format
 
+# TODO: maybe use one single 'format:' job? run each lint job as a step... since lint:* don't autofix, the prettier step's errors won't be affected
+
 on:
   pull_request:
     paths-ignore:

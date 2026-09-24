@@ -1,3 +1,4 @@
+// @ts-expect-error
 import githubActionsFormatter from "@csstools/stylelint-formatter-github";
 import * as process from "node:process";
 import type { Config } from "stylelint";
