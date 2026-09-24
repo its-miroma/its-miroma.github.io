@@ -170,101 +170,101 @@ importers:
   .:
     dependencies:
       '@fontsource-variable/jetbrains-mono':
-        specifier: ^5.3.0
+        specifier: 5.3.0
         version: 5.3.0
       '@vueuse/core':
-        specifier: ^15.0.0
+        specifier: 15.0.0
         version: 15.0.0(vue@3.5.43(typescript@6.0.3))
       medium-zoom:
-        specifier: ^1.1.0
+        specifier: 1.1.0
         version: 1.1.0
       vidstack:
-        specifier: ^1.15.6
+        specifier: 1.15.6
         version: 1.15.6
       vitepress:
         specifier: 2.0.0-alpha.20
         version: 2.0.0-alpha.20(patch_hash=c0c3630b5a402d75a3dd13eb197236cdace6a42ef4105b18917d739f24331c6a)(@types/node@26.6.2)(esbuild@0.28.2)(postcss@8.5.28)(tsx@4.23.15)(typescript@6.0.3)
       vitepress-plugin-tabs:
-        specifier: ^0.9.1
+        specifier: 0.9.1
         version: 0.9.1(vitepress@2.0.0-alpha.20(patch_hash=c0c3630b5a402d75a3dd13eb197236cdace6a42ef4105b18917d739f24331c6a)(@types/node@26.6.2)(esbuild@0.28.2)(postcss@8.5.28)(tsx@4.23.15)(typescript@6.0.3))(vue@3.5.43(typescript@6.0.3))
       vue:
-        specifier: ^3.5.43
+        specifier: 3.5.43
         version: 3.5.43(typescript@6.0.3)
     devDependencies:
       '@archiver/archiver':
-        specifier: ^0.3.0
+        specifier: 0.3.0
         version: 0.3.0
       '@csstools/stylelint-formatter-github':
-        specifier: ^2.0.0
+        specifier: 2.0.0
         version: 2.0.0(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       '@emnapi/core':
-        specifier: ^1.11.3
+        specifier: 1.11.3
         version: 1.11.3
       '@emnapi/runtime':
-        specifier: ^1.11.3
+        specifier: 1.11.3
         version: 1.11.3
       '@iconify-json/lucide':
-        specifier: ^1.2.135
+        specifier: 1.2.135
         version: 1.2.135
       '@iconify-json/material-icon-theme':
-        specifier: ^1.2.70
+        specifier: 1.2.70
         version: 1.2.70
       '@iconify-json/simple-icons':
-        specifier: ^1.2.97
+        specifier: 1.2.97
         version: 1.2.97
       '@types/cross-spawn':
-        specifier: ^6.0.6
+        specifier: 6.0.6
         version: 6.0.6
       '@types/node':
-        specifier: ^26.6.2
+        specifier: 26.6.2
         version: 26.6.2
       cross-spawn:
-        specifier: ^7.0.6
+        specifier: 7.0.6
         version: 7.0.6
       gray-matter:
-        specifier: ^4.0.3
+        specifier: 4.0.3
         version: 4.0.3
       markdown-it-vuepress-code-snippet-enhanced:
         specifier: github:IMB11/md-it-enhanced-snippets#dfb9fa25527b2f772d50ca37ae526484c890b8ae
         version: https://codeload.github.com/IMB11/md-it-enhanced-snippets/tar.gz/dfb9fa25527b2f772d50ca37ae526484c890b8ae
       markdownlint-cli2:
-        specifier: ^0.23.3
+        specifier: 0.23.3
         version: 0.23.3(supports-color@10.2.2)
       markdownlint-rule-search-replace:
-        specifier: ^1.2.0
+        specifier: 1.2.0
         version: 1.2.0
       markdownlint-rule-titlecase:
-        specifier: ^0.1.0
+        specifier: 0.1.0
         version: 0.1.0
       oxc-minify:
-        specifier: ^0.151.0
+        specifier: 0.151.0
         version: 0.151.0
       p-limit:
-        specifier: ^7.3.3
+        specifier: 7.3.3
         version: 7.3.3
       postcss-html:
-        specifier: ^2.0.0
+        specifier: 2.0.0
         version: 2.0.0(postcss@8.5.28)
       prettier:
-        specifier: ^3.9.8
+        specifier: 3.9.8
         version: 3.9.8
       stylelint:
-        specifier: ^17.15.0
+        specifier: 17.15.0
         version: 17.15.0(supports-color@10.2.2)(typescript@6.0.3)
       stylelint-config-clean-order:
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0(stylelint-order@8.1.1(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3)))(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       stylelint-config-recommended-vue:
-        specifier: ^2.0.0
+        specifier: 2.0.0
         version: 2.0.0(postcss-html@2.0.0(postcss@8.5.28))(stylelint-config-html@2.0.0(postcss-html@2.0.0(postcss@8.5.28))(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3)))(stylelint-config-recommended@18.0.0(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3)))(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       stylelint-config-standard:
-        specifier: ^40.0.0
+        specifier: 40.0.0
         version: 40.0.0(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       stylelint-plugin-use-baseline:
-        specifier: ^1.4.6
+        specifier: 1.4.6
         version: 1.4.6(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       stylelint-use-nesting:
-        specifier: ^6.0.2
+        specifier: 6.0.2
         version: 6.0.2(stylelint@17.15.0(supports-color@10.2.2)(typescript@6.0.3))
       syntax-java-bytecode:
         specifier: github:mcgambing/Java-Bytecode#578f3e2c6861ac6396492540a987fe05d23b061a
@@ -273,13 +273,13 @@ importers:
         specifier: github:MinecraftCommands/syntax-mcfunction#51eb8bf4ca04355bb89f5538b7331cb0c0f3df2b
         version: https://codeload.github.com/MinecraftCommands/syntax-mcfunction/tar.gz/51eb8bf4ca04355bb89f5538b7331cb0c0f3df2b
       tinyglobby:
-        specifier: ^0.2.17
+        specifier: 0.2.17
         version: 0.2.17
       tsx:
-        specifier: ^4.23.15
+        specifier: 4.23.15
         version: 4.23.15
       typescript:
-        specifier: ^6.0.3
+        specifier: 6.0.3
         version: 6.0.3
       vitepress-versioning-plugin:
         specifier: github:FabricMC/vitepress-versioning-plugin#3710e8b43e0484731e79c0fce5e1d623609435f0

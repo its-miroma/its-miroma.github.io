@@ -7,6 +7,8 @@ minimumReleaseAge: 4320 # three days
 patchedDependencies:
   vitepress@2.0.0-alpha.20: patches/vitepress@2.0.0-alpha.20.patch
 
+savePrefix: ""
+
 update:
   ignoreDeps:
     - typescript

@@ -117,8 +117,6 @@ div[class*="language-"] button.fullscreen:hover {
   background-color: var(--vp-code-copy-code-hover-bg);
 }
 
-/* TODO: if two images are in the same <p> element, the generated DOM is p > img + a[download] + img + a[download], which means that both download buttons end up above the first image element. If this is not fixable, that's not a problem - it's an unintended edge case anyway */
-
 /* Download button */
 p:has(> a[download]) {
   position: relative;
@@ -159,7 +157,6 @@ a[download]:not(.VPButton) {
   }
 
   &:not([href]) {
-    /* TODO: let's add a / on top of the icon only (not the blank space), same thickness of the download icon. This because I couldn't find another icon that meant "cannot download" in lucide. */
     cursor: not-allowed;
   }
 

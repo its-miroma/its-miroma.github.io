@@ -14,8 +14,6 @@ import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
 import { excludedLocales, getLocaleConfig } from "./i18n.ts";
 
-// TODO: consider pinning deps and devDeps to exact versions: instead of "^0.0.1", use "0.0.1"
-
 // https://vitepress.dev/reference/site-config
 // https://www.npmjs.com/package/vitepress-versioning-plugin
 export default defineVersionedConfig(
