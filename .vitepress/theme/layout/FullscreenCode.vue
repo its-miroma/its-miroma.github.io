@@ -25,8 +25,6 @@ const isClosing = ref(false);
 const isWrapped = ref(false);
 const isCopied = ref(false);
 
-// TODO: what is happening to button.copy in this code? why does it get removed? why is it being stored in a ref?
-
 const loadCodeBlock = async (originalCodeBlock: HTMLDivElement) => {
   if (!dialog.value) return;
 
@@ -407,8 +405,7 @@ div.toolbar {
     }
 
     [class^="vpi-"] {
-      width: 20px;
-      height: 20px;
+      font-size: 20px;
     }
 
     &.copy {
@@ -448,10 +445,8 @@ div.toolbar {
       }
     }
 
-    /* TODO: use font-size? I think that's the intended strategy for VPIcon. In general I'm pretty sure all .vpi-* should use font-size, please review them */
     &.wrap.wrapped [class^="vpi-"] {
-      width: 24px;
-      height: 24px;
+      font-size: 24px;
     }
   }
 }

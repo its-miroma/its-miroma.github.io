@@ -1,3 +1,5 @@
+/* TODO: vuejs/vitepress#5323 dropped all usages of px as a unit of measurement. I would like to follow suit, and to also add a rule to stylelint.config.ts about this */
+
 @font-face {
   font-family: "JetBrains Mono";
   font-weight: 100 800;
@@ -86,7 +88,6 @@ div[class*="language-"] button.fullscreen {
   border: 1px solid var(--vp-code-copy-code-border-color);
   border-radius: 0.25rem;
 
-  /* TODO: is this the right way to set the color? should it use a var() defined by vp? */
   color: #808080;
 
   opacity: 0%;
@@ -116,13 +117,14 @@ div[class*="language-"] button.fullscreen:hover {
   background-color: var(--vp-code-copy-code-hover-bg);
 }
 
-/* TODO: for some reason, when two download images are one under the other, they are shown side-by-side. */
+/* TODO: if two images are in the same <p> element, the generated DOM is p > img + a[download] + img + a[download], which means that both download buttons end up above the first image element. If this is not fixable, that's not a problem - it's an unintended edge case anyway */
 
 /* Download button */
 p:has(> a[download]) {
-  /* TODO: this breaks the image centering (margin-inline: auto). */
   position: relative;
-  display: inline-block;
+  display: flow-root;
+  width: fit-content;
+  margin-inline: auto;
 }
 
 /* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
@@ -131,6 +133,10 @@ a[download]:not(.VPButton) {
   z-index: 3;
   top: 20px; /* p has a margin of 16px */
   right: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   width: 40px;
   height: 40px;
@@ -158,7 +164,8 @@ a[download]:not(.VPButton) {
   }
 
   [class^="vpi-"] {
-    /* TODO: the icon is not centered and it's tiny up top. */
+    font-size: 20px;
+    color: #808080;
   }
 }
 

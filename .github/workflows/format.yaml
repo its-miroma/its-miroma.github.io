@@ -1,7 +1,5 @@
 name: Format
 
-# TODO: maybe use one single 'format:' job? run each lint job as a step... since lint:* don't autofix, the prettier step's errors won't be affected
-
 on:
   pull_request:
     paths-ignore:
@@ -17,29 +15,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  markdownlint:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@b4c9feab76d8025d1e83c653fa3990936df0e6c8
-
-  prettier:
+  format:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
-      - run: pnpm run format
-      - run: |
+      - if: ${{ !cancelled() }}
+        uses: DavidAnson/markdownlint-cli2-action@b4c9feab76d8025d1e83c653fa3990936df0e6c8
+      - if: ${{ !cancelled() }}
+        run: pnpm run lint:css
+      - if: ${{ !cancelled() }}
+        run: pnpm run format
+      - if: ${{ !cancelled() }}
+        run: |
           readarray -d "" files < <(git ls-files --modified --others --exclude-standard -z)
           [[ ${#files[@]} -eq 0 ]] && exit 0
           for f in "${files[@]}"; do
             echo "::error file=${f},title=Prettier::Format this file with 'npx prettier --write \"${f}\"'"
           done
           exit 1
-
-  stylelint:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
-      - run: pnpm run lint:css

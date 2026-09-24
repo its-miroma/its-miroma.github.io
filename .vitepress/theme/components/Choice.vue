@@ -88,8 +88,7 @@ li + li {
     color 0.25s ease;
 
   [class^="vpi-"] {
-    width: 48px;
-    height: 48px;
+    font-size: 48px;
   }
 }
 

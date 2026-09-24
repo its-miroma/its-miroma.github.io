@@ -108,12 +108,12 @@ jobs:
         # #endregion automatic_testing_game_test_3
         working-directory: reference
         # #region automatic_testing_game_test_3
-      - if: always()
+      - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           path: build/run/clientGameTest/screenshots
         # #endregion automatic_testing_game_test_3
-      - if: always()
+      - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           path: reference/build/run/clientGameTest/screenshots
