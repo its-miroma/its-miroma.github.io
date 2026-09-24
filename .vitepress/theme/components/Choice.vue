@@ -59,7 +59,7 @@ ul {
 }
 
 li + li {
-  margin-top: unset;
+  margin-top: revert;
 }
 
 .VPLink {

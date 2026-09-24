@@ -173,6 +173,11 @@ export interface ThemeConfig extends Versioned.ThemeConfig {
     switcherLabel: string;
 
     /**
+     * @default "Select Version"
+     */
+    switcherTitle: string;
+
+    /**
      * @default "No other versions"
      */
     noOtherVersions: string;

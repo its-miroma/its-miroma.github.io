@@ -9,7 +9,6 @@ import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { AT, ENV, EXCLUDED_OLD_VERSIONS, LATEST_VERSION } from "../constants.ts";
 import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
-import { moreWatchesPlugin } from "../plugins/moreWatches.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import type { Config } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead } from "./head.ts";
@@ -154,7 +153,7 @@ export default defineVersionedConfig(
     },
 
     vite: {
-      plugins: [moreWatchesPlugin(), transformFilesPlugin()],
+      plugins: [transformFilesPlugin()],
     },
 
     vue: {

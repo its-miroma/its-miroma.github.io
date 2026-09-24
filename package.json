@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "tsx ./.vitepress/scripts/build.ts",
+    "build:latest": "pnpm build --latest-only",
     "preview": "vitepress preview",
     "bump": "tsx ./.vitepress/scripts/bump.ts",
     "format": "prettier --write .",

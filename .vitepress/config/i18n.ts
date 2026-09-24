@@ -1,16 +1,16 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as tinyglobby from "tinyglobby";
-import { AT, ENV } from "../constants.ts";
+import { AT } from "../constants.ts";
 import { DEVELOP_SIDEBAR } from "../sidebars/develop.ts";
 import { PLAYERS_SIDEBAR } from "../sidebars/players.ts";
 import type { Config, SidebarItem, ThemeConfig, Translations } from "../types.d.ts";
 
-const allLocales = tinyglobby
+const otherLocales = tinyglobby
   .globSync("*", { cwd: path.join(AT, "translated"), onlyDirectories: true })
   .map((d) => path.basename(d));
 
-export const excludedLocales = allLocales.filter((l) =>
+export const excludedLocales = otherLocales.filter((l) =>
   ["index.md", "website_translations.json"].some(
     (f) => !fs.existsSync(path.join(AT, "translated", l, f))
   )
@@ -18,13 +18,13 @@ export const excludedLocales = allLocales.filter((l) =>
 
 export const getLocales = () => [
   "en_us",
-  ...allLocales.filter((l) => !excludedLocales.includes(l)),
+  ...otherLocales.filter((l) => !excludedLocales.includes(l)),
 ];
 
 const translationFileCache = new Map<string, Record<string, any>>();
 const readTranslationFile = <T extends Record<string, any>>(file: string, locale: string): T => {
   const filePath = path.join(AT, "translated", locale === "en_us" ? ".." : locale, file);
-  if (ENV === "dev" || !translationFileCache.has(filePath)) {
+  if (!translationFileCache.has(filePath)) {
     try {
       translationFileCache.set(filePath, JSON.parse(fs.readFileSync(filePath, "utf-8")));
     } catch {
@@ -351,6 +351,7 @@ export const getLocaleConfig = () => {
 
         version: {
           switcherLabel: resolver("version.switcher.label"),
+          switcherTitle: resolver("version.switcher.title"),
           noOtherVersions: resolver("version.switcher.none"),
         },
 

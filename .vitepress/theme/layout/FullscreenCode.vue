@@ -471,14 +471,6 @@ div.toolbar {
 
     background: transparent;
 
-    span.lang {
-      right: 20px;
-
-      :hover & {
-        opacity: unset;
-      }
-    }
-
     pre {
       overflow: auto;
       flex-grow: 1;

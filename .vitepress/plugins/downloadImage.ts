@@ -78,22 +78,17 @@ export const downloadImagePlugin = (md: MarkdownRenderer) => {
     }
 
     if (stat.isDirectory()) {
-      if (ENV !== "dev") {
-        directoriesToBeZipped.add(downloadPath);
+      if (ENV === "dev") {
+        return `${renderedImage} <a download title="${md.utils.escapeHtml(resolver("download.unavailable_in_dev"))}"><span class="vpi-lucide-folder-x" style="--icon: url('/_vpi/lucide/folder-x.svg')"></span></a>`;
       }
 
+      directoriesToBeZipped.add(downloadPath);
       downloadPath += ".zip";
     }
 
-    const icon = `<span class="vpi-lucide-download"${ENV === "dev" ? ` style="--icon: url('/_vpi/lucide/download.svg')"` : ""}></span>`;
-
-    return `${renderedImage} <a download ${
-      downloadPath.endsWith(".zip") && ENV === "dev"
-        ? `title="${md.utils.escapeHtml(resolver("download.unavailable_in_dev"))}"`
-        : `title="${md.utils.escapeHtml(
-            resolver("download.button").replace("%s", token.content || path.basename(downloadPath))
-          )}" href="${md.utils.escapeHtml(downloadPath)}"`
-    }>${icon}</a>`;
+    return `${renderedImage} <a download title="${md.utils.escapeHtml(
+      resolver("download.button").replace("%s", token.content || path.basename(downloadPath))
+    )}" href="${md.utils.escapeHtml(downloadPath)}"><span class="vpi-lucide-download" ${ENV === "dev" ? `style="--icon: url('/_vpi/lucide/download.svg')"` : ""}></span></a>`;
   };
 };
 

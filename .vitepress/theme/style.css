@@ -43,7 +43,7 @@
 }
 
 .VPLink.no-icon::after {
-  content: unset;
+  content: revert;
 }
 
 *,
@@ -201,7 +201,7 @@ body:has(.VPFooter:not(.has-sidebar)) .aside-container {
 }
 
 .VPNav .content-body > *::before {
-  content: unset;
+  content: revert;
 }
 
 button.VPSwitchAppearance {

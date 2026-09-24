@@ -16,6 +16,7 @@ const props = defineProps<{
 
 const data = useData<ThemeConfig>();
 const route = useRoute();
+const icon = useIconSpan("material-icon-theme:minecraft");
 
 const options = computed(() => data.theme.value.version);
 
@@ -27,8 +28,6 @@ const currentV = computed(() => {
   if (/^[0-9]+[.][0-9]+([.][0-9]+)?$/.test(split[0])) return split[0];
   return props.versioningPlugin.latestVersion;
 });
-
-const icon = useIconSpan("material-icon-theme:minecraft");
 
 // TODO(not-for-llm): add future versions to the supported pages
 const collator = new Intl.Collator(undefined, { numeric: true });
@@ -58,25 +57,26 @@ const getRoute = (v: string) => {
     .join("/")}`;
 };
 
-const items = computed(
-  () =>
-    [
-      ...versions.value.map((v) => ({
-        text: options.value.switcherLabel.replace("%s", v),
-        link: getRoute(v),
-        activeMatch: v === currentV.value ? "(?=)" : "(?!)",
-      })),
-      versions.value.length <= 1 && {
-        text: options.value.noOtherVersions,
-        link: "",
-      },
-    ].filter(Boolean) as DefaultTheme.NavItemWithLink[]
-);
+const item = computed(() => ({
+  text: `${icon} ${!props.h1 && props.screenMenu === false ? options.value.switcherTitle : currentV.value}`,
+  items: [
+    ...versions.value.map((v) => ({
+      text: options.value.switcherLabel.replace("%s", v),
+      link: getRoute(v),
+      activeMatch: v === currentV.value ? "(?=)" : "(?!)",
+    })),
+    versions.value.length <= 1 && {
+      text: options.value.noOtherVersions,
+      link: "",
+    },
+  ].filter(Boolean) as DefaultTheme.NavItemWithLink[],
+  activeMatch: "(?!)",
+}));
 </script>
 
 <template>
   <VPNavMenuGroup
-    :item="{ text: `${icon} ${currentV}`, items, activeMatch: '(?!)' }"
+    :item
     :screen="screenMenu"
     :class="h1 && ['VPBadge', currentV === versioningPlugin.latestVersion ? 'info' : 'warning']"
   />
@@ -108,7 +108,7 @@ const items = computed(
     padding-inline: 0.5rem;
 
     .text {
-      line-height: 2.5rem;
+      line-height: revert;
     }
   }
 

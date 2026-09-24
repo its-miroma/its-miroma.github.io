@@ -6,7 +6,7 @@ import { AT, LATEST_VERSION, OLD_VERSIONS, VERSION_RE } from "../constants.ts";
 
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
 
-const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin="${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION }).replaceAll('"', "'")}" />`;
+const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin='${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION })}' />`;
 
 export const transformFile = (src: string, id: string) => {
   const { data, content } = matter(src, {});

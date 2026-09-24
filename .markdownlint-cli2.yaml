@@ -88,6 +88,7 @@ config:
         search: [“, ”, ‘, ’]
         replace: ['"', '"', "'", "'"]
         searchScope: text
+      # TODO: revert this rule, use .md extensions. Maybe allow index.md too
       - name: no-file-extension-in-links
         message: "Don't add the file extension to links"
         information: https://vitepress.dev/guide/routing#linking-between-pages
@@ -167,7 +168,7 @@ config:
         replace: ""
         searchScope: code
 customRules:
-  # TODO(not-for-llm): add markdownlint-rule-max-one-sentence-per-line/rule.js
+  # TODO: add markdownlint-rule-max-one-sentence-per-line/rule.js
   - ./node_modules/markdownlint-rule-search-replace/rule.js
   - ./node_modules/markdownlint-rule-titlecase/rule.js
 globs:
