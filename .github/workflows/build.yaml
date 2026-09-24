@@ -34,7 +34,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # TODO: only build versions modified by the pull_request
         version: ${{ fromJSON(needs.versions.outputs.versions) }}
     steps:
       - uses: actions/checkout@v4
