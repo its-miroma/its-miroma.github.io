@@ -69,21 +69,51 @@ pre {
   tab-size: 2 !important;
 }
 
-/* TODO: let's replicate the styles of button.copy:not(.fullscreen) for button.fullscreen, instead of having the classes "copy fullscreen". that was originally done to avoid cloning the styles of the copy button, and it is why .fullscreen's listener stopsImmediatePropagation - to avoid firing .copy's listener */
-div[class*="language-"] button.copy.fullscreen {
+div[class*="language-"] button.fullscreen {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 3;
+  top: 0.75rem;
+  right: 0.75rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: unset;
+
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--vp-code-copy-code-border-color);
+  border-radius: 0.25rem;
+
+  /* TODO: is this the right way to set the color? should it use a var() defined by vp? */
+  color: #808080;
+
+  opacity: 0%;
+  background-color: var(--vp-code-copy-code-bg);
+
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    opacity 0.25s;
 
   span {
     font-size: 20px;
-    color: #808080;
   }
 
   + button.copy {
     right: 64px;
   }
+}
+
+div[class*="language-"]:hover button.fullscreen,
+div[class*="language-"] button.fullscreen:focus {
+  opacity: 100%;
+}
+
+div[class*="language-"] button.fullscreen:hover {
+  border-color: var(--vp-code-copy-code-hover-border-color);
+  background-color: var(--vp-code-copy-code-hover-bg);
 }
 
 /* TODO: for some reason, when two download images are one under the other, they are shown side-by-side. */

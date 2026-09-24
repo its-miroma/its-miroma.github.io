@@ -25,16 +25,20 @@ const isClosing = ref(false);
 const isWrapped = ref(false);
 const isCopied = ref(false);
 
+// TODO: what is happening to button.copy in this code? why does it get removed? why is it being stored in a ref?
+
 const loadCodeBlock = async (originalCodeBlock: HTMLDivElement) => {
   if (!dialog.value) return;
 
   originalCopyButton.value =
-    originalCodeBlock.querySelector<HTMLButtonElement>("button.copy:not(.fullscreen)") || undefined;
+    originalCodeBlock.querySelector<HTMLButtonElement>("button.copy") || undefined;
 
   const clonedCodeBlock = originalCodeBlock.cloneNode(true) as HTMLDivElement;
   clonedCodeBlock.style.viewTransitionName = "code-block-view-transition";
   clonedCodeBlock.querySelector<HTMLDivElement>("div.line-numbers-wrapper")?.remove();
-  clonedCodeBlock.querySelectorAll<HTMLButtonElement>("button.copy").forEach((b) => b.remove());
+  clonedCodeBlock
+    .querySelectorAll<HTMLButtonElement>("button.copy, button.fullscreen")
+    .forEach((b) => b.remove());
 
   const onViewTransition = () => {
     dialog.value?.querySelector<HTMLDivElement>("div.slot")?.replaceChildren(clonedCodeBlock);
@@ -114,21 +118,19 @@ onContentUpdated(() =>
       document.querySelectorAll<HTMLDivElement>("div.vp-doc:not(.slot) div[class*='language-']");
 
     for (const codeBlock of codeBlocks) {
-      const originalCopyButton = //
-        codeBlock.querySelector<HTMLButtonElement>("button.copy:not(.fullscreen)");
+      const originalCopyButton = codeBlock.querySelector<HTMLButtonElement>("button.copy");
       if (!originalCopyButton) continue;
 
       const enterFullscreenButton =
-        codeBlock.querySelector<HTMLButtonElement>("button.copy.fullscreen")
+        codeBlock.querySelector<HTMLButtonElement>("button.fullscreen")
         || document.createElement("button");
       enterFullscreenButton.title = options.value.enterFullscreen;
       enterFullscreenButton.setAttribute("aria-label", options.value.enterFullscreen);
-      enterFullscreenButton.className = "copy fullscreen";
+      enterFullscreenButton.className = "fullscreen";
       enterFullscreenButton.innerHTML = icon;
       enterFullscreenButton.onclick = (event) => {
         if (!(event.currentTarget instanceof HTMLButtonElement)) return;
 
-        event.stopImmediatePropagation();
         event.currentTarget.blur();
 
         const codeBlock = event.currentTarget.closest<HTMLDivElement>("div[class*='language-']");
@@ -173,11 +175,8 @@ onUnmounted(() => dialog.value?.close());
         :aria-label="copyOptions.tooltipText"
         @click="handleCopy"
       >
-        <!-- TODO: VPIcon uses span too, so now the copiedText styling gets clunky. Possible solutions: unwrap the span, use another element, add a class (my least favorite) -->
         <span>{{ copyOptions.copiedText }}</span>
-        <!-- TODO: this had to use two icons because Icon from iconify would take some time to fetch the new icon on click (empty content flash). Since VPIcon has all icons preloaded, this issue probably does not exist and we can avoid two VPIcons and using .clicked. same thing a little further down. -->
-        <VPIcon icon="lucide:clipboard" />
-        <VPIcon icon="lucide:clipboard-check" class="clicked" />
+        <VPIcon :icon="isCopied ? 'lucide:clipboard-check' : 'lucide:clipboard'" />
       </button>
       <button
         class="wrap"
@@ -186,8 +185,7 @@ onUnmounted(() => dialog.value?.close());
         :aria-label="options.wrap"
         @click="handleWrap"
       >
-        <VPIcon icon="lucide:text-wrap" />
-        <VPIcon icon="lucide:text" class="clicked" />
+        <VPIcon :icon="isWrapped ? 'lucide:text' : 'lucide:text-wrap'" />
       </button>
       <button
         class="fullscreen"
@@ -411,10 +409,6 @@ div.toolbar {
     [class^="vpi-"] {
       width: 20px;
       height: 20px;
-
-      &.clicked {
-        display: none;
-      }
     }
 
     &.copy {
@@ -454,20 +448,10 @@ div.toolbar {
       }
     }
 
-    &.wrap.wrapped [class^="vpi-"].clicked {
+    /* TODO: use font-size? I think that's the intended strategy for VPIcon. In general I'm pretty sure all .vpi-* should use font-size, please review them */
+    &.wrap.wrapped [class^="vpi-"] {
       width: 24px;
       height: 24px;
-    }
-
-    &.copy.copied,
-    &.wrap.wrapped {
-      [class^="vpi-"].clicked {
-        display: revert;
-      }
-
-      [class^="vpi-"]:not(.clicked) {
-        display: none;
-      }
     }
   }
 }
