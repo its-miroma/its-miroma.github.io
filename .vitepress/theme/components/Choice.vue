@@ -53,7 +53,7 @@ ul {
 
   list-style: none;
 
-  @media (width <= 768px) {
+  @media (width <= 48rem) {
     grid-template-columns: 1fr;
   }
 }
@@ -72,7 +72,7 @@ li + li {
   height: 100%;
   padding: 1rem;
   border: 1px solid var(--vp-c-border);
-  border-radius: 10px;
+  border-radius: 0.75rem;
 
   font-size: 1.1rem;
   font-weight: 600;
@@ -88,13 +88,13 @@ li + li {
     color 0.25s ease;
 
   [class^="vpi-"] {
-    font-size: 48px;
+    font-size: 3rem;
   }
 }
 
 a.VPLink:hover,
 a.VPLink:focus-visible {
-  transform: translateY(-4px);
+  transform: translateY(-0.25rem);
   border-color: var(--color, var(--vp-c-brand-1));
   color: var(--color, var(--vp-c-brand-1));
   box-shadow: 0 6px 16px rgb(0 0 0 / 12%);

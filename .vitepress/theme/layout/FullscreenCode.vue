@@ -206,7 +206,7 @@ dialog#fullscreen {
 
   max-width: none;
   max-height: none;
-  padding: 1em;
+  padding: 1rem;
   border: none;
 
   background: transparent;
@@ -286,7 +286,7 @@ dialog#fullscreen {
 div.toolbar {
   display: flex;
   flex-grow: 0;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: flex-end;
   justify-content: flex-end;
 
@@ -298,14 +298,14 @@ div.toolbar {
     flex-grow: 1;
     align-items: flex-end;
 
-    height: calc(100% + 2px);
+    height: calc(100% + 0.125rem);
     margin: -1px 0;
-    padding: 0 12px;
+    padding: 0 0.75rem;
     border: 1px solid var(--vp-c-divider);
     border-bottom: none;
-    border-radius: 12px 12px 0 0;
+    border-radius: 0.75rem 0.75rem 0 0;
 
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--vp-code-tab-text-color);
     white-space: nowrap;
@@ -314,7 +314,7 @@ div.toolbar {
     box-shadow: inset 0 -1px var(--vp-code-block-divider-color);
 
     &::-webkit-scrollbar {
-      height: 8px;
+      height: 0.5rem;
     }
 
     &::-webkit-scrollbar-track {
@@ -332,9 +332,9 @@ div.toolbar {
       position: relative;
 
       height: 100%;
-      padding: 0 12px;
+      padding: 0 0.75rem;
 
-      line-height: 48px;
+      line-height: 3rem;
       text-align: center;
 
       &::after {
@@ -347,8 +347,8 @@ div.toolbar {
         display: block;
 
         width: 100%;
-        height: 2px;
-        border-radius: 2px;
+        height: 0.125rem;
+        border-radius: 0.125rem;
 
         background-color: transparent;
 
@@ -384,11 +384,11 @@ div.toolbar {
     align-items: center;
     justify-content: center;
 
-    width: 40px;
-    height: 40px;
-    margin-bottom: 8px;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
     border: 1px solid var(--vp-code-copy-code-border-color);
-    border-radius: 4px;
+    border-radius: 0.25rem;
 
     color: #808080;
 
@@ -405,13 +405,13 @@ div.toolbar {
     }
 
     [class^="vpi-"] {
-      font-size: 20px;
+      font-size: 1.25rem;
     }
 
     &.copy {
       gap: 0;
       width: auto;
-      min-width: 40px;
+      min-width: 2.5rem;
 
       [class^="vpi-"] {
         margin-right: 9px;
@@ -427,7 +427,7 @@ div.toolbar {
         height: 100%;
         border-right: 1px solid transparent;
 
-        font-size: 12px;
+        font-size: 0.75rem;
         font-weight: 500;
         color: var(--vp-code-copy-code-active-text);
         white-space: nowrap;
@@ -439,14 +439,14 @@ div.toolbar {
       }
 
       &.copied span:not([class^="vpi-"]) {
-        max-width: 100px;
+        max-width: 6.25rem;
         padding-inline: 9px;
         border-right-color: var(--vp-code-copy-code-hover-border-color);
       }
     }
 
     &.wrap.wrapped [class^="vpi-"] {
-      font-size: 24px;
+      font-size: 1.5rem;
     }
   }
 }
@@ -456,7 +456,7 @@ div.toolbar {
   flex-grow: 1;
 
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
+  border-radius: 0.25rem;
 
   background-color: var(--vp-code-block-bg);
 
@@ -499,7 +499,7 @@ div.toolbar {
 
       span.line {
         position: relative;
-        padding-left: 56px;
+        padding-left: 3.5rem;
 
         &::before {
           content: counter(line-counter);
@@ -512,9 +512,9 @@ div.toolbar {
 
           display: inline-block;
 
-          width: 32px;
-          margin-right: 12px;
-          margin-left: -56px;
+          width: 2rem;
+          margin-right: 0.75rem;
+          margin-left: -3.5rem;
           border-right: 1px solid var(--vp-code-block-divider-color);
 
           color: var(--vp-code-line-number-color);

@@ -1,5 +1,3 @@
-/* TODO: vuejs/vitepress#5323 dropped all usages of px as a unit of measurement. I would like to follow suit, and to also add a rule to stylelint.config.ts about this */
-
 @font-face {
   font-family: "JetBrains Mono";
   font-weight: 100 800;
@@ -58,7 +56,7 @@ html:has(dialog#fullscreen[open], div.VPLocalSearchBox) {
 
 ::view-transition-group(code-block-view-transition) {
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 0.75rem;
 }
 
 ::view-transition-group(root) {
@@ -99,11 +97,11 @@ div[class*="language-"] button.fullscreen {
     opacity 0.25s;
 
   span {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   + button.copy {
-    right: 64px;
+    right: 4rem;
   }
 }
 
@@ -129,17 +127,17 @@ p:has(> a[download]) {
 a[download]:not(.VPButton) {
   position: absolute;
   z-index: 3;
-  top: 20px; /* p has a margin of 16px */
-  right: 4px;
+  top: 1.5rem;
+  right: 0.5rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   border: 1px solid var(--vp-code-copy-code-border-color);
-  border-radius: 4px;
+  border-radius: 0.25rem;
 
   opacity: 50%;
   background-color: var(--vp-code-copy-code-bg);
@@ -161,7 +159,7 @@ a[download]:not(.VPButton) {
   }
 
   [class^="vpi-"] {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: #808080;
   }
 }
@@ -179,13 +177,13 @@ p[role="doc-subtitle"] {
 }
 
 body:has(.VPFooter:not(.has-sidebar)) .aside-container {
-  padding-bottom: 64px;
+  padding-bottom: 4rem;
 }
 
-@media (width >= 1525px) {
+@media (width >= 100rem) {
   .aside-container,
   .aside-curtain {
-    width: 300px !important;
+    width: 20rem !important;
   }
 }
 
@@ -235,12 +233,12 @@ button.VPSwitchAppearance {
 .vp-doc kbd {
   display: inline-block;
 
-  min-width: 24px;
-  padding: 5px;
+  min-width: 1.5rem;
+  padding: 0.3rem;
   border: 1px solid rgb(128 128 128 / 15%);
-  border-radius: 4px;
+  border-radius: 0.25rem;
 
-  font-size: 0.85em;
+  font-size: 0.85rem;
   font-weight: bold;
   line-height: 1;
   text-align: center;
@@ -255,7 +253,7 @@ button.VPSwitchAppearance {
 .vp-doc > div > p > img,
 .medium-zoom-image--opened {
   margin-inline: auto;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 10px #8883;
 }
 

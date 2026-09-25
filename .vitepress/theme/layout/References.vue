@@ -82,37 +82,37 @@ const getFileExtension = (filePath: string) =>
 
 <style scoped>
 h2 {
-  margin-top: 20px;
-  margin-bottom: 8px;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
 
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: bold;
   color: var(--vp-c-text-2);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05rem;
 
   &:not(:first-child) {
-    padding-top: 16px;
+    padding-top: 1rem;
     border-top: 1px solid var(--vp-c-divider);
   }
 }
 
 ul:last-of-type:has(+ *:not(div.spacer)) {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 li {
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 .VPLink {
   display: flex;
-  gap: 0.3em;
+  gap: 0.2rem;
   align-items: flex-start;
 
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
   color: var(--vp-c-text-2);
 
@@ -125,14 +125,14 @@ li {
 
 [class^="vpi-"] {
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 0.125rem;
 }
 
 img {
   margin-top: 1px;
 }
 
-@media (width >= 1280px) {
+@media (width >= 80rem) {
   .VPDocFooter {
     * {
       display: none;

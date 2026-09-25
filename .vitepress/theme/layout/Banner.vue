@@ -61,7 +61,7 @@ div {
 
   align-items: center;
 
-  padding: 8px;
+  padding: 0.5rem;
 
   font-family: var(--vp-font-family-mono);
   font-weight: 600;

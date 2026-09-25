@@ -49,7 +49,7 @@ dialog {
   width: 100%;
   height: 100%;
   padding: 2rem;
-  border-radius: 6px;
+  border-radius: 0.375rem;
 
   color: var(--vp-c-white);
   text-align: center;
