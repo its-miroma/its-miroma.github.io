@@ -116,17 +116,14 @@ button.VPSwitchAppearance {
     color 0.25s,
     background-color 0.25s;
 
-  &.level-0 {
-    /* TODO: centralize this styling that gets used for h2 in here + Authors.vue + References.vue. Use it to style the "On this page" title in the aside too - after removing the left border there and only applying it to the TOC itself */
-    h2 {
-      margin-block: 1.25rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--vp-c-divider);
+  &.level-0 h2 {
+    margin-block: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--vp-c-divider);
 
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05rem;
-    }
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
   }
 
   &.level-1 {
@@ -152,6 +149,24 @@ button.VPSwitchAppearance {
         }
       }
     }
+  }
+}
+
+.VPDocAsideOutline .content {
+  padding-left: revert;
+  border-left: revert;
+
+  .outline-title {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--vp-c-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+  }
+
+  .VPDocOutlineItem {
+    padding-left: 1rem;
+    border-left: 1px solid var(--vp-c-divider);
   }
 }
 
