@@ -65,7 +65,7 @@ div {
 
   font-family: var(--vp-font-family-mono);
   font-weight: 600;
-  color: #fff;
+  color: var(--vp-c-white);
   text-align: center;
 
   background: rgb(207 114 21);

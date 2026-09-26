@@ -11,7 +11,7 @@ div {
   width: 100%;
   margin: auto;
   padding: 50%;
-  border-color: #888;
+  border-color: rgb(136 136 136);
   border-width: 1px;
   border-radius: 0.25rem;
 }

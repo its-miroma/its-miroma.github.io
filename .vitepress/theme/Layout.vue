@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useEventListener } from "@vueuse/core";
 import mediumZoom, { type Zoom } from "medium-zoom";
 import { inBrowser, onContentUpdated, useRouter } from "vitepress";
 import DefaultTheme from "vitepress/theme";
-import { nextTick, onMounted } from "vue";
+import { nextTick } from "vue";
 import Authors from "./layout/Authors.vue";
 import Banner from "./layout/Banner.vue";
 import FullscreenCode from "./layout/FullscreenCode.vue";
@@ -30,12 +31,10 @@ const attachZoom = () => {
 
 onContentUpdated(attachZoom);
 
-onMounted(() => {
-  if (!inBrowser) return;
-  document.addEventListener("click", (event) => {
-    if (!(event.target instanceof HTMLElement)) return;
-    if (event.target.closest(".plugin-tabs--tab")) nextTick(attachZoom);
-  });
+useEventListener("click", (event) => {
+  if (!(event.target instanceof HTMLElement)) return;
+
+  if (event.target.closest(".plugin-tabs--tab")) nextTick(attachZoom);
 });
 </script>
 
