@@ -74,6 +74,10 @@ ul {
   a {
     transition: filter 0.2s ease-in-out;
 
+    &::after {
+      content: none;
+    }
+
     &:hover {
       filter: brightness(120%);
     }

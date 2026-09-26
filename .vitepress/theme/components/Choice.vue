@@ -83,9 +83,9 @@ li + li {
 
   transition:
     transform 0.25s ease,
-    box-shadow 0.25s ease,
     border-color 0.25s ease,
-    color 0.25s ease;
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 
   [class^="vpi-"] {
     font-size: 3rem;

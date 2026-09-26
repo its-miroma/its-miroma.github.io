@@ -11,6 +11,7 @@ import References from "./layout/References.vue";
 const router = useRouter();
 
 // Replace data-gen head script, which updates head tags
+// TODO: why can this code not be inside of onContentUpdated too?
 router.onAfterRouteChange = () => {
   const oldScript = document.querySelector("script[data-gen]");
   if (!oldScript) return;
@@ -21,10 +22,10 @@ router.onAfterRouteChange = () => {
   oldScript.parentNode!.replaceChild(newScript, oldScript);
 };
 
-// Medium zoom handler
+// TODO: given vitepress-plugin-tabs, if I switch to a tab that contains an image, that image cannot be zoomed in. This appears to be caused by the fact that the plugin uses v-if when switching tabs.
 onContentUpdated(() => {
   if (!inBrowser) return;
-  mediumZoom(".main img", { background: "var(--vp-c-bg)" });
+  mediumZoom(".vp-doc img", { background: "var(--vp-c-bg)" });
 });
 </script>
 
