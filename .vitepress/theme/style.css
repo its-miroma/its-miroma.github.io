@@ -26,6 +26,7 @@
   --vp-font-family-mono:
     "JetBrains Mono", ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
     monospace;
+  --vp-layout-max-width: 100rem;
 
   scrollbar-gutter: stable;
 
@@ -63,10 +64,109 @@ html:has(dialog#fullscreen[open], div.VPLocalSearchBox) {
   animation: none;
 }
 
-code,
-pre {
+body:has(.VPFooter:not(.has-sidebar)) .aside-container {
+  padding-bottom: 4rem;
+}
+
+.VPContent .VPHome {
+  margin-bottom: 0;
+}
+
+.VPNav .content-body > *::before {
+  content: revert;
+}
+
+button.VPSwitchAppearance {
+  margin: 0 0.75rem;
+}
+
+.VPLocalSearchBox > .backdrop {
+  opacity: 0%;
+  animation: show 150ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+}
+
+.VPLocalSearchBox > .shell {
+  transform-origin: top center;
+  transform: rotateX(-90deg);
+  opacity: 0%;
+  animation: show 250ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+}
+
+@keyframes show {
+  100% {
+    transform: none;
+    opacity: 100%;
+  }
+}
+
+.VPDoc .container .content .content-container {
+  max-width: revert;
+}
+
+.VPNav .VPNavBar .divider {
+  padding-left: revert;
+}
+
+.Layout .VPNav .VPNavBar .divider::before {
+  content: revert;
+}
+
+.VPSidebar .VPSidebarItem {
+  transition:
+    color 0.25s,
+    background-color 0.25s;
+
+  &.level-1 {
+    border-radius: 0.5rem;
+
+    > .item * {
+      padding-inline: 0.5rem;
+      font-weight: bold;
+      color: var(--vp-c-text-1);
+    }
+
+    &.has-active {
+      background-color: var(--vp-c-divider);
+
+      .items {
+        border-radius: inherit;
+
+        * {
+          --vp-c-divider: var(--vp-c-text-2);
+
+          color: var(--vp-c-text-1);
+        }
+      }
+    }
+  }
+}
+
+@media (width >= 60rem) {
+  .Layout {
+    .VPSidebar {
+      top: calc(var(--vp-nav-height) + 2.5rem);
+      width: max(
+        calc((100% - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width)),
+        var(--vp-sidebar-width)
+      );
+      padding-top: revert;
+    }
+
+    .VPContent.has-sidebar {
+      padding-left: max(
+        calc((100% - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width)),
+        var(--vp-sidebar-width)
+      );
+    }
+  }
+}
+
+/* TODO: I think that all rules below can be grouped under .vp-doc, whereas the others can be under .Layout (for clarity, not for necessity) */
+
+/* TODO: nest and group .language-*; check if stuff must be applied to code and pre */
+.vp-doc div[class*="language-"] :is(code, pre) {
   font-variant-ligatures: none;
-  tab-size: 2 !important;
+  tab-size: 2;
 }
 
 div[class*="language-"] button.fullscreen {
@@ -121,51 +221,52 @@ p:has(> a[download]) {
   display: flow-root;
   width: fit-content;
   margin-inline: auto;
-}
 
-/* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
-a[download]:not(.VPButton) {
-  position: absolute;
-  z-index: 3;
-  top: 1.5rem;
-  right: 0.5rem;
+  /* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
+  a[download]:not(.VPButton) {
+    position: absolute;
+    z-index: 3;
+    top: 1.5rem;
+    right: 0.5rem;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--vp-code-copy-code-border-color);
-  border-radius: 0.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--vp-code-copy-code-border-color);
+    border-radius: 0.25rem;
 
-  opacity: 50%;
-  background-color: var(--vp-code-copy-code-bg);
+    opacity: 50%;
+    background-color: var(--vp-code-copy-code-bg);
 
-  transition:
-    border-color 0.25s,
-    background-color 0.25s,
-    opacity 0.25s;
+    transition:
+      border-color 0.25s,
+      background-color 0.25s,
+      opacity 0.25s;
 
-  &[href]:hover,
-  &[href]:focus {
-    border-color: var(--vp-code-copy-code-hover-border-color);
-    opacity: 100%;
-    background-color: var(--vp-code-copy-code-hover-bg);
-  }
+    &[href]:hover,
+    &[href]:focus {
+      border-color: var(--vp-code-copy-code-hover-border-color);
+      opacity: 100%;
+      background-color: var(--vp-code-copy-code-hover-bg);
+    }
 
-  &:not([href]) {
-    cursor: not-allowed;
-  }
+    &:not([href]) {
+      cursor: not-allowed;
+    }
 
-  [class^="vpi-"] {
-    font-size: 1.25rem;
-    color: #808080;
+    [class^="vpi-"] {
+      font-size: 1.25rem;
+      color: #808080;
+    }
   }
 }
 
 /* Description at the top of pages */
-p[role="doc-subtitle"] {
+p[role="doc-subtitle"],
+p.tagline {
   margin-block: 1rem;
 
   font-size: 0.8rem;
@@ -174,52 +275,6 @@ p[role="doc-subtitle"] {
   color: var(--vp-c-text-3);
   text-align: left;
   text-wrap: balance;
-}
-
-body:has(.VPFooter:not(.has-sidebar)) .aside-container {
-  padding-bottom: 4rem;
-}
-
-@media (width >= 100rem) {
-  .aside-container,
-  .aside-curtain {
-    width: 20rem !important;
-  }
-}
-
-.VPHome {
-  margin-bottom: 0 !important;
-
-  p.tagline {
-    text-wrap: balance;
-  }
-}
-
-.VPNav .content-body > *::before {
-  content: revert;
-}
-
-button.VPSwitchAppearance {
-  margin: 0 0.75rem;
-}
-
-.VPLocalSearchBox > .backdrop {
-  opacity: 0%;
-  animation: show 150ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
-}
-
-.VPLocalSearchBox > .shell {
-  transform-origin: top center;
-  transform: rotateX(-90deg);
-  opacity: 0%;
-  animation: show 250ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
-}
-
-@keyframes show {
-  100% {
-    transform: none;
-    opacity: 100%;
-  }
 }
 
 .medium-zoom-overlay {
