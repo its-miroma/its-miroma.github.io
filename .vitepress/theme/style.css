@@ -1,3 +1,5 @@
+/* TODO: resolve Stylelint(color-no-hex) - prefer variables, and if not possible use rgb(). for example, can #808080 be replaced by a variable (set by vp)? */
+
 :root {
   --vp-c-blue-1: #1662c5;
   --vp-c-blue-2: #2275da;

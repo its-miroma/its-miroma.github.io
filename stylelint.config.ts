@@ -22,7 +22,7 @@ export default {
   rules: {
     "alpha-value-notation": "percentage",
     "color-named": "never",
-    // TODO: color-no-hex
+    "color-no-hex": true,
     "csstools/use-nesting": "always",
     "declaration-no-important": [true, { severity: "warning" }],
     "font-weight-notation": "named-where-possible",
