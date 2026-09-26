@@ -24,9 +24,7 @@ export default defineVersionedConfig(
     // Set head tags on the client side
     head: [["script", { "data-gen": "" }, getClientTransformHead()]],
 
-    icons: {
-      include: ["lucide:download", "lucide:git-graph", "lucide:maximize-2"],
-    },
+    icons: { include: ["lucide:download"] },
 
     // Ignore dead links under translated/. Allows builds with incomplete translations
     ignoreDeadLinks: [
