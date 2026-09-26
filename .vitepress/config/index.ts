@@ -42,7 +42,6 @@ export default defineVersionedConfig(
 
     markdown: {
       config: (md) => {
-        // TODO(not-for-llm): add a plugin that rewrites asset paths from /public/* to drop that prefix.
         // Use the snippet plugin for transclusions
         md.use(snippetPlugin);
         // Use the tabs plugin for... having tabs?

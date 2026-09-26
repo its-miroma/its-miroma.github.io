@@ -126,6 +126,7 @@ config:
         searchPattern: "/^(:{3,}) (?!(?:info|tip|warning|danger|details|raw|code-group|v-pre|tab|tabs)(?: |$))/gim"
         replace: "$1 info "
         searchScope: text
+      # TODO: revert this rule. add md-it plugin that removes /public
       - name: no-links-to-public
         message: "Don't add /public to links"
         information: https://vitepress.dev/guide/asset-handling#the-public-directory
