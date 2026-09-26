@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import mediumZoom from "medium-zoom";
+import mediumZoom, { type Zoom } from "medium-zoom";
 import { inBrowser, onContentUpdated, useRouter } from "vitepress";
 import DefaultTheme from "vitepress/theme";
+import { nextTick, onMounted } from "vue";
 import Authors from "./layout/Authors.vue";
 import Banner from "./layout/Banner.vue";
 import FullscreenCode from "./layout/FullscreenCode.vue";
@@ -10,8 +11,7 @@ import References from "./layout/References.vue";
 
 const router = useRouter();
 
-// Replace data-gen head script, which updates head tags
-// TODO: why can this code not be inside of onContentUpdated too?
+// Replace data-gen head script, which updates head tags.
 router.onAfterRouteChange = () => {
   const oldScript = document.querySelector("script[data-gen]");
   if (!oldScript) return;
@@ -22,10 +22,20 @@ router.onAfterRouteChange = () => {
   oldScript.parentNode!.replaceChild(newScript, oldScript);
 };
 
-// TODO: given vitepress-plugin-tabs, if I switch to a tab that contains an image, that image cannot be zoomed in. This appears to be caused by the fact that the plugin uses v-if when switching tabs.
-onContentUpdated(() => {
+let zoom: Zoom;
+const attachZoom = () => {
   if (!inBrowser) return;
-  mediumZoom(".vp-doc img", { background: "var(--vp-c-bg)" });
+  (zoom ||= mediumZoom({ background: "var(--vp-c-bg)" })).attach(".vp-doc img");
+};
+
+onContentUpdated(attachZoom);
+
+onMounted(() => {
+  if (!inBrowser) return;
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof HTMLElement)) return;
+    if (event.target.closest(".plugin-tabs--tab")) nextTick(attachZoom);
+  });
 });
 </script>
 

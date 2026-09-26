@@ -1,16 +1,14 @@
-/* TODO: resolve Stylelint(color-no-hex) - prefer variables, and if not possible use rgb(). for example, can #808080 be replaced by a variable (set by vp)? */
-
 :root {
-  --vp-c-blue-1: #1662c5;
-  --vp-c-blue-2: #2275da;
-  --vp-c-blue-3: #5c9de4;
+  --vp-c-blue-1: rgb(22 98 197);
+  --vp-c-blue-2: rgb(34 117 218);
+  --vp-c-blue-3: rgb(92 157 228);
   --vp-c-blue-soft: rgb(52 130 219 / 14%);
   --vp-c-brand-1: var(--vp-c-blue-3);
   --vp-c-brand-2: var(--vp-c-blue-2);
   --vp-c-brand-3: var(--vp-c-blue-1);
   --vp-c-brand-soft: var(--vp-c-blue-soft);
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #3463fe 30%, #4787ff);
+  --vp-home-hero-name-background: linear-gradient(120deg, rgb(52 99 254) 30%, rgb(71 135 255));
   --font-family-base:
     "Inter", ui-sans-serif, system-ui, sans-serif, "Noto Color Emoji", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
@@ -88,12 +86,11 @@ body {
     z-index: 10000;
   }
 
-  /* TODO: when I zoom an image, I see .medium-zoom-image--opened three times in the DOM */
   .medium-zoom-image--opened {
     z-index: 10001;
     margin-inline: auto;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 10px #8883;
+    box-shadow: 0 4px 10px rgb(136 136 136 / 20%);
   }
 }
 
@@ -249,7 +246,7 @@ body {
       border: 1px solid var(--vp-code-copy-code-border-color);
       border-radius: 0.25rem;
 
-      color: #808080;
+      color: var(--vp-code-copy-code-active-text);
 
       opacity: 0%;
       background-color: var(--vp-code-copy-code-bg);
@@ -323,7 +320,7 @@ body {
 
       [class^="vpi-"] {
         font-size: 1.25rem;
-        color: #808080;
+        color: var(--vp-code-copy-code-active-text);
       }
     }
   }
@@ -350,6 +347,6 @@ body {
   p > img {
     margin-inline: auto;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 10px #8883;
+    box-shadow: 0 4px 10px rgb(136 136 136 / 20%);
   }
 }
