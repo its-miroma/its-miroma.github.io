@@ -125,7 +125,7 @@ const item = computed(() => ({
         margin-top: 0;
 
         a {
-          text-decoration: unset;
+          text-decoration: none;
         }
       }
     }
