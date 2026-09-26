@@ -175,120 +175,153 @@ button.VPSwitchAppearance {
   }
 }
 
-/* TODO: I think that all rules below can be grouped under .vp-doc, whereas the others can be under .Layout (for clarity, not for necessity) */
+.vp-doc {
+  div[class*="language-"] {
+    :is(code, pre) {
+      font-variant-ligatures: none;
+      tab-size: 2;
+    }
 
-/* TODO: nest and group .language-*; check if stuff must be applied to code and pre */
-.vp-doc div[class*="language-"] :is(code, pre) {
-  font-variant-ligatures: none;
-  tab-size: 2;
-}
+    button.fullscreen {
+      cursor: pointer;
 
-div[class*="language-"] button.fullscreen {
-  cursor: pointer;
+      position: absolute;
+      z-index: 3;
+      top: 0.75rem;
+      right: 0.75rem;
 
-  position: absolute;
-  z-index: 3;
-  top: 0.75rem;
-  right: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--vp-code-copy-code-border-color);
+      border-radius: 0.25rem;
 
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--vp-code-copy-code-border-color);
-  border-radius: 0.25rem;
+      color: #808080;
 
-  color: #808080;
+      opacity: 0%;
+      background-color: var(--vp-code-copy-code-bg);
 
-  opacity: 0%;
-  background-color: var(--vp-code-copy-code-bg);
+      transition:
+        border-color 0.25s,
+        background-color 0.25s,
+        opacity 0.25s;
 
-  transition:
-    border-color 0.25s,
-    background-color 0.25s,
-    opacity 0.25s;
+      span {
+        font-size: 1.25rem;
+      }
 
-  span {
-    font-size: 1.25rem;
-  }
+      + button.copy {
+        right: 4rem;
+      }
+    }
 
-  + button.copy {
-    right: 4rem;
-  }
-}
-
-div[class*="language-"]:hover button.fullscreen,
-div[class*="language-"] button.fullscreen:focus {
-  opacity: 100%;
-}
-
-div[class*="language-"] button.fullscreen:hover {
-  border-color: var(--vp-code-copy-code-hover-border-color);
-  background-color: var(--vp-code-copy-code-hover-bg);
-}
-
-/* Download button */
-p:has(> a[download]) {
-  position: relative;
-  display: flow-root;
-  width: fit-content;
-  margin-inline: auto;
-
-  /* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
-  a[download]:not(.VPButton) {
-    position: absolute;
-    z-index: 3;
-    top: 1.5rem;
-    right: 0.5rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--vp-code-copy-code-border-color);
-    border-radius: 0.25rem;
-
-    opacity: 50%;
-    background-color: var(--vp-code-copy-code-bg);
-
-    transition:
-      border-color 0.25s,
-      background-color 0.25s,
-      opacity 0.25s;
-
-    &[href]:hover,
-    &[href]:focus {
-      border-color: var(--vp-code-copy-code-hover-border-color);
+    &:hover button.fullscreen,
+    button.fullscreen:focus {
       opacity: 100%;
+    }
+
+    button.fullscreen:hover {
+      border-color: var(--vp-code-copy-code-hover-border-color);
       background-color: var(--vp-code-copy-code-hover-bg);
     }
+  }
 
-    &:not([href]) {
-      cursor: not-allowed;
-    }
+  /* Download button */
+  p:has(> a[download]) {
+    position: relative;
+    display: flow-root;
+    width: fit-content;
+    margin-inline: auto;
 
-    [class^="vpi-"] {
-      font-size: 1.25rem;
-      color: #808080;
+    /* TODO(not-for-llm): drop :not(.VPButton) once DownloadEntry is removed */
+    a[download]:not(.VPButton) {
+      position: absolute;
+      z-index: 3;
+      top: 1.5rem;
+      right: 0.5rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--vp-code-copy-code-border-color);
+      border-radius: 0.25rem;
+
+      opacity: 50%;
+      background-color: var(--vp-code-copy-code-bg);
+
+      transition:
+        border-color 0.25s,
+        background-color 0.25s,
+        opacity 0.25s;
+
+      &[href]:hover,
+      &[href]:focus {
+        border-color: var(--vp-code-copy-code-hover-border-color);
+        opacity: 100%;
+        background-color: var(--vp-code-copy-code-hover-bg);
+      }
+
+      &:not([href]) {
+        cursor: not-allowed;
+      }
+
+      [class^="vpi-"] {
+        font-size: 1.25rem;
+        color: #808080;
+      }
     }
   }
-}
 
-/* Description at the top of pages */
-p[role="doc-subtitle"],
-p.tagline {
-  margin-block: 1rem;
+  /* Description at the top of pages */
+  p[role="doc-subtitle"],
+  p.tagline {
+    margin-block: 1rem;
 
-  font-size: 0.8rem;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--vp-c-text-3);
-  text-align: left;
-  text-wrap: balance;
+    font-size: 0.8rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--vp-c-text-3);
+    text-align: left;
+    text-wrap: balance;
+  }
+
+  kbd {
+    display: inline-block;
+
+    min-width: 1.5rem;
+    padding: 0.3rem;
+    border: 1px solid rgb(128 128 128 / 15%);
+    border-radius: 0.25rem;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+
+    background: rgb(128 128 128 / 10%);
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 10%);
+  }
+
+  > p > img,
+  > div > p > img {
+    margin-inline: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px #8883;
+  }
+
+  /* Remove border from headings if that's the first thing in the page */
+  hgroup + :is(h2, h3, h4, h5, h6) {
+    margin-top: 0;
+    border-top: none;
+  }
 }
 
 .medium-zoom-overlay {
@@ -297,37 +330,7 @@ p.tagline {
 
 .medium-zoom-image--opened {
   z-index: 10001;
-}
-
-.vp-doc kbd {
-  display: inline-block;
-
-  min-width: 1.5rem;
-  padding: 0.3rem;
-  border: 1px solid rgb(128 128 128 / 15%);
-  border-radius: 0.25rem;
-
-  font-size: 0.85rem;
-  font-weight: bold;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-
-  background: rgb(128 128 128 / 10%);
-  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 10%);
-}
-
-.vp-doc > p > img,
-.vp-doc > div > p > img,
-.medium-zoom-image--opened {
   margin-inline: auto;
   border-radius: 0.5rem;
   box-shadow: 0 4px 10px #8883;
-}
-
-/* Remove border from headings if that's the first thing in the page */
-.vp-doc hgroup + :is(h2, h3, h4, h5, h6) {
-  margin-top: 0;
-  border-top: none;
 }
