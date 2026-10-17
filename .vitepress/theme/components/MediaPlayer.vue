@@ -7,7 +7,7 @@ import "@videojs/html/video/skin";
 import { useData } from "vitepress";
 import { VPButton } from "vitepress/theme";
 import { computed, ref, useId } from "vue";
-import type { Fabric } from "../../types.d.ts";
+import type { ThemeConfig } from "../../types.d.ts";
 
 const props = defineProps<{
   type: "audio" | "video" | "youtube";
@@ -17,7 +17,7 @@ const props = defineProps<{
 }>();
 
 const id = useId();
-const data = useData<Fabric.ThemeConfig>();
+const data = useData<ThemeConfig>();
 
 const options = computed(() => data.theme.value.video);
 
