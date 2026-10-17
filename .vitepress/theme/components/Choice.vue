@@ -31,7 +31,7 @@ ul {
   list-style: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   ul {
     grid-template-columns: 1fr;
   }
@@ -46,7 +46,7 @@ li + li {
   height: 100%;
   align-items: center;
   background-color: var(--vp-c-bg-soft);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   border: 1px solid var(--vp-c-border);
   color: var(--vp-c-text-1);
   display: flex;
@@ -63,7 +63,7 @@ li + li {
     color 0.25s ease;
 
   [class^="vpi-"] {
-    font-size: 48px;
+    font-size: 3rem;
   }
 }
 
@@ -72,7 +72,7 @@ a.VPLink:focus-visible {
   border-color: var(--color, var(--vp-brand-1));
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   color: var(--color, var(--vp-brand-1));
-  transform: translateY(-4px);
+  transform: translateY(-0.25rem);
 }
 
 span.VPLink {
