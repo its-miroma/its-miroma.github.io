@@ -213,6 +213,10 @@ export namespace Fabric {
     button: string;
   }
 
+  export interface Translations {
+    website: typeof import("../website_translations.json");
+  }
+
   export interface SidebarItem extends Versioned.SidebarItem {
     text: string;
     items?: SidebarItem[];
