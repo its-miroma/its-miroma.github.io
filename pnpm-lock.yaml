@@ -180,19 +180,19 @@ importers:
         version: 10.0.1
       '@vueuse/core':
         specifier: 15.0.0
-        version: 15.0.0(vue@3.5.43)
+        version: 15.0.0(vue@3.5.43(typescript@6.0.3))
       medium-zoom:
         specifier: 1.1.0
         version: 1.1.0
       vitepress:
         specifier: 2.0.0-alpha.20
-        version: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)
+        version: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3)
       vitepress-plugin-tabs:
         specifier: 0.9.1
-        version: 0.9.1(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6))(vue@3.5.43)
+        version: 0.9.1(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3))(vue@3.5.43(typescript@6.0.3))
       vue:
         specifier: 3.5.43
-        version: 3.5.43
+        version: 3.5.43(typescript@6.0.3)
     devDependencies:
       '@emnapi/core':
         specifier: 1.11.3
@@ -248,9 +248,12 @@ importers:
       tsx:
         specifier: 4.20.6
         version: 4.20.6
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
       vitepress-versioning-plugin:
         specifier: github:FabricMC/vitepress-versioning-plugin#65bae2d4dfee47d0d233f688844cbb572c534ef5
-        version: https://codeload.github.com/FabricMC/vitepress-versioning-plugin/tar.gz/65bae2d4dfee47d0d233f688844cbb572c534ef5(vite@7.3.7(@types/node@26.6.5)(lightningcss@1.33.0)(tsx@4.20.6))(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6))
+        version: https://codeload.github.com/FabricMC/vitepress-versioning-plugin/tar.gz/65bae2d4dfee47d0d233f688844cbb572c534ef5(vite@7.3.7(@types/node@26.6.5)(lightningcss@1.33.0)(tsx@4.20.6))(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3))
 
 packages:
 
@@ -1661,6 +1664,11 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   undici-types@8.9.0:
     resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
@@ -2307,11 +2315,11 @@ snapshots:
       '@videojs/media': 10.0.1
       '@videojs/utils': 10.0.1
 
-  '@vitejs/plugin-vue@6.0.10(vite@8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6))(vue@3.5.43)':
+  '@vitejs/plugin-vue@6.0.10(vite@8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6))(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6)
-      vue: 3.5.43
+      vue: 3.5.43(typescript@6.0.3)
 
   '@vue/compiler-core@3.5.43':
     dependencies:
@@ -2380,25 +2388,25 @@ snapshots:
 
   '@vue/shared@3.5.43': {}
 
-  '@vueuse/core@14.4.0(vue@3.5.43)':
+  '@vueuse/core@14.4.0(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       '@types/web-bluetooth': 0.0.21
       '@vueuse/metadata': 14.4.0
-      '@vueuse/shared': 14.4.0(vue@3.5.43)
-      vue: 3.5.43
+      '@vueuse/shared': 14.4.0(vue@3.5.43(typescript@6.0.3))
+      vue: 3.5.43(typescript@6.0.3)
 
-  '@vueuse/core@15.0.0(vue@3.5.43)':
+  '@vueuse/core@15.0.0(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       '@types/web-bluetooth': 0.0.21
       '@vueuse/metadata': 15.0.0
-      '@vueuse/shared': 15.0.0(vue@3.5.43)
-      vue: 3.5.43
+      '@vueuse/shared': 15.0.0(vue@3.5.43(typescript@6.0.3))
+      vue: 3.5.43(typescript@6.0.3)
 
-  '@vueuse/integrations@14.4.0(focus-trap@8.2.3)(vue@3.5.43)':
+  '@vueuse/integrations@14.4.0(focus-trap@8.2.3)(vue@3.5.43(typescript@6.0.3))':
     dependencies:
-      '@vueuse/core': 14.4.0(vue@3.5.43)
-      '@vueuse/shared': 14.4.0(vue@3.5.43)
-      vue: 3.5.43
+      '@vueuse/core': 14.4.0(vue@3.5.43(typescript@6.0.3))
+      '@vueuse/shared': 14.4.0(vue@3.5.43(typescript@6.0.3))
+      vue: 3.5.43(typescript@6.0.3)
     optionalDependencies:
       focus-trap: 8.2.3
 
@@ -2406,13 +2414,13 @@ snapshots:
 
   '@vueuse/metadata@15.0.0': {}
 
-  '@vueuse/shared@14.4.0(vue@3.5.43)':
+  '@vueuse/shared@14.4.0(vue@3.5.43(typescript@6.0.3))':
     dependencies:
-      vue: 3.5.43
+      vue: 3.5.43(typescript@6.0.3)
 
-  '@vueuse/shared@15.0.0(vue@3.5.43)':
+  '@vueuse/shared@15.0.0(vue@3.5.43(typescript@6.0.3))':
     dependencies:
-      vue: 3.5.43
+      vue: 3.5.43(typescript@6.0.3)
 
   ansi-regex@6.2.2: {}
 
@@ -3067,6 +3075,8 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
+  typescript@6.0.3: {}
+
   undici-types@8.9.0: {}
 
   unist-util-is@6.0.0:
@@ -3129,17 +3139,17 @@ snapshots:
       fsevents: 2.3.3
       tsx: 4.20.6
 
-  vitepress-plugin-tabs@0.9.1(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6))(vue@3.5.43):
+  vitepress-plugin-tabs@0.9.1(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3))(vue@3.5.43(typescript@6.0.3)):
     dependencies:
-      vitepress: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)
-      vue: 3.5.43
+      vitepress: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3)
+      vue: 3.5.43(typescript@6.0.3)
 
-  vitepress-versioning-plugin@https://codeload.github.com/FabricMC/vitepress-versioning-plugin/tar.gz/65bae2d4dfee47d0d233f688844cbb572c534ef5(vite@7.3.7(@types/node@26.6.5)(lightningcss@1.33.0)(tsx@4.20.6))(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)):
+  vitepress-versioning-plugin@https://codeload.github.com/FabricMC/vitepress-versioning-plugin/tar.gz/65bae2d4dfee47d0d233f688844cbb572c534ef5(vite@7.3.7(@types/node@26.6.5)(lightningcss@1.33.0)(tsx@4.20.6))(vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3)):
     dependencies:
       vite: 7.3.7(@types/node@26.6.5)(lightningcss@1.33.0)(tsx@4.20.6)
-      vitepress: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)
+      vitepress: 2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3)
 
-  vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6):
+  vitepress@2.0.0-alpha.20(patch_hash=612b8a268013c658e2d637200854430cda0520548937abe789daa35c9d61d915)(@types/node@26.6.5)(esbuild@0.27.7)(postcss@8.5.29)(tsx@4.20.6)(typescript@6.0.3):
     dependencies:
       '@docsearch/css': 4.7.1
       '@docsearch/js': 4.7.1
@@ -3147,17 +3157,17 @@ snapshots:
       '@iconify-json/simple-icons': 1.2.100
       '@shikijs/transformers': 4.5.0
       '@types/markdown-it': 14.1.2
-      '@vitejs/plugin-vue': 6.0.10(vite@8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6))(vue@3.5.43)
+      '@vitejs/plugin-vue': 6.0.10(vite@8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6))(vue@3.5.43(typescript@6.0.3))
       '@vue/devtools-api': 8.2.1
       '@vue/shared': 3.5.43
-      '@vueuse/core': 14.4.0(vue@3.5.43)
-      '@vueuse/integrations': 14.4.0(focus-trap@8.2.3)(vue@3.5.43)
+      '@vueuse/core': 14.4.0(vue@3.5.43(typescript@6.0.3))
+      '@vueuse/integrations': 14.4.0(focus-trap@8.2.3)(vue@3.5.43(typescript@6.0.3))
       focus-trap: 8.2.3
       mark.js: 8.11.1
       minisearch: 7.2.0
       shiki: 4.5.0
       vite: 8.3.4(@types/node@26.6.5)(esbuild@0.27.7)(tsx@4.20.6)
-      vue: 3.5.43
+      vue: 3.5.43(typescript@6.0.3)
     optionalDependencies:
       postcss: 8.5.29
     transitivePeerDependencies:
@@ -3186,13 +3196,15 @@ snapshots:
       - universal-cookie
       - yaml
 
-  vue@3.5.43:
+  vue@3.5.43(typescript@6.0.3):
     dependencies:
       '@vue/compiler-dom': 3.5.43
       '@vue/compiler-sfc': 3.5.43
       '@vue/runtime-dom': 3.5.43
       '@vue/server-renderer': 3.5.43
       '@vue/shared': 3.5.43
+    optionalDependencies:
+      typescript: 6.0.3
 
   which@2.0.2:
     dependencies:
