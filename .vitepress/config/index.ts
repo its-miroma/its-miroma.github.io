@@ -9,6 +9,7 @@ import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { AT, ENV, EXCLUDED_LOCALES, EXCLUDED_OLD_VERSIONS, LATEST_VERSION } from "../constants.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
+import { videoImagePlugin } from "../plugins/videoImage.ts";
 import type { Fabric } from "../types.d.ts";
 import { getBuildTransformHead, getClientTransformHead, pageToVersionsMap } from "./head.ts";
 import { getLocaleConfig } from "./i18n.ts";
@@ -68,6 +69,8 @@ export default defineVersionedConfig(
         md.use(snippetPlugin);
         // Use the tabs plugin for... having tabs?
         md.use(tabsMarkdownPlugin);
+        // Turn ![title](video.webm) into a media player
+        md.use(videoImagePlugin);
       },
       container: {
         // TODO: acknowledge ::: caution and ::: note
