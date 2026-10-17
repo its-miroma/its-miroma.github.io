@@ -10,3 +10,5 @@ overrides:
 
 patchedDependencies:
   vitepress: patches/vitepress.patch
+
+savePrefix: ""
