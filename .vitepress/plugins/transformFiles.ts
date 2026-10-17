@@ -5,6 +5,7 @@ import { getWebsiteResolver } from "../config/i18n.ts";
 import { AT, LATEST_VERSION, OLD_VERSIONS, VERSION_RE } from "../constants.ts";
 
 const FILE_PATH_RE = /(?:^<<< *([^[{#\n]+))|(?:^@\[[^\]]*\]\(([^)]*)\))/gm;
+const VERSION_SWITCHER = `<VersionSwitcher h1 :versioningPlugin='${JSON.stringify({ versions: OLD_VERSIONS, latestVersion: LATEST_VERSION })}' />`;
 
 export const transformFile = (src: string, id: string) => {
   const { data, content } = matter(src, {});
@@ -59,8 +60,7 @@ export const transformFile = (src: string, id: string) => {
     if (data.title) {
       newContent.push("<hgroup>");
 
-      const type = versionType === "latest" ? "tip" : "warning";
-      newContent.push(`# ${data.title} <Badge type="${type}">${data.version}</Badge> {#h1}`);
+      newContent.push(`# ${data.title} ${VERSION_SWITCHER} {#h1}`);
 
       if (data.description) {
         newContent.push(`${data.description} {role="doc-subtitle"} `);

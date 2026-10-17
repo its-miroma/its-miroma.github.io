@@ -166,17 +166,20 @@ export namespace Fabric {
   }
 
   export interface VersionOptions {
-    switcher: {
-      /**
-       * @default "Minecraft %s"
-       */
-      label: string;
+    /**
+     * @default "Minecraft %s"
+     */
+    switcherLabel: string;
 
-      /**
-       * @default "No other versions"
-       */
-      none: string;
-    };
+    /**
+     * @default "Select Version"
+     */
+    switcherTitle: string;
+
+    /**
+     * @default "No other versions"
+     */
+    noOtherVersions: string;
   }
 
   export interface VideoOptions {
