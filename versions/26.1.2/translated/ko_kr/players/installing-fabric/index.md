@@ -19,7 +19,7 @@ authors:
 
 ## OS 고르기 {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

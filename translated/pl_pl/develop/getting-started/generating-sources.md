@@ -8,7 +8,7 @@ authors:
 
 ## Wybierz swoje IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/generating-sources',

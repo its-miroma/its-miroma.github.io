@@ -19,7 +19,7 @@ authors:
 
 ## Διαλέξτε το λειτουργικό σας σύστημα {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

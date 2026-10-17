@@ -21,7 +21,7 @@ Mods mais recentes podem requerer a versão mais nova do Fabric Loader para func
 
 ## Escolha o Seu SO {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

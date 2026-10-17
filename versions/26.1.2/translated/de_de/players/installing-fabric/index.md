@@ -19,7 +19,7 @@ Diese Anleitung bezieht sich ausschließlich auf den offiziellen Minecraft Launc
 
 ## Dein Betriebssystem wählen {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

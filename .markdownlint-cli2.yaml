@@ -20,7 +20,7 @@ config:
     allowed_elements:
       - audio
       - Badge
-      - ChoiceComponent
+      - Choice
       - ColorSwatch
       - DownloadEntry
       - kbd

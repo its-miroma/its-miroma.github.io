@@ -19,7 +19,7 @@ authors:
 
 ## あなたのOSを選択してください {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

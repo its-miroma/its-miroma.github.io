@@ -19,7 +19,7 @@ Questa guida si applica soltanto al Launcher di Minecraft ufficiale. Per launche
 
 ## Scegli il tuo sistema operativo {#choose-your-os}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'Windows',
  href: './windows',

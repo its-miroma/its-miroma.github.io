@@ -12,7 +12,7 @@ Appena la tua mod sarà pronta per il testing, potrai esportarla come file JAR, 
 
 ## Scegli il tuo IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/building-a-mod',

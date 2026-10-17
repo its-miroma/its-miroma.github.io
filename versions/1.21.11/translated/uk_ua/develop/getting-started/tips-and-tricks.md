@@ -11,7 +11,7 @@ outline: false
 
 ## Виберіть ваш IDE {#choose-your-ide}
 
-<ChoiceComponent :choices="[
+<Choice :choices="[
 {
  name: 'IntelliJ IDEA',
  href: './intellij-idea/tips-and-tricks',

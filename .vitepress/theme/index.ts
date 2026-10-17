@@ -5,7 +5,7 @@ import DefaultTheme from "vitepress/theme";
 import { h, nextTick, watch } from "vue";
 import Authors from "./layout/Authors.vue";
 import Banner from "./layout/Banner.vue";
-import ChoiceComponent from "./components/ChoiceComponent.vue";
+import Choice from "./components/Choice.vue";
 import ColorSwatch from "./components/ColorSwatch.vue";
 import DownloadEntry from "./components/DownloadEntry.vue";
 import Range from "./components/Range.vue";
@@ -22,7 +22,7 @@ export default {
     enhanceAppWithTabs(app);
 
     // Custom Components for Pages
-    app.component("ChoiceComponent", ChoiceComponent);
+    app.component("Choice", Choice);
     app.component("ColorSwatch", ColorSwatch);
     app.component("DownloadEntry", DownloadEntry);
     app.component("Range", Range);
