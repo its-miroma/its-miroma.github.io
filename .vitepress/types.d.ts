@@ -67,15 +67,6 @@ export namespace Fabric {
     wrap: string;
   }
 
-  export interface DownloadOptions {
-    /**
-     * Set custom text for download button.
-     *
-     * @default "Download %s"
-     */
-    text: string;
-  }
-
   export type EnvOptions = typeof import("./constants.ts").ENV;
 
   export interface NotFoundOptions {
@@ -221,7 +212,10 @@ export namespace Fabric {
     authors: AuthorsOptions;
     banner: BannerOptions;
     code: CodeOptions;
-    download: DownloadOptions;
+    /**
+     * @deprecated TODO: drop once DownloadEntry is removed
+     */
+    download: unknown;
     env: EnvOptions;
     notFound: NotFoundOptions;
     references: ReferencesOptions;

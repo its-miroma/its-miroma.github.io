@@ -2,19 +2,23 @@
 import { useData } from "vitepress";
 import { VPButton } from "vitepress/theme";
 import { computed, useSlots } from "vue";
-import type { Fabric } from "../../types.d.ts";
+
+/** @deprecated use {download} instead */
+interface DownloadOptions {
+  text: string;
+}
 
 defineProps<{
   downloadURL: string;
   visualURL?: string;
 }>();
 
-const data = useData<Fabric.ThemeConfig>();
+const data = useData();
 
 const title = useSlots().default?.() ?? [""];
 
 const text = computed(() =>
-  data.theme.value.download.text.replace(
+  (data.theme.value.download as DownloadOptions).text.replace(
     "%s",
     title.length > 0 ? ((title[0] as any).children ?? "") : "%s"
   )
@@ -44,8 +48,15 @@ img {
   max-height: 300px;
 }
 
-a {
+.VPButton.medium {
+  width: fit-content;
+  max-width: 100%;
+  padding-block: 8px;
+
+  line-height: unset;
   text-decoration: none;
+  text-wrap: balance;
+  white-space: normal;
 
   &:hover {
     cursor: pointer;

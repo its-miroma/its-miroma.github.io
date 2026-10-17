@@ -8,6 +8,7 @@ import type { SiteConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import defineVersionedConfig from "vitepress-versioning-plugin";
 import { AT, ENV, EXCLUDED_LOCALES, EXCLUDED_OLD_VERSIONS, LATEST_VERSION } from "../constants.ts";
+import { createDownloadZips, downloadImagePlugin } from "../plugins/downloadImage.ts";
 import { transformFile, transformFilesPlugin } from "../plugins/transformFiles.ts";
 import { videoImagePlugin } from "../plugins/videoImage.ts";
 import type { Fabric } from "../types.d.ts";
@@ -28,6 +29,8 @@ const hostname =
 export default defineVersionedConfig(
   {
     buildEnd: (siteConfig) => {
+      createDownloadZips(siteConfig);
+
       fs.writeFileSync(
         path.join(siteConfig.outDir, "page-versions.json"),
         JSON.stringify(
@@ -43,6 +46,8 @@ export default defineVersionedConfig(
 
     // Set head tags on the client side
     head: [["script", { "data-gen": "" }, getClientTransformHead()]],
+
+    icons: { include: ["lucide:download"] },
 
     // Allow builds with incomplete translations
     ignoreDeadLinks: [
@@ -71,6 +76,8 @@ export default defineVersionedConfig(
         md.use(tabsMarkdownPlugin);
         // Turn ![title](video.webm) into a media player
         md.use(videoImagePlugin);
+        // Add {download} buttons to images
+        md.use(downloadImagePlugin);
       },
       container: {
         // TODO: acknowledge ::: caution and ::: note
