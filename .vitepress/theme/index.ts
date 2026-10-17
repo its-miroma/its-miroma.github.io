@@ -14,7 +14,6 @@ export default {
   enhanceApp: ({ app }) => {
     enhanceAppWithTabs(app);
 
-    // Register every component in ./components globally, for use in Markdown
     for (const [modulePath, { default: component }] of Object.entries(modules)) {
       app.component(modulePath.match(/[/]([^/]+)[.]vue$/)![1], component);
     }

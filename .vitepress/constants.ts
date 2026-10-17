@@ -44,7 +44,6 @@ const ALL_LOCALES = [
   ),
 ];
 
-// A locale needs a home page and website translations to be listed
 export const EXCLUDED_LOCALES = ALL_LOCALES.filter((l) =>
   ["index.md", "website_translations.json"].some(
     (f) => !fs.existsSync(path.join(AT, "translated", l, f))
