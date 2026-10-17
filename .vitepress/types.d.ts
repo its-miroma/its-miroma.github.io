@@ -196,6 +196,23 @@ export namespace Fabric {
     };
   }
 
+  export interface VideoOptions {
+    /**
+     * @default "Warning"
+     */
+    title: string;
+
+    /**
+     * @default "This video contains flashing lights."
+     */
+    description: string;
+
+    /**
+     * @default "Proceed"
+     */
+    button: string;
+  }
+
   export interface SidebarItem extends Versioned.SidebarItem {
     text: string;
     items?: SidebarItem[];
@@ -215,6 +232,7 @@ export namespace Fabric {
     references: ReferencesOptions;
     sidebar: Sidebar;
     version: VersionOptions;
+    video: VideoOptions;
   }
 
   export type Config = UserConfig<ThemeConfig> & Versioned.Config;

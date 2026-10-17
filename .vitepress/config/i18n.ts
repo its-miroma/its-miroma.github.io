@@ -294,6 +294,12 @@ export const getLocales = () => {
         },
 
         versionSwitcher: false,
+
+        video: {
+          title: resolver("video.warning.title"),
+          description: resolver("video.warning.description"),
+          button: resolver("video.warning.button"),
+        },
       },
     };
   }
