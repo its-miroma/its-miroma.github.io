@@ -5,9 +5,9 @@ import "@videojs/html/media/youtube-video";
 import "@videojs/html/video/player";
 import "@videojs/html/video/skin";
 import { useData } from "vitepress";
-import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue";
+import { VPButton } from "vitepress/theme";
 import { computed, ref, useId } from "vue";
-import type { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d.ts";
 
 const props = defineProps<{
   type: "audio" | "video" | "youtube";
@@ -17,9 +17,9 @@ const props = defineProps<{
 }>();
 
 const id = useId();
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 
-const options = computed(() => data.theme.value.video as Fabric.VideoOptions);
+const options = computed(() => data.theme.value.video);
 
 const showWarning = ref(props.warn);
 </script>

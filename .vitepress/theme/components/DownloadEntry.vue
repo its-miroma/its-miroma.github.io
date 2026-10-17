@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { useData } from "vitepress";
-import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue";
+import { VPButton } from "vitepress/theme";
 import { computed, useSlots } from "vue";
-import { Fabric } from "../../types.d";
+import type { Fabric } from "../../types.d.ts";
 
 defineProps<{
   downloadURL: string;
   visualURL?: string;
 }>();
 
-const data = useData();
+const data = useData<Fabric.ThemeConfig>();
 
 const title = useSlots().default?.() ?? [""];
 
 const text = computed(() =>
-  (data.theme.value.download as Fabric.DownloadOptions).text.replace(
+  data.theme.value.download.text.replace(
     "%s",
     title.length > 0 ? ((title[0] as any).children ?? "") : "%s"
   )

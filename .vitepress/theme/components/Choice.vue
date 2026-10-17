@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import VPLink from "vitepress/dist/client/theme-default/components/VPLink.vue";
-import { VPIcon } from "vitepress/theme";
+import { VPIcon, VPLink } from "vitepress/theme";
 
 defineProps<{
   choices: {
