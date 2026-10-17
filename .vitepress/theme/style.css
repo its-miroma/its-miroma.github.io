@@ -28,6 +28,8 @@
   --vp-font-family-mono:
     "JetBrains Mono", ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
     monospace;
+
+  --media-border-radius: 8px;
 }
 
 :root:where(:lang(zh)) {
@@ -157,7 +159,7 @@ kbd:not(.DocSearch-Button-Key) {
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0 4px 10px #8883;
-  border-radius: 8px;
+  border-radius: var(--media-border-radius);
 }
 
 h1 > .VPBadge {
